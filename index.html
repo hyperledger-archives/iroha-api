@@ -230,6 +230,14 @@
           </li>
           <li>
             <a href="#build" class="toc-h1 toc-link" data-title="Build">Build</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#docker" class="toc-h2 toc-link" data-title="Build">Docker</a>
+                  </li>
+                  <li>
+                    <a href="#linux-or-macos" class="toc-h2 toc-link" data-title="Build">Linux or macOS</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#transactions" class="toc-h1 toc-link" data-title="Transactions">Transactions</a>
@@ -366,9 +374,66 @@ Users are authenticated by their keypair and account id, passed as the parameter
 </ol>
 
 <aside class="notice"> Right now, responses for trasaction status are not retrieved from the CLI. ETA is October 2017. </aside>
-<h1 id='build'>Build</h1>
-<p><code>cmake -H. -Bbuild -DFIND_PROTOBUF=ON -DFIND_GRPC=ON</code></p>
-<h1 id='transactions'>Transactions</h1>
+<h1 id='build'>Build</h1><h2 id='docker'>Docker</h2><h3 id='git-repository'>Git repository</h3>
+<p>Clone <code>iroha</code> repository on your directory.</p>
+
+<blockquote>
+<p>Cloning Iroha</p>
+</blockquote>
+<pre class="highlight shell"><code>git clone -b develop --depth<span class="o">=</span>1 <span class="se">\</span>
+https://github.com/hyperledger/iroha /path/to/iroha
+</code></pre><h3 id='how-to-run-development-environment'>How to run development environment</h3><pre class="highlight shell"><code>/path/to/iroha/scripts/run-iroha-dev.sh
+</code></pre>
+<p>You will be attached to interactive environment for development and testing with <code>iroha</code> folder mounted from host machine.</p>
+
+<p>Docker environment will be removed when you logout from the container.</p>
+<h3 id='build-code-iroha-code-and-run-tests'>Build <code>iroha</code> and run tests</h3>
+<p>Build:
+<code>bash
+cmake -H. -Bbuild; 
+cmake --build build -- -j$(nproc)
+</code></p>
+
+<p><code>irohad</code> and <code>iroha-cli</code> binaries will be in <code>./build/bin</code> directory.</p>
+
+<blockquote>
+<p>How to run tests method #1</p>
+</blockquote>
+<pre class="highlight shell"><code>cmake --build build --target <span class="nb">test</span>
+</code></pre>
+<blockquote>
+<p>How to run tests method #2</p>
+</blockquote>
+<pre class="highlight shell"><code>ctest . <span class="c"># in build folder </span>
+</code></pre><h3 id='execute-code-iroha-cli-code-with-code-irohad-code-running'>Execute <code>iroha-cli</code> with <code>irohad</code> running</h3>
+<p>Execute <code>run-iroha-dev.sh</code> again to attach to existing container.</p>
+<h2 id='linux-or-macos'>Linux or macOS</h2>
+<blockquote>
+<p>Linux</p>
+</blockquote>
+<pre class="highlight shell"><code>apt-get -y --no-install-recommends install <span class="se">\</span>
+        build-essential python-software-properties <span class="se">\</span>
+        automake libtool <span class="se">\</span>
+        <span class="c"># dev dependencies</span>
+        libssl-dev zlib1g-dev libboost-all-dev <span class="se">\</span>
+        libc6-dbg golang <span class="se">\</span>
+        <span class="c"># CircleCI dependencies</span>
+        git ssh tar gzip ca-certificates <span class="se">\</span>
+        python3 python3-pip python3-setuptools <span class="se">\</span>
+        <span class="c"># code coverage</span>
+        lcov <span class="se">\</span>
+        <span class="c"># other</span>
+        wget curl cmake file unzip gdb <span class="se">\</span>
+        iputils-ping vim ccache <span class="se">\</span>
+        gcovr vera++ cppcheck doxygen <span class="se">\</span>
+        graphviz graphviz-dev; <span class="se">\</span>
+    apt-get -y clean
+</code></pre>
+<blockquote>
+<p>macOS</p>
+</blockquote>
+<pre class="highlight shell"><code>brew …
+</code></pre><h1 id='transactions'>Transactions</h1>
 <blockquote>
 <p>Transaction </p>
 </blockquote>
@@ -461,7 +526,11 @@ In preview version, there is no way to get current transaction counter by any me
 </aside>
 
 <p><strong>Body</strong> stores repeated commands, which would be described in details later.</p>
-<h1 id='commands'>Commands</h1><h2 id='add-asset-quantity'>Add asset quantity</h2><h3 id='purpose'>Purpose</h3>
+<h1 id='commands'>Commands</h1>
+<aside class="warning">
+Currently, docs are updated. Sections with contraints and validation parts are gradally updated.
+</aside>
+<h2 id='add-asset-quantity'>Add asset quantity</h2><h3 id='purpose'>Purpose</h3>
 <p>Purpose of <em>add asset quantity</em> is to increase amount of assets on some account. </p>
 <h3 id='structure'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddAssetQuantity</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -507,8 +576,8 @@ In preview version, there is no way to get current transaction counter by any me
 <h2 id='add-peer'>Add peer</h2><h3 id='purpose-2'>Purpose</h3>
 <p>Purpose of <em>add peer</em> is to write into ledger fact of peer addition into the peer network.</p>
 <h3 id='structure-2'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddPeer</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">address</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">bytes</span> <span class="na">peer_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">address</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">bytes</span> <span class="na">peer_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -543,8 +612,8 @@ In preview version, there is no way to get current transaction counter by any me
 <h2 id='add-signatory'>Add signatory</h2><h3 id='purpose-3'>Purpose</h3>
 <p>Purpose of <em>add signatory</em> is to add identity to the account. It can be the public key of another device or public key of another user.</p>
 <h3 id='structure-3'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddSignatory</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">bytes</span> <span class="na">public_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">bytes</span> <span class="na">public_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -579,9 +648,9 @@ In preview version, there is no way to get current transaction counter by any me
 <h2 id='create-asset'>Create asset</h2><h3 id='purpose-4'>Purpose</h3>
 <p>Purpose of <em>сreate asset</em> is to create new type of asset, specific for a domain.</p>
 <h3 id='structure-4'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAsset</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">asset_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
- <span class="kt">uint32</span> <span class="na">precision</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">asset_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">uint32</span> <span class="na">precision</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -622,9 +691,9 @@ In preview version, there is no way to get current transaction counter by any me
 <h2 id='create-account'>Create account</h2><h3 id='purpose-5'>Purpose</h3>
 <p>Purpose of <em>create account</em> is to make new entity similar to wallet, which stores assets and identities.</p>
 <h3 id='structure-5'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAccount</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">account_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
- <span class="kt">bytes</span> <span class="na">main_pubkey</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">account_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">bytes</span> <span class="na">main_pubkey</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -673,7 +742,7 @@ Just in case it is not working — it was suggested to rename domain_name field 
 Also, regarding recent API changes, we are going to add _default role_ in account so that any created account in this domain has this role by default.
 </aside>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">domain_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">domain_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -705,8 +774,8 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <h2 id='remove-signatory'>Remove signatory</h2><h3 id='purpose-7'>Purpose</h3>
 <p>Purpose of <em>remove signatory</em> is to remove public key, associated with an identity, from an account</p>
 <h3 id='structure-7'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RemoveSignatory</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">bytes</span> <span class="na">public_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">bytes</span> <span class="na">public_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -736,8 +805,8 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <h2 id='set-account-quorum'>Set account quorum</h2><h3 id='purpose-8'>Purpose</h3>
 <p>Purpose of <em>set account quorum</em> is to set the number of signatories needed to confirm the identity of person, sending the transaction or is to set amount of people to agree on transaction contents.</p>
 <h3 id='structure-8'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountQuorum</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -772,8 +841,8 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <h2 id='set-account-quorum-2'>Set account quorum</h2><h3 id='purpose-9'>Purpose</h3>
 <p>Purpose of <em>set account quorum</em> is to set the number of signatories needed to confirm the identity of person, sending the transaction or is to set amount of people to agree on transaction contents.</p>
 <h3 id='structure-9'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountQuorum</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -808,10 +877,10 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <h2 id='transfer-asset'>Transfer asset</h2><h3 id='purpose-10'>Purpose</h3>
 <p>Purpose of <em>transfer asset</em> is to share assets across the network, so that source account can transfer assets to target account.</p>
 <h3 id='structure-10'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransferAsset</span> <span class="p">{</span>
- <span class="kt">string</span> <span class="na">src_account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
- <span class="kt">string</span> <span class="na">dest_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
- <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
- <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">src_account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">dest_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -862,7 +931,7 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <p>Purpose of <em>subtract asset quantity</em> is to decrease amount of asset, belonging to an account.</p>
 <h3 id='structure-11'>Structure</h3>
 <aside class="warning">
-This command is not implemented currently
+This command is not implemented currently.
 </aside>
 
 <table><thead>
