@@ -1,5 +1,9 @@
 # Commands
 
+<aside class="warning">
+Currently, docs are updated. Sections with contraints and validation parts are gradally updated.
+</aside>
+
 ## Add asset quantity
 
 ### Purpose
@@ -48,8 +52,8 @@ Purpose of _add peer_ is to write into ledger fact of peer addition into the pee
 
 ```protobuf
 message AddPeer {
- string address = 1;
- bytes peer_key = 2;
+	string address = 1;
+	bytes peer_key = 2;
 }
 ```
 ```json
@@ -85,8 +89,8 @@ Purpose of _add signatory_ is to add identity to the account. It can be the publ
 
 ```protobuf
 message AddSignatory {
- string account_id = 1;
- bytes public_key = 2;
+    string account_id = 1;
+    bytes public_key = 2;
 }
 ```
 ```json
@@ -120,9 +124,9 @@ Purpose of _сreate asset_ is to create new type of asset, specific for a domain
 
 ```protobuf
 message CreateAsset {
- string asset_name = 1;
- string domain_id = 2;
- uint32 precision = 3;
+    string asset_name = 1;
+    string domain_id = 2;
+    uint32 precision = 3;
 }
 ```
 ```json
@@ -158,9 +162,9 @@ Purpose of _create account_ is to make new entity similar to wallet, which store
 
 ```protobuf
 message CreateAccount {
- string account_name = 1;
- string domain_id = 2;
- bytes main_pubkey = 3;
+    string account_name = 1;
+    string domain_id = 2;
+    bytes main_pubkey = 3;
 }
 ```
 ```json
@@ -204,7 +208,7 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 
 ```protobuf
 message CreateDomain {
- string domain_name = 1;
+    string domain_name = 1;
 }
 ```
 ```json
@@ -237,8 +241,8 @@ Purpose of _remove signatory_ is to remove public key, associated with an identi
 
 ```protobuf
 message RemoveSignatory {
- string account_id = 1;
- bytes public_key = 2;
+    string account_id = 1;
+    bytes public_key = 2;
 }
 ```
 ```json
@@ -271,8 +275,8 @@ Purpose of _set account quorum_ is to set the number of signatories needed to co
 
 ```protobuf
 message SetAccountQuorum {
- string account_id = 1;
- uint32 quorum = 2;
+    string account_id = 1;
+    uint32 quorum = 2;
 }
 ```
 ```json
@@ -306,8 +310,8 @@ Purpose of _set account quorum_ is to set the number of signatories needed to co
 
 ```protobuf
 message SetAccountQuorum {
- string account_id = 1;
- uint32 quorum = 2;
+    string account_id = 1;
+    uint32 quorum = 2;
 }
 ```
 ```json
@@ -341,10 +345,10 @@ Purpose of _transfer asset_ is to share assets across the network, so that sourc
 
 ```protobuf
 message TransferAsset {
- string src_account_id = 1;
- string dest_account_id = 2;
- string asset_id = 3;
- Amount amount = 4;
+	string src_account_id = 1;
+	string dest_account_id = 2;
+	string asset_id = 3;
+	Amount amount = 4;
 }
 ```
 ```json
@@ -384,7 +388,7 @@ Purpose of _subtract asset quantity_ is to decrease amount of asset, belonging t
 ### Structure
 
 <aside class="warning">
-This command is not implemented currently
+This command is not implemented currently.
 </aside>
 
 Field | Description | Constraint
