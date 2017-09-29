@@ -275,9 +275,6 @@
                     <a href="#set-account-quorum" class="toc-h2 toc-link" data-title="Commands">Set account quorum</a>
                   </li>
                   <li>
-                    <a href="#set-account-quorum-2" class="toc-h2 toc-link" data-title="Commands">Set account quorum</a>
-                  </li>
-                  <li>
                     <a href="#transfer-asset" class="toc-h2 toc-link" data-title="Commands">Transfer asset</a>
                   </li>
                   <li>
@@ -414,15 +411,11 @@ cmake --build build -- -j$(nproc)
 <pre class="highlight shell"><code>apt-get -y --no-install-recommends install <span class="se">\</span>
         build-essential python-software-properties <span class="se">\</span>
         automake libtool <span class="se">\</span>
-        <span class="c"># dev dependencies</span>
         libssl-dev zlib1g-dev libboost-all-dev <span class="se">\</span>
         libc6-dbg golang <span class="se">\</span>
-        <span class="c"># CircleCI dependencies</span>
         git ssh tar gzip ca-certificates <span class="se">\</span>
         python3 python3-pip python3-setuptools <span class="se">\</span>
-        <span class="c"># code coverage</span>
         lcov <span class="se">\</span>
-        <span class="c"># other</span>
         wget curl cmake file unzip gdb <span class="se">\</span>
         iputils-ping vim ccache <span class="se">\</span>
         gcovr vera++ cppcheck doxygen <span class="se">\</span>
@@ -838,45 +831,9 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 </tbody></table>
 <h3 id='validation-8'>Validation</h3>
 <p>When quorum is set, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds</p>
-<h2 id='set-account-quorum-2'>Set account quorum</h2><h3 id='purpose-9'>Purpose</h3>
-<p>Purpose of <em>set account quorum</em> is to set the number of signatories needed to confirm the identity of person, sending the transaction or is to set amount of people to agree on transaction contents.</p>
-<h3 id='structure-9'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountQuorum</span> <span class="p">{</span>
-    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SetAccountQuorum"</span><span class="p">,</span><span class="w"> 
-            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"quorum"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Constraint</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Account ID</td>
-<td>ID of account to set quorum</td>
-<td>already existent, regex is <strong>?</strong></td>
-</tr>
-<tr>
-<td>Quorum</td>
-<td>number of signatories needed to be included with a transaction from this account</td>
-<td># less than</td>
-</tr>
-</tbody></table>
-<h3 id='validation-9'>Validation</h3>
-<p>When quorum is set, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds</p>
-<h2 id='transfer-asset'>Transfer asset</h2><h3 id='purpose-10'>Purpose</h3>
+<h2 id='transfer-asset'>Transfer asset</h2><h3 id='purpose-9'>Purpose</h3>
 <p>Purpose of <em>transfer asset</em> is to share assets across the network, so that source account can transfer assets to target account.</p>
-<h3 id='structure-10'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransferAsset</span> <span class="p">{</span>
+<h3 id='structure-9'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransferAsset</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">src_account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">dest_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
@@ -925,11 +882,11 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <td><strong>?</strong></td>
 </tr>
 </tbody></table>
-<h3 id='validation-10'>Validation</h3>
+<h3 id='validation-9'>Validation</h3>
 <p>?</p>
-<h2 id='subtract-asset-quantity'>Subtract asset quantity</h2><h3 id='purpose-11'>Purpose</h3>
+<h2 id='subtract-asset-quantity'>Subtract asset quantity</h2><h3 id='purpose-10'>Purpose</h3>
 <p>Purpose of <em>subtract asset quantity</em> is to decrease amount of asset, belonging to an account.</p>
-<h3 id='structure-11'>Structure</h3>
+<h3 id='structure-10'>Structure</h3>
 <aside class="warning">
 This command is not implemented currently.
 </aside>
@@ -947,11 +904,11 @@ This command is not implemented currently.
 <td>?</td>
 </tr>
 </tbody></table>
-<h3 id='validation-11'>Validation</h3>
+<h3 id='validation-10'>Validation</h3>
 <p>?</p>
-<h2 id='append-role'>Append role</h2><h3 id='purpose-12'>Purpose</h3>
+<h2 id='append-role'>Append role</h2><h3 id='purpose-11'>Purpose</h3>
 <p>Purpose of <em>append role</em> is to promote an account to some created role in the system, where role is a set or permissions account has to perform an action (command or query).</p>
-<h3 id='structure-12'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AppendRole</span> <span class="p">{</span>
+<h3 id='structure-11'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AppendRole</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -988,12 +945,12 @@ This command is not implemented currently.
 <td><strong>?</strong></td>
 </tr>
 </tbody></table>
-<h3 id='validation-12'>Validation</h3>
+<h3 id='validation-11'>Validation</h3>
 <p>?</p>
-<h2 id='create-role'>Create role</h2><h3 id='purpose-13'>Purpose</h3>
+<h2 id='create-role'>Create role</h2><h3 id='purpose-12'>Purpose</h3>
 <p>Purpose of <em>create role</em> is to create new role in the system from the set of permissions.
 Combining different permissions into roles, maintainers of Iroha peer network can create customized security model.</p>
-<h3 id='structure-13'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateRole</span> <span class="p">{</span>
+<h3 id='structure-12'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateRole</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="k">repeated</span> <span class="kt">string</span> <span class="na">permissions</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1028,11 +985,11 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td><strong>?</strong></td>
 </tr>
 </tbody></table>
-<h3 id='validation-13'>Validation</h3>
+<h3 id='validation-12'>Validation</h3>
 <p>?</p>
-<h2 id='grant-permission'>Grant permission</h2><h3 id='purpose-14'>Purpose</h3>
+<h2 id='grant-permission'>Grant permission</h2><h3 id='purpose-13'>Purpose</h3>
 <p>Purpose of <em>grant permission</em> is to give another account in the system rights to perform actions over account of transaction sender (give someone right to do something with my account).</p>
-<h3 id='structure-14'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GrantPermission</span> <span class="p">{</span>
+<h3 id='structure-13'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GrantPermission</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">permission_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1064,11 +1021,11 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td><strong>?</strong></td>
 </tr>
 </tbody></table>
-<h3 id='validation-14'>Validation</h3>
+<h3 id='validation-13'>Validation</h3>
 <p>?</p>
-<h2 id='revoke-permission'>Revoke permission</h2><h3 id='purpose-15'>Purpose</h3>
+<h2 id='revoke-permission'>Revoke permission</h2><h3 id='purpose-14'>Purpose</h3>
 <p>Purpose of <em>revoke permission</em> is to revoke or dismiss given grant permission to another account in the netw</p>
-<h3 id='structure-15'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RevokePermission</span> <span class="p">{</span>
+<h3 id='structure-14'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RevokePermission</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">permission_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1100,7 +1057,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td><strong>?</strong></td>
 </tr>
 </tbody></table>
-<h3 id='validation-15'>Validation</h3>
+<h3 id='validation-14'>Validation</h3>
 <p>?</p>
 <h1 id='queries'>Queries</h1><h2 id='query-structure'>Query structure</h2><pre class="highlight protobuf tab-protobuf"><code> <span class="kd">message</span> <span class="nc">Query</span> <span class="p">{</span>
     <span class="kd">message</span> <span class="nc">Header</span> <span class="p">{</span>
