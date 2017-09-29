@@ -300,41 +300,6 @@ Quorum | number of signatories needed to be included with a transaction from thi
 
 When quorum is set, we should check if invariant of **size(signatories) >= quorum** holds
 
-## Set account quorum
-
-### Purpose
-
-Purpose of _set account quorum_ is to set the number of signatories needed to confirm the identity of person, sending the transaction or is to set amount of people to agree on transaction contents.
-
-### Structure
-
-```protobuf
-message SetAccountQuorum {
-    string account_id = 1;
-    uint32 quorum = 2;
-}
-```
-```json
-{
-    "commands": [
-        {
-            "command_type": "SetAccountQuorum", 
-            "account_id": "takemiya@test",
-            "quorum": 5
-        }
-    ], …
-}
-```
-
-Field | Description | Constraint
--------------- | -------------- | --------------
-Account ID | ID of account to set quorum | already existent, regex is **?**
-Quorum | number of signatories needed to be included with a transaction from this account | # less than 
-
-### Validation
-
-When quorum is set, we should check if invariant of **size(signatories) >= quorum** holds
-
 ## Transfer asset
 
 ### Purpose
