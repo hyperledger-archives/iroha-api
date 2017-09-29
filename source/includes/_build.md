@@ -72,5 +72,5 @@ apt-get -y --no-install-recommends install \
 > macOS
 
 ``` bash
-brew …
+brew install autoconf git libtool automake cmake go
 ```
