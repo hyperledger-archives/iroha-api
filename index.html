@@ -200,10 +200,10 @@
     <link href="stylesheets/print.css" rel="stylesheet" media="print" />
       <script src="javascripts/all.js"></script>
     <script>
-    ((window.gitter = {}).chat = {}).options = {
-      room: 'hyperledger-iroha/Lobby'
-    };
-  </script>
+      ((window.gitter = {}).chat = {}).options = {
+        room: 'hyperledger-iroha/Lobby'
+      };
+    </script>
   <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
 </head>
 
@@ -423,11 +423,22 @@ cmake --build build -- -j$(nproc)
         gcovr vera++ cppcheck doxygen <span class="se">\</span>
         graphviz graphviz-dev; <span class="se">\</span>
     apt-get -y clean
+git clone https://github.com/hyperledger/iroha -b develop
+<span class="nb">cd </span>iroha
+cmake -H. -Bbuild
+cmake --build build -- -j4
 </code></pre>
 <blockquote>
 <p>macOS</p>
 </blockquote>
-<pre class="highlight shell"><code>brew install autoconf git libtool automake cmake go
+<pre class="highlight shell"><code>xcode-select --install
+<span class="c"># if you dont't have brew installed</span>
+ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/homebrew/install/master/install<span class="k">)</span><span class="s2">"</span>
+brew install cmake boost postgres grpc autoconf automake libtool golang
+git clone https://github.com/hyperledger/iroha -b develop
+<span class="nb">cd </span>iroha
+cmake -H. -Bbuild
+cmake --build build -- -j4
 </code></pre><h1 id='transactions'>Transactions</h1>
 <blockquote>
 <p>Transaction </p>
