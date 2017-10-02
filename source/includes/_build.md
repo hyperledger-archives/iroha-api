@@ -67,10 +67,21 @@ apt-get -y --no-install-recommends install \
         gcovr vera++ cppcheck doxygen \
         graphviz graphviz-dev; \
     apt-get -y clean
-```    
+git clone https://github.com/hyperledger/iroha -b develop
+cd iroha
+cmake -H. -Bbuild
+cmake --build build -- -j4
+```
 
 > macOS
 
 ``` bash
-brew install autoconf git libtool automake cmake go
+xcode-select --install
+# if you dont't have brew installed
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/homebrew/install/master/install)"
+brew install cmake boost postgres grpc autoconf automake libtool golang
+git clone https://github.com/hyperledger/iroha -b develop
+cd iroha
+cmake -H. -Bbuild
+cmake --build build -- -j4
 ```
