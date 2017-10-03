@@ -85,3 +85,10 @@ cd iroha
 cmake -H. -Bbuild
 cmake --build build -- -j4
 ```
+> macOS brew
+
+``` bash
+brew tap soramitsu/iroha
+brew install iroha
+```
+
