@@ -450,13 +450,11 @@ brew install iroha
 <p>Transaction </p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">Transaction</span> <span class="p">{</span>
-    <span class="n">Header</span> <span class="na">header</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">Meta</span> <span class="na">meta</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="n">Body</span> <span class="na">body</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-<span class="p">}</span>
+  <span class="n">Payload</span> <span class="na">payload</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">repeated</span> <span class="n">Signature</span> <span class="na">signature</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+ <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="err">/*</span><span class="w"> </span><span class="err">Transaction</span><span class="w"> </span><span class="err">*/</span><span class="w">
-
     </span><span class="s2">"signatures"</span><span class="p">:</span><span class="w"> </span><span class="err">array</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">objects</span><span class="p">,</span><span class="w">
     </span><span class="s2">"created_ts"</span><span class="p">:</span><span class="w"> </span><span class="err">int(</span><span class="mi">13</span><span class="err">)</span><span class="p">,</span><span class="w">
     </span><span class="s2">"creator_account_id"</span><span class="p">:</span><span class="w"> </span><span class="err">string(?)</span><span class="p">,</span><span class="w">
@@ -468,22 +466,43 @@ brew install iroha
 
 <p>Client application should follow descibed protocol and form transactions accordingly to description below.</p>
 <h2 id='transaction-structure'>Transaction structure</h2>
-<p>Each transaction consists of three things:
+<p>Each transaction consists of two parts:
 <ul>
-    <li> Header </li> 
-    <li> Meta information </li> 
-    <li> Body </li> 
+    <li> Payload </li> 
+    <li> Signature </li> 
 </ul></p>
 
 <blockquote>
-<p>Header</p>
+<p>Payload</p>
 </blockquote>
-<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">Header</span> <span class="p">{</span>
-    <span class="kt">uint64</span> <span class="na">created_time</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">repeated</span> <span class="n">Signature</span> <span class="na">signatures</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">Payload</span> <span class="p">{</span>
+  <span class="k">repeated</span> <span class="n">Command</span> <span class="na">commands</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="kt">string</span> <span class="na">creator_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="kt">uint64</span> <span class="na">tx_counter</span>  <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="kt">uint64</span> <span class="na">created_time</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"created_ts"</span><span class="p">:</span><span class="w"> </span><span class="err">int(</span><span class="mi">13</span><span class="err">)</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="err">string(?)</span><span class="p">,</span><span class="w">
+            </span><span class="err">/*</span><span class="w"> </span><span class="err">other</span><span class="w"> </span><span class="err">command-specific</span><span class="w"> </span><span class="err">fields</span><span class="w"> </span><span class="err">*/</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"creator_account_id"</span><span class="p">:</span><span class="w"> </span><span class="err">string(?)</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"tx_counter"</span><span class="p">:</span><span class="w"> </span><span class="err">int</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_ts"</span><span class="p">:</span><span class="w"> </span><span class="err">int(</span><span class="mi">13</span><span class="err">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>Signature </p>
+
+<p>one or more signatures of payload</p>
+</blockquote>
+<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">Signature</span> <span class="p">{</span>
+   <span class="kt">bytes</span> <span class="na">pubkey</span>    <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kt">bytes</span> <span class="na">signature</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"signatures"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="p">,</span><span class="w">
@@ -492,52 +511,19 @@ brew install iroha
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<blockquote>
-<p>Meta </p>
-
-<p><em>creator_account_id</em> is used to prevent replay attacks: </p>
-</blockquote>
-<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">Meta</span> <span class="p">{</span>
-    <span class="kt">string</span> <span class="na">creator_account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">uint64</span> <span class="na">tx_counter</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"creator_account_id"</span><span class="p">:</span><span class="w"> </span><span class="err">string(?)</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"tx_counter"</span><span class="p">:</span><span class="w"> </span><span class="err">int</span><span class="p">,</span><span class="w"> </span><span class="err">…</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<blockquote>
-<p>Body </p>
-</blockquote>
-<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">Body</span> <span class="p">{</span>
-    <span class="k">repeated</span> <span class="n">Command</span> <span class="na">commands</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="err">string(?)</span><span class="p">,</span><span class="w">
-            </span><span class="err">/*</span><span class="w"> </span><span class="err">other</span><span class="w"> </span><span class="err">command-specific</span><span class="w"> </span><span class="err">fields</span><span class="w"> </span><span class="err">*/</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p><strong>Header</strong> stores: 
+<p><strong>Payload</strong> stores everything except signatures: 
 <ul>
     <li> Time of creation (unix time, in milliseconds) </li> 
-    <li> One or many signatures (ed25519 pubkey + signature - base64 from Transaction model) </li> 
-</ul></p>
-
-<p><strong>Meta</strong> information stores:
-<ul>
     <li> ID of transaction creator (username@domain) </li>
     <li> Transaction counter — counts how many times transaction creator send transactions in total. Counter is used to prevent replays, and is formed on client side. </li>
+    <li> Repeated commands which would be described in details later</li> 
 </ul></p>
+
+<p><strong>Signatures</strong> contain one or many signatures (ed25519 pubkey + signature):</p>
 
 <aside class="notice">
 In preview version, there is no way to get current transaction counter by any means. You have to remember it on a client side and increment it. In future version this will be changed, and client application may retrieve this information.
 </aside>
-
-<p><strong>Body</strong> stores repeated commands, which would be described in details later.</p>
 <h1 id='commands'>Commands</h1>
 <aside class="warning">
 Currently, docs are updated. Sections with contraints and validation parts are gradally updated.
