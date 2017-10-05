@@ -379,16 +379,16 @@ Users are authenticated by their keypair and account id, passed as the parameter
 <blockquote>
 <p>Cloning Iroha</p>
 </blockquote>
-<pre class="highlight shell"><code>git clone -b develop --depth<span class="o">=</span>1 <span class="se">\</span>
+<pre class="highlight shell tab-shell"><code>git clone -b develop --depth<span class="o">=</span>1 <span class="se">\</span>
 https://github.com/hyperledger/iroha /path/to/iroha
-</code></pre><h3 id='how-to-run-development-environment'>How to run development environment</h3><pre class="highlight shell"><code>/path/to/iroha/scripts/run-iroha-dev.sh
+</code></pre><h3 id='how-to-run-development-environment'>How to run development environment</h3><pre class="highlight shell tab-shell"><code>/path/to/iroha/scripts/run-iroha-dev.sh
 </code></pre>
 <p>You will be attached to interactive environment for development and testing with <code>iroha</code> folder mounted from host machine.</p>
 
 <p>Docker environment will be removed when you logout from the container.</p>
 <h3 id='build-code-iroha-code-and-run-tests'>Build <code>iroha</code> and run tests</h3>
 <p>Build:
-<code>bash
+<code>shell
 cmake -H. -Bbuild; 
 cmake --build build -- -j$(nproc)
 </code></p>
@@ -398,19 +398,19 @@ cmake --build build -- -j$(nproc)
 <blockquote>
 <p>How to run tests method #1</p>
 </blockquote>
-<pre class="highlight shell"><code>cmake --build build --target <span class="nb">test</span>
+<pre class="highlight shell tab-shell"><code>cmake --build build --target <span class="nb">test</span>
 </code></pre>
 <blockquote>
 <p>How to run tests method #2</p>
 </blockquote>
-<pre class="highlight shell"><code>ctest . <span class="c"># in build folder </span>
+<pre class="highlight shell tab-shell"><code>ctest . <span class="c"># in build folder </span>
 </code></pre><h3 id='execute-code-iroha-cli-code-with-code-irohad-code-running'>Execute <code>iroha-cli</code> with <code>irohad</code> running</h3>
 <p>Execute <code>run-iroha-dev.sh</code> again to attach to existing container.</p>
 <h2 id='linux-or-macos'>Linux or macOS</h2>
 <blockquote>
 <p>Linux</p>
 </blockquote>
-<pre class="highlight shell"><code>apt-get -y --no-install-recommends install <span class="se">\</span>
+<pre class="highlight shell tab-shell"><code>apt-get -y --no-install-recommends install <span class="se">\</span>
         build-essential python-software-properties <span class="se">\</span>
         automake libtool <span class="se">\</span>
         libssl-dev zlib1g-dev libboost-all-dev <span class="se">\</span>
@@ -431,7 +431,7 @@ cmake --build build -- -j4
 <blockquote>
 <p>macOS</p>
 </blockquote>
-<pre class="highlight shell"><code>xcode-select --install
+<pre class="highlight shell tab-shell"><code>xcode-select --install
 <span class="c"># if you dont't have brew installed</span>
 ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/homebrew/install/master/install<span class="k">)</span><span class="s2">"</span>
 brew install cmake boost postgres grpc autoconf automake libtool golang
@@ -443,7 +443,7 @@ cmake --build build -- -j4
 <blockquote>
 <p>macOS brew</p>
 </blockquote>
-<pre class="highlight shell"><code>brew tap soramitsu/iroha
+<pre class="highlight shell tab-shell"><code>brew tap soramitsu/iroha
 brew install iroha
 </code></pre><h1 id='transactions'>Transactions</h1>
 <blockquote>
