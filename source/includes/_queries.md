@@ -4,46 +4,43 @@
 
 ``` protobuf
  message Query {
-    message Header {
-        uint64 created_time = 1;
-        Signature signature = 2;
-    }
- 
-   Header header = 1;
-   string creator_account_id = 2;
-
-   oneof query {
-        GetAccount get_account = 3;
-        GetSignatories get_account_signatories = 4;
-        GetAccountTransactions get_account_transactions = 5;
-        GetAccountAssetTransactions get_account_asset_transactions = 6;
-        GetAccountAssets get_account_assets = 7;
-        GetRoles get_roles = 8;
-        GetAssetInfo get_asset_info = 9;
-        GetRolePermissions get_role_permissions = 10;
-    }
-
-    uint64 query_counter = 11;
+  message Payload {
+    uint64 created_time = 1;
+    string creator_account_id = 2;
+     oneof query {
+       GetAccount get_account = 3;
+       GetSignatories get_account_signatories = 4;
+       GetAccountTransactions get_account_transactions = 5;
+       GetAccountAssetTransactions get_account_asset_transactions = 6;
+       GetAccountAssets get_account_assets = 7;
+       GetRoles get_roles = 8;
+       GetAssetInfo get_asset_info = 9;
+       GetRolePermissions get_role_permissions = 10;
+     }
+     // used to prevent replay attacks.
+     uint64 query_counter = 11;
   }
+
+  Payload payload = 1;
+  Signature signature = 2;
+}
 ```
 
 Each query consists of following things:
 <ol>
-    <li> Header </li>
-    <li> Creator account_id </li>
-    <li> Query (one of Query type) object </li>
-    <li> Query counter </li>
+    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li> 
+    <li> Signature, which signs payload </li> 
 </ol>
 
-**Header** stores: 
+**Payload** stores everything except signatures: 
 <ul>
-    <li>  time of creation (unix time, in milliseconds) </li> 
-    <li>  single signature (ed25519 pubkey + signature — singed message with private key) </li> 
+    <li> **Time of creation** (unix time, in milliseconds) </li> 
+    <li> **Creator account_id** stores account id in form username@domain  </li>
+    <li> **Query counter** is used to prevent replay attack and it is formed on client side </li>
+    <li> **Query object** might be any of types, described below </li> 
 </ul>
 
-**Creator account_id** stores account id in form username@domain <br>
-**Query object** might be any of types, described below <br>
-**Query counter** is used to prevent replay attack and it is formed on client side
+**Signatures** contain one or many signatures (ed25519 pubkey + signature):
 
 ## Get account
 
