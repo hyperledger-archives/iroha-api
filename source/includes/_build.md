@@ -8,14 +8,14 @@ Clone `iroha` repository on your directory.
 
 > Cloning Iroha
 
-``` bash
+``` shell
 git clone -b develop --depth=1 \
 https://github.com/hyperledger/iroha /path/to/iroha
 ```
 
 ### How to run development environment
 
-``` bash
+``` shell
 /path/to/iroha/scripts/run-iroha-dev.sh
 ```
 
@@ -26,7 +26,7 @@ Docker environment will be removed when you logout from the container.
 ### Build `iroha` and run tests
 
 Build:
-``` bash
+``` shell
 cmake -H. -Bbuild; 
 cmake --build build -- -j$(nproc)
 ```
@@ -35,13 +35,13 @@ cmake --build build -- -j$(nproc)
 
 > How to run tests method #1
 
-``` bash
+``` shell
 cmake --build build --target test
 ```
 
 > How to run tests method #2
 
-``` bash
+``` shell
 ctest . # in build folder 
 ```
 
@@ -53,7 +53,7 @@ Execute `run-iroha-dev.sh` again to attach to existing container.
 
 > Linux
 
-``` bash
+``` shell
 apt-get -y --no-install-recommends install \
         build-essential python-software-properties \
         automake libtool \
@@ -75,7 +75,7 @@ cmake --build build -- -j4
 
 > macOS
 
-``` bash
+``` shell
 xcode-select --install
 # if you dont't have brew installed
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/homebrew/install/master/install)"
@@ -87,7 +87,7 @@ cmake --build build -- -j4
 ```
 > macOS brew
 
-``` bash
+``` shell
 brew tap soramitsu/iroha
 brew install iroha
 ```
