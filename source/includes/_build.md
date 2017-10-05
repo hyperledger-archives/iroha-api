@@ -51,6 +51,15 @@ Execute `run-iroha-dev.sh` again to attach to existing container.
 
 ## Linux or macOS
 
+For Iroha, a provisioning of Postgres and Redis are required. You may launch them on your local machine, or use docker containers, as provided.
+
+> Launching Docker and Postgres in Docker
+
+``` shell
+docker run --name some-redis -p 6379:6379 -d redis:3.2.8
+docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres:9.5
+```
+
 > Linux
 
 ``` shell
