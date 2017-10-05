@@ -407,6 +407,14 @@ cmake --build build -- -j$(nproc)
 </code></pre><h3 id='execute-code-iroha-cli-code-with-code-irohad-code-running'>Execute <code>iroha-cli</code> with <code>irohad</code> running</h3>
 <p>Execute <code>run-iroha-dev.sh</code> again to attach to existing container.</p>
 <h2 id='linux-or-macos'>Linux or macOS</h2>
+<p>For Iroha, a provisioning of Postgres and Redis are required. You may launch them on your local machine, or use docker containers, as provided.</p>
+
+<blockquote>
+<p>Launching Docker and Postgres in Docker</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>docker run --name some-redis -p 6379:6379 -d redis:3.2.8
+docker run --name some-postgres -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword -p 5432:5432 -d postgres:9.5
+</code></pre>
 <blockquote>
 <p>Linux</p>
 </blockquote>
@@ -1065,45 +1073,42 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <h3 id='validation-14'>Validation</h3>
 <p>?</p>
 <h1 id='queries'>Queries</h1><h2 id='query-structure'>Query structure</h2><pre class="highlight protobuf tab-protobuf"><code> <span class="kd">message</span> <span class="nc">Query</span> <span class="p">{</span>
-    <span class="kd">message</span> <span class="nc">Header</span> <span class="p">{</span>
-        <span class="kt">uint64</span> <span class="na">created_time</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">Signature</span> <span class="na">signature</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="p">}</span>
-
-   <span class="n">Header</span> <span class="na">header</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-   <span class="kt">string</span> <span class="na">creator_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-   <span class="k">oneof</span> <span class="n">query</span> <span class="p">{</span>
-        <span class="n">GetAccount</span> <span class="na">get_account</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-        <span class="n">GetSignatories</span> <span class="na">get_account_signatories</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-        <span class="n">GetAccountTransactions</span> <span class="na">get_account_transactions</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-        <span class="n">GetAccountAssetTransactions</span> <span class="na">get_account_asset_transactions</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-        <span class="n">GetAccountAssets</span> <span class="na">get_account_assets</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
-        <span class="n">GetRoles</span> <span class="na">get_roles</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
-        <span class="n">GetAssetInfo</span> <span class="na">get_asset_info</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
-        <span class="n">GetRolePermissions</span> <span class="na">get_role_permissions</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kt">uint64</span> <span class="na">query_counter</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+  <span class="kd">message</span> <span class="nc">Payload</span> <span class="p">{</span>
+    <span class="kt">uint64</span> <span class="na">created_time</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">creator_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">oneof</span> <span class="n">query</span> <span class="p">{</span>
+       <span class="n">GetAccount</span> <span class="na">get_account</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+       <span class="n">GetSignatories</span> <span class="na">get_account_signatories</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+       <span class="n">GetAccountTransactions</span> <span class="na">get_account_transactions</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+       <span class="n">GetAccountAssetTransactions</span> <span class="na">get_account_asset_transactions</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+       <span class="n">GetAccountAssets</span> <span class="na">get_account_assets</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+       <span class="n">GetRoles</span> <span class="na">get_roles</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+       <span class="n">GetAssetInfo</span> <span class="na">get_asset_info</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+       <span class="n">GetRolePermissions</span> <span class="na">get_role_permissions</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+     <span class="p">}</span>
+     <span class="c1">// used to prevent replay attacks.
+</span>     <span class="kt">uint64</span> <span class="na">query_counter</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
   <span class="p">}</span>
+
+  <span class="n">Payload</span> <span class="na">payload</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">Signature</span> <span class="na">signature</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre>
 <p>Each query consists of following things:
 <ol>
-    <li> Header </li>
-    <li> Creator account_id </li>
-    <li> Query (one of Query type) object </li>
-    <li> Query counter </li>
+    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li> 
+    <li> Signature, which signs payload </li> 
 </ol></p>
 
-<p><strong>Header</strong> stores: 
+<p><strong>Payload</strong> stores everything except signatures: 
 <ul>
-    <li>  time of creation (unix time, in milliseconds) </li> 
-    <li>  single signature (ed25519 pubkey + signature — singed message with private key) </li> 
+    <li> <strong>Time of creation</strong> (unix time, in milliseconds) </li> 
+    <li> <strong>Creator account_id</strong> stores account id in form username@domain  </li>
+    <li> <strong>Query counter</strong> is used to prevent replay attack and it is formed on client side </li>
+    <li> <strong>Query object</strong> might be any of types, described below </li> 
 </ul></p>
 
-<p><strong>Creator account_id</strong> stores account id in form username@domain <br>
-<strong>Query object</strong> might be any of types, described below <br>
-<strong>Query counter</strong> is used to prevent replay attack and it is formed on client side</p>
+<p><strong>Signatures</strong> contain one or many signatures (ed25519 pubkey + signature):</p>
 <h2 id='get-account'>Get account</h2><h3 id='purpose'>Purpose</h3>
 <p>Purpose of <em>get account</em> query is to get state of an account.</p>
 
