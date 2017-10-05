@@ -26,7 +26,7 @@ Docker environment will be removed when you logout from the container.
 ### Build `iroha` and run tests
 
 Build:
-``` shell
+``` 
 cmake -H. -Bbuild; 
 cmake --build build -- -j$(nproc)
 ```
