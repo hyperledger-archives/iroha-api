@@ -534,7 +534,7 @@ In preview version, there is no way to get current transaction counter by any me
 </aside>
 <h1 id='commands'>Commands</h1>
 <aside class="warning">
-Currently, docs are updated. Sections with contraints and validation parts are gradally updated.
+Currently, docs are updated. Sections with contraints and validation parts are gradually updated.
 </aside>
 <h2 id='add-asset-quantity'>Add asset quantity</h2><h3 id='purpose'>Purpose</h3>
 <p>Purpose of <em>add asset quantity</em> is to increase amount of assets on some account. </p>
@@ -543,13 +543,29 @@ Currently, docs are updated. Sections with contraints and validation parts are g
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
     <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="p">}</span>
+
+<span class="kd">message</span> <span class="nc">uint256</span> <span class="p">{</span>
+   <span class="kt">uint64</span> <span class="na">first</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kt">uint64</span> <span class="na">second</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+   <span class="kt">uint64</span> <span class="na">third</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+   <span class="kt">uint64</span> <span class="na">fourth</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span> <span class="nc">Amount</span> <span class="p">{</span>
+   <span class="n">uint256</span> <span class="na">value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kt">uint32</span> <span class="na">precision</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AddAssetQuantity"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@test"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="err">object</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="err">string</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"precision"</span><span class="p">:</span><span class="w"> </span><span class="err">int</span><span class="w">
+            </span><span class="p">}</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -578,9 +594,15 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 </tr>
 </tbody></table>
 <h3 id='validation'>Validation</h3>
-<p>?</p>
+<ol>
+<li>Asset and account should exist</li>
+<li>Added quantity precision should be equal to asset precision</li>
+<li>User should have this asset in AccountHasAsset relation (&quot;wallet&quot;)</li>
+<li>Creator of transaction should has role which has permissions for issuing assets</li>
+<li>Creator of transaction adds account quantity to his/her account only</li>
+</ol>
 <h2 id='add-peer'>Add peer</h2><h3 id='purpose-2'>Purpose</h3>
-<p>Purpose of <em>add peer</em> is to write into ledger fact of peer addition into the peer network.</p>
+<p>Purpose of <em>add peer</em> is to write into ledger the fact of peer addition into the peer network.</p>
 <h3 id='structure-2'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddPeer</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">address</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">bytes</span> <span class="na">peer_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -610,11 +632,13 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 <tr>
 <td>Peer key</td>
 <td>peer public key, which will be used in consensus algorithm to sign-off vote, commit, reject messages</td>
-<td><strong>?</strong></td>
+<td>ed25519 public key</td>
 </tr>
 </tbody></table>
 <h3 id='validation-2'>Validation</h3>
-<p>?</p>
+<ol>
+<li>Creator of transaction has role which has CanAddPeer permission.</li>
+</ol>
 <h2 id='add-signatory'>Add signatory</h2><h3 id='purpose-3'>Purpose</h3>
 <p>Purpose of <em>add signatory</em> is to add identity to the account. It can be the public key of another device or public key of another user.</p>
 <h3 id='structure-3'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddSignatory</span> <span class="p">{</span>
@@ -650,7 +674,9 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 </tr>
 </tbody></table>
 <h3 id='validation-3'>Validation</h3>
-<p>?</p>
+<p>Two cases:
+Case 1. When transaction creator wants to add signatory to their account and he or she has permission CanAddSignatory
+Case 2. Transaction creator was granted with CanAddSignatory permission to add signatory to this account</p>
 <h2 id='create-asset'>Create asset</h2><h3 id='purpose-4'>Purpose</h3>
 <p>Purpose of <em>сreate asset</em> is to create new type of asset, specific for a domain.</p>
 <h3 id='structure-4'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAsset</span> <span class="p">{</span>
@@ -679,12 +705,12 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 <tr>
 <td>Asset name</td>
 <td>domain-unique name for asset</td>
-<td><strong>?</strong></td>
+<td><code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Domain ID</td>
 <td>target domain to make relation with</td>
-<td>should be created before the asset, length — <strong>?</strong></td>
+<td>should be created before the asset, <code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -693,7 +719,10 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 </tr>
 </tbody></table>
 <h3 id='validation-4'>Validation</h3>
-<p>?</p>
+<ol>
+<li>Transaction creator has permission to create assets</li>
+<li>Asset name is valid and unique per domain</li>
+</ol>
 <h2 id='create-account'>Create account</h2><h3 id='purpose-5'>Purpose</h3>
 <p>Purpose of <em>create account</em> is to make new entity similar to wallet, which stores assets and identities.</p>
 <h3 id='structure-5'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAccount</span> <span class="p">{</span>
@@ -722,12 +751,12 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 <tr>
 <td>Account name</td>
 <td>domain-unique name for account</td>
-<td><strong>?</strong></td>
+<td><code>[a-z]{1,7}</code></td>
 </tr>
 <tr>
 <td>Domain ID</td>
 <td>target domain to make relation with</td>
-<td>should be created before the account, length is <strong>?</strong></td>
+<td>should be created before the account, <code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Main pubkey</td>
@@ -736,25 +765,25 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 </tr>
 </tbody></table>
 <h3 id='validation-5'>Validation</h3>
-<p>?</p>
+<ol>
+<li>Transaction creator has permission to create account</li>
+</ol>
 <h2 id='create-domain'>Create domain</h2><h3 id='purpose-6'>Purpose</h3>
 <p>Purpose of <em>create domain</em> is to make new domain in Iroha network.</p>
 <h3 id='structure-6'>Structure</h3>
 <aside class="notice">
 Just in case it is not working — it was suggested to rename domain_name field into domain_id on 24th of September for consistency across the project.
 </aside>
-
-<aside class="notice">
-Also, regarding recent API changes, we are going to add _default role_ in account so that any created account in this domain has this role by default.
-</aside>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">domain_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">default_role</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateDomain"</span><span class="p">,</span><span class="w"> 
-            </span><span class="s2">"domain_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test2"</span><span class="w">
+            </span><span class="s2">"domain_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"default_role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="w">
         </span><span class="p">}</span><span class="w"> 
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -769,14 +798,19 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <tr>
 <td>Domain ID</td>
 <td>ID for created domain</td>
-<td>unique, regex is <strong>?</strong></td>
+<td>unique, <code>[a-z]{1,9}</code></td>
+</tr>
+<tr>
+<td>Default role</td>
+<td>role for any created user in the domain</td>
+<td>one of existing roles</td>
 </tr>
 </tbody></table>
 <h3 id='validation-6'>Validation</h3>
-<ul>
+<ol>
 <li><em>domain id</em> is unique and valid against regex</li>
-<li>Account, who sends this command in transaction, has permission to create domain</li>
-</ul>
+<li>Account, who sends this command in transaction, has role with permission to create domain</li>
+</ol>
 <h2 id='remove-signatory'>Remove signatory</h2><h3 id='purpose-7'>Purpose</h3>
 <p>Purpose of <em>remove signatory</em> is to remove public key, associated with an identity, from an account</p>
 <h3 id='structure-7'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RemoveSignatory</span> <span class="p">{</span>
@@ -803,11 +837,21 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <tr>
 <td>Account ID</td>
 <td>ID of account to delete signatory from</td>
-<td>already existent, regex is <strong>?</strong></td>
+<td>already existent, <code>[a-z]{1,9}</code></td>
+</tr>
+<tr>
+<td>Public key</td>
+<td>Signatory to delete</td>
+<td>ed25519 public key</td>
 </tr>
 </tbody></table>
 <h3 id='validation-7'>Validation</h3>
-<p>When signatory is deleted, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds</p>
+<p>When signatory is deleted, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds.
+Signatory should be added previously to the account.</p>
+
+<p>Two cases:
+Case 1. When transaction creator wants to remove signatory from their account and he or she has permission CanRemoveSignatory
+Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account</p>
 <h2 id='set-account-quorum'>Set account quorum</h2><h3 id='purpose-8'>Purpose</h3>
 <p>Purpose of <em>set account quorum</em> is to set the number of signatories needed to confirm the identity of person, sending the transaction or is to set amount of people to agree on transaction contents.</p>
 <h3 id='structure-8'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountQuorum</span> <span class="p">{</span>
@@ -834,16 +878,20 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <tr>
 <td>Account ID</td>
 <td>ID of account to set quorum</td>
-<td>already existent, regex is <strong>?</strong></td>
+<td>already existent, <code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Quorum</td>
 <td>number of signatories needed to be included with a transaction from this account</td>
-<td># less than</td>
+<td>0 &lt; quorum &lt; 10</td>
 </tr>
 </tbody></table>
 <h3 id='validation-8'>Validation</h3>
-<p>When quorum is set, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds</p>
+<p>When quorum is set, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds.</p>
+
+<p>Two cases:
+Case 1. When transaction creator wants to set quorum for his/her account and he or she has permission CanRemoveSignatory
+Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account</p>
 <h2 id='transfer-asset'>Transfer asset</h2><h3 id='purpose-9'>Purpose</h3>
 <p>Purpose of <em>transfer asset</em> is to share assets across the network, so that source account can transfer assets to target account.</p>
 <h3 id='structure-9'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransferAsset</span> <span class="p">{</span>
@@ -877,26 +925,31 @@ Also, regarding recent API changes, we are going to add _default role_ in accoun
 <tr>
 <td>Source account ID</td>
 <td>ID of account to withdraw asset from</td>
-<td>already existent, regex is <strong>?</strong></td>
+<td>already existent, <code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Destination account ID</td>
 <td>ID of account to send asset at</td>
-<td>already existent</td>
+<td>already existent, <code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Asset ID</td>
 <td>ID of asset to use</td>
-<td>already existent</td>
+<td>already existent, <code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Amount</td>
 <td>amount of asset to transfer</td>
-<td><strong>?</strong></td>
+<td>0 &lt; amount &lt; max_uint256</td>
 </tr>
 </tbody></table>
 <h3 id='validation-9'>Validation</h3>
-<p>?</p>
+<ol>
+<li>Source and destination accounts have this asset in their AccountHasAsset relations.</li>
+<li>Precision is formed right.</li>
+<li>Source account has this amount of asset to transfer and is not zero.</li>
+<li>Source account can transfer money, and destination account can recieve money (their roles have these permissions).</li>
+</ol>
 <h2 id='subtract-asset-quantity'>Subtract asset quantity</h2><h3 id='purpose-10'>Purpose</h3>
 <p>Purpose of <em>subtract asset quantity</em> is to decrease amount of asset, belonging to an account.</p>
 <h3 id='structure-10'>Structure</h3>
@@ -990,16 +1043,19 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Role name</td>
 <td>name of role to create</td>
-<td>regex?</td>
+<td><strong>?</strong></td>
 </tr>
 <tr>
 <td>Permissions</td>
 <td>array of already existent permissions</td>
-<td><strong>?</strong></td>
+<td>set of passed permissions is fully included into set of existing permissions</td>
 </tr>
 </tbody></table>
 <h3 id='validation-12'>Validation</h3>
-<p>?</p>
+<ol>
+<li>TODO: check if role name is valid</li>
+<li>TODO: check if set of passed permissions is fully included into set of existing permissions<br></li>
+</ol>
 <h2 id='grant-permission'>Grant permission</h2><h3 id='purpose-13'>Purpose</h3>
 <p>Purpose of <em>grant permission</em> is to give another account in the system rights to perform actions over account of transaction sender (give someone right to do something with my account).</p>
 <h3 id='structure-13'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GrantPermission</span> <span class="p">{</span>
@@ -1035,9 +1091,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </tr>
 </tbody></table>
 <h3 id='validation-13'>Validation</h3>
-<p>?</p>
+<ol>
+<li>Account exists</li>
+<li>Transaction creator is permitted to grant this permission</li>
+</ol>
 <h2 id='revoke-permission'>Revoke permission</h2><h3 id='purpose-14'>Purpose</h3>
-<p>Purpose of <em>revoke permission</em> is to revoke or dismiss given grant permission to another account in the netw</p>
+<p>Purpose of <em>revoke permission</em> is to revoke or dismiss given grant permission to another account in the network.</p>
 <h3 id='structure-14'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RevokePermission</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">permission_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -1071,7 +1130,9 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </tr>
 </tbody></table>
 <h3 id='validation-14'>Validation</h3>
-<p>?</p>
+<ol>
+<li>Transaction creator should have previously granted this permission to target account</li>
+</ol>
 <h1 id='queries'>Queries</h1><h2 id='query-structure'>Query structure</h2><pre class="highlight protobuf tab-protobuf"><code> <span class="kd">message</span> <span class="nc">Query</span> <span class="p">{</span>
   <span class="kd">message</span> <span class="nc">Payload</span> <span class="p">{</span>
     <span class="kt">uint64</span> <span class="na">created_time</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
