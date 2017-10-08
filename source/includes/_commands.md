@@ -1,7 +1,7 @@
 # Commands
 
 <aside class="warning">
-Currently, docs are updated. Sections with contraints and validation parts are gradally updated.
+Currently, docs are updated. Sections with contraints and validation parts are gradually updated.
 </aside>
 
 ## Add asset quantity
@@ -18,6 +18,19 @@ message AddAssetQuantity {
 	string asset_id = 2;
 	Amount amount = 3;
 }
+
+message uint256 {
+   uint64 first = 1;
+   uint64 second = 2;
+   uint64 third = 3;
+   uint64 fourth = 4;
+}
+
+message Amount {
+   uint256 value = 1;
+   uint32 precision = 2;
+}
+
 ```
 ```json
 {
@@ -26,7 +39,10 @@ message AddAssetQuantity {
             "command_type": "AddAssetQuantity",
             "account_id": "test@test",
             "asset_id": "coin#test",
-            "amount": object
+            "amount": {
+                "value": string,
+                "precision": int
+            }
         }
     ], …
 }
@@ -40,13 +56,17 @@ Amount  | positive amount of the asset to add | > 0
 
 ### Validation
 
-?
+1. Asset and account should exist
+2. Added quantity precision should be equal to asset precision
+3. User should have this asset in AccountHasAsset relation ("wallet")
+4. Creator of transaction should has role which has permissions for issuing assets
+5. Creator of transaction adds account quantity to his/her account only
 
 ## Add peer
 
 ### Purpose
 
-Purpose of _add peer_ is to write into ledger fact of peer addition into the peer network.
+Purpose of _add peer_ is to write into ledger the fact of peer addition into the peer network.
 
 ### Structure
 
@@ -71,12 +91,12 @@ message AddPeer {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Address | resolvable address in network (IPv4, IPv6, domain name, etc.) | should be resolvable
-Peer key | peer public key, which will be used in consensus algorithm to sign-off vote, commit, reject messages | **?**
+Peer key | peer public key, which will be used in consensus algorithm to sign-off vote, commit, reject messages | ed25519 public key
 
 
 ### Validation
 
-?
+1. Creator of transaction has role which has CanAddPeer permission.
 
 
 ## Add signatory
@@ -112,7 +132,9 @@ Public key | Signatory to add to account | ed25519 public key
 
 ### Validation
 
-?
+Two cases:
+Case 1. When transaction creator wants to add signatory to their account and he or she has permission CanAddSignatory
+Case 2. Transaction creator was granted with CanAddSignatory permission to add signatory to this account
 
 ## Create asset
 
@@ -144,13 +166,14 @@ message CreateAsset {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset name | domain-unique name for asset | **?**
-Domain ID | target domain to make relation with | should be created before the asset, length — **?**
+Asset name | domain-unique name for asset | `[a-z]{1,9}`
+Domain ID | target domain to make relation with | should be created before the asset, `[a-z]{1,9}`
 Precision | number of digits after comma/dot | 0 <= precision <= uint32 max
 
 ### Validation
 
-?
+1. Transaction creator has permission to create assets
+2. Asset name is valid and unique per domain
 
 ## Create account
 
@@ -182,13 +205,13 @@ message CreateAccount {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account name | domain-unique name for account | **?**
-Domain ID | target domain to make relation with | should be created before the account, length is **?**
+Account name | domain-unique name for account | `[a-z]{1,7}`
+Domain ID | target domain to make relation with | should be created before the account, `[a-z]{1,9}`
 Main pubkey| first piblic key to add into the account | ed25519 public key
 
 ### Validation
 
-?
+1. Transaction creator has permission to create account
 
 ## Create domain
 
@@ -202,13 +225,10 @@ Purpose of _create domain_ is to make new domain in Iroha network.
 Just in case it is not working — it was suggested to rename domain_name field into domain_id on 24th of September for consistency across the project.
 </aside>
 
-<aside class="notice">
-Also, regarding recent API changes, we are going to add _default role_ in account so that any created account in this domain has this role by default.
-</aside>
-
 ```protobuf
 message CreateDomain {
     string domain_name = 1;
+    string default_role = 2;
 }
 ```
 ```json
@@ -216,7 +236,8 @@ message CreateDomain {
     "commands": [
         {
             "command_type": "CreateDomain", 
-            "domain_name": "test2"
+            "domain_name": "test2",
+            "default_role": "User"
         } 
     ], …
 }
@@ -224,12 +245,13 @@ message CreateDomain {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Domain ID | ID for created domain | unique, regex is **?**
+Domain ID | ID for created domain | unique, `[a-z]{1,9}`
+Default role | role for any created user in the domain | one of existing roles
 
 ### Validation
 
-* _domain id_ is unique and valid against regex
-* Account, who sends this command in transaction, has permission to create domain
+1. _domain id_ is unique and valid against regex
+2. Account, who sends this command in transaction, has role with permission to create domain
 
 ## Remove signatory
 
@@ -259,11 +281,17 @@ message RemoveSignatory {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | ID of account to delete signatory from | already existent, regex is **?**
+Account ID | ID of account to delete signatory from | already existent, `[a-z]{1,9}`
+Public key | Signatory to delete | ed25519 public key
 
 ### Validation
 
-When signatory is deleted, we should check if invariant of **size(signatories) >= quorum** holds
+When signatory is deleted, we should check if invariant of **size(signatories) >= quorum** holds.
+Signatory should be added previously to the account.
+
+Two cases:
+Case 1. When transaction creator wants to remove signatory from their account and he or she has permission CanRemoveSignatory
+Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account
 
 ## Set account quorum
 
@@ -293,12 +321,16 @@ message SetAccountQuorum {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | ID of account to set quorum | already existent, regex is **?**
-Quorum | number of signatories needed to be included with a transaction from this account | # less than 
+Account ID | ID of account to set quorum | already existent, `[a-z]{1,9}`
+Quorum | number of signatories needed to be included with a transaction from this account | 0 < quorum < 10
 
 ### Validation
 
-When quorum is set, we should check if invariant of **size(signatories) >= quorum** holds
+When quorum is set, we should check if invariant of **size(signatories) >= quorum** holds.
+
+Two cases:
+Case 1. When transaction creator wants to set quorum for his/her account and he or she has permission CanRemoveSignatory
+Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account
 
 ## Transfer asset
 
@@ -335,14 +367,17 @@ message TransferAsset {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Source account ID | ID of account to withdraw asset from | already existent, regex is **?**
-Destination account ID | ID of account to send asset at | already existent
-Asset ID | ID of asset to use | already existent
-Amount | amount of asset to transfer | **?** 
+Source account ID | ID of account to withdraw asset from | already existent, `[a-z]{1,9}`
+Destination account ID | ID of account to send asset at | already existent, `[a-z]{1,9}`
+Asset ID | ID of asset to use | already existent, `[a-z]{1,9}\#[a-z]{1,9}`
+Amount | amount of asset to transfer | 0 < amount < max_uint256 
 
 ### Validation
 
-?
+1. Source and destination accounts have this asset in their AccountHasAsset relations.
+2. Precision is formed right.
+3. Source account has this amount of asset to transfer and is not zero.
+4. Source account can transfer money, and destination account can recieve money (their roles have these permissions).
 
 ## Subtract asset quantity
 
@@ -432,12 +467,13 @@ message CreateRole {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Role name | name of role to create | regex?
-Permissions | array of already existent permissions | **?** 
+Role name | name of role to create | **?** 
+Permissions | array of already existent permissions | set of passed permissions is fully included into set of existing permissions  
 
 ### Validation
 
-?
+1. TODO: check if role name is valid
+2. TODO: check if set of passed permissions is fully included into set of existing permissions  
 
 ## Grant permission
 
@@ -472,13 +508,14 @@ Permission name | name of granted permission | **?**
 
 ### Validation
 
-?
+1. Account exists
+2. Transaction creator is permitted to grant this permission
 
 ## Revoke permission
 
 ### Purpose
 
-Purpose of _revoke permission_ is to revoke or dismiss given grant permission to another account in the netw
+Purpose of _revoke permission_ is to revoke or dismiss given grant permission to another account in the network.
 
 ### Structure
 
@@ -507,4 +544,4 @@ Permission name | name of revoked permission | **?**
 
 ### Validation
 
-?
+1. Transaction creator should have previously granted this permission to target account
