@@ -15,6 +15,7 @@ includes:
   - transactions
   - commands
   - queries
+  - run
   - cli
 
 search: true
