@@ -10,7 +10,7 @@ $ echo 'localhost:10001' > peers.list
 ```bash
 $ iroha-cli --genesis_block --peers_address peers.list
 ```
-3. File `genesis.block` should be generated in the same folder.
+File `genesis.block` with keypair files for Administrator account (`admin@test.priv` and `admin@test.pub`) and node (`node0.priv` and `node0.pub`) should be generated in the same folder.
 
 Pass generated genesis block to irohad using --genesis_block flag.
 
@@ -56,4 +56,11 @@ $ cat /tmp/flags
 --flag1=val
 --flag2=val
 $ irohad --flagfile=/tmp/flags
+```
+
+### Example
+
+Using command line arguments:
+```bash
+irohad --create --dbpath /tmp/block_store --genesis_block genesis.block --postgres_host localhost --postgres_port 5432 --postgres_username postgres --postgres_password mysecretpassword --private_key node0.priv --public_key node0.pub --redis_host localhost --redis_port 6379 --torii_host localhost --torii_port 50051
 ```
