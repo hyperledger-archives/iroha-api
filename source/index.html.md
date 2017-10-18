@@ -12,10 +12,10 @@ toc_footers:
 includes:
   - overview
   - build
+  - run
   - transactions
   - commands
   - queries
-  - run
   - cli
 
 search: true
