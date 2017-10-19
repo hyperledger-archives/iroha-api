@@ -240,6 +240,17 @@
               </ul>
           </li>
           <li>
+            <a href="#run-irohad-on-a-local-machine" class="toc-h1 toc-link" data-title="Run Irohad on a local machine">Run Irohad on a local machine</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#generate-genesis-block" class="toc-h2 toc-link" data-title="Run Irohad on a local machine">Generate genesis block</a>
+                  </li>
+                  <li>
+                    <a href="#launch-irohad" class="toc-h2 toc-link" data-title="Run Irohad on a local machine">Launch irohad</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#transactions" class="toc-h1 toc-link" data-title="Transactions">Transactions</a>
               <ul class="toc-list-h2">
                   <li>
@@ -329,6 +340,9 @@
           <li>
             <a href="#command-line-interface" class="toc-h1 toc-link" data-title="Command Line Interface">Command Line Interface</a>
               <ul class="toc-list-h2">
+                  <li>
+                    <a href="#keypair-generation" class="toc-h2 toc-link" data-title="Command Line Interface">Keypair generation</a>
+                  </li>
                   <li>
                     <a href="#interactive-mode" class="toc-h2 toc-link" data-title="Command Line Interface">Interactive mode </a>
                   </li>
@@ -453,7 +467,130 @@ cmake --build build -- -j4
 </blockquote>
 <pre class="highlight shell tab-shell"><code>brew tap soramitsu/iroha
 brew install iroha
-</code></pre><h1 id='transactions'>Transactions</h1>
+</code></pre><h1 id='run-irohad-on-a-local-machine'>Run Irohad on a local machine</h1><h2 id='generate-genesis-block'>Generate genesis block</h2>
+<ol>
+<li>Create peers.list file containing the peers&#39; addresses. For the local node suffice to add only single peer:
+<code>bash
+$ echo &#39;localhost:10001&#39; &gt; peers.list
+</code></li>
+<li>Generate genesis block using iroha-cli:
+<code>bash
+$ iroha-cli --genesis_block --peers_address peers.list
+</code>
+File <code>genesis.block</code> with keypair files for Administrator account (<code>admin@test.priv</code> and <code>admin@test.pub</code>) and node (<code>node0.priv</code> and <code>node0.pub</code>) should be generated in the same folder.</li>
+</ol>
+
+<p>Pass generated genesis block to irohad using --genesis_block flag.</p>
+<h2 id='launch-irohad'>Launch irohad</h2>
+<p>To launch iroha the following flags are used:</p>
+
+<table><thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>--create</td>
+<td>Create new ledger with given genesis block</td>
+<td>bool</td>
+<td>false</td>
+</tr>
+<tr>
+<td>--dbpath</td>
+<td>Define path to folder for block storage</td>
+<td>string</td>
+<td>&quot;&quot;</td>
+</tr>
+<tr>
+<td>--genesis_block</td>
+<td>Define path to genesis block</td>
+<td>string</td>
+<td>&quot;genesis.json&quot;</td>
+</tr>
+<tr>
+<td>--postgres_host</td>
+<td>Define host on which postgres is listening</td>
+<td>string</td>
+<td>&quot;localhost&quot;</td>
+</tr>
+<tr>
+<td>--postgres_port</td>
+<td>Define port on which postgresql is listening</td>
+<td>int32</td>
+<td>5432</td>
+</tr>
+<tr>
+<td>--postgres_username</td>
+<td>Define postgres user</td>
+<td>string</td>
+<td>&quot;postgres&quot;</td>
+</tr>
+<tr>
+<td>--private_key</td>
+<td>Define path to private key</td>
+<td>string</td>
+<td>&quot;&quot;</td>
+</tr>
+<tr>
+<td>--public_key</td>
+<td>Define path to public key</td>
+<td>string</td>
+<td>&quot;&quot;</td>
+</tr>
+<tr>
+<td>--redis_host</td>
+<td>Define host on which redis is listening</td>
+<td>string</td>
+<td>&quot;localhost&quot;</td>
+</tr>
+<tr>
+<td>--redis_port</td>
+<td>Define port on which redis is listening</td>
+<td>int32</td>
+<td>6379</td>
+</tr>
+<tr>
+<td>--torii_host</td>
+<td>Define host for iroha to listen on</td>
+<td>string</td>
+<td>&quot;0.0.0.0&quot;</td>
+</tr>
+<tr>
+<td>--torii_port</td>
+<td>Define port for iroha to listen on</td>
+<td>int32</td>
+<td>50051</td>
+</tr>
+</tbody></table>
+<h3 id='launch-irohad-using-command-line-arguments'>Launch irohad using command line arguments</h3>
+<p>Usage:
+<code>bash
+$ irohad -flag1=val -flag2=val
+</code></p>
+<h3 id='launch-irohad-using-environment-variables'>Launch irohad using environment variables</h3>
+<p>Usage:
+<code>bash
+$ export FLAGS_flag1=val
+$ export FLAGS_flag2=val
+$ irohad --fromenv=flag1,flag2
+</code></p>
+<h3 id='launch-irohad-using-flag-file'>Launch irohad using FLAG FILE</h3>
+<p>Usage:
+<code>bash
+$ cat /tmp/flags
+--flag1=val
+--flag2=val
+$ irohad --flagfile=/tmp/flags
+</code></p>
+<h3 id='example'>Example</h3>
+<p>Using command line arguments:
+<code>bash
+irohad --create --dbpath /tmp/block_store --genesis_block genesis.block --postgres_host localhost --postgres_port 5432 --postgres_username postgres --postgres_password mysecretpassword --private_key node0.priv --public_key node0.pub --redis_host localhost --redis_port 6379 --torii_host localhost --torii_port 50051
+</code></p>
+<h1 id='transactions'>Transactions</h1>
 <blockquote>
 <p>Transaction </p>
 </blockquote>
@@ -1714,10 +1851,19 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <h3 id='validation-8'>Validation</h3>
 <p>?</p>
 <h1 id='command-line-interface'>Command Line Interface</h1>
-<p>Iroha Command Line Interface (CLI) is a tool for creation of transaction containing commands from the command line, or sending queries to Iroha. It is intended to simplify interaction between the client side and Iroha peer. </p>
+<p>Iroha Command Line Interface (CLI) is a tool for creation of transaction containing commands from the command line, or sending queries to Iroha. It is intended to simplify interaction between the client side and Iroha peer. CLI could be also used for keypair generation.</p>
 
 <p>Interactive mode of cli in a nutshell represents number of steps, where at each step user must interact with the system. 
 To choose one of the options can type short name of the command specified in parentheses, or number of the command in the menu.</p>
+<h2 id='keypair-generation'>Keypair generation</h2>
+<p>To generate files containing private and public keys <code>--new_account</code> flag should be used.</p>
+
+<p>Example:
+<code>bash
+iroha-cli --new_account --name alice@ru --pass_phrase mysupersecretpassword
+</code></p>
+
+<p>After that <code>alice@ru.priv</code> and <code>alice@ru.pub</code> files will be generated in the folder from which iroha-cli has been launched.</p>
 <h2 id='interactive-mode'>Interactive mode </h2>
 <p>Run: 
 <code class="bash"> iroha-cli --interactive --name your_account_id </code></p>
@@ -1746,7 +1892,7 @@ To add command to transaction there two options:
 <ol> 
     <li> Type number of the command in the menu, or command name without parameters: 
     This will iterate through the parameters of the command and ask user to type the parameter value. 
-    For example typing &quot;1&quot; will create set account quorum, and ask to type account id and quorum: 
+    For example typing &quot;1&quot; will create set account quorum, and ask to type account id and quorum:
     <img src="images/cli/image-4.png" alt="image-3" /> </li> </p>
 
 <p><li> Type command name with all needed parameters . 
@@ -1773,8 +1919,8 @@ Currently interactive cli supports the following queries:</p>
 
 <p>For each query there two possible modes to run: 
 <ol>
-    <li> By typing appropriate number of query, either the corresponding abbreviation specified in parentheses. </li> 
-    <li> Typing the command abbreviation with appropriated parameters. </li> 
+    <li> By typing appropriate number of query, either the corresponding abbreviation specified in parentheses. </li>
+    <li> Typing the command abbreviation with appropriated parameters. </li>
 </ol> </p>
 
 <p>After query is formed there are following options:
