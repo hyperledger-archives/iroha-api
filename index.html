@@ -383,10 +383,8 @@ Users are authenticated by their keypair and account id, passed as the parameter
 <li>Run iroha-cli in interactive mode</li>
 <li>Select a necessary action to perform</li>
 <li>Send formed protobuf via gRPC call</li>
-<li>Get a response from the system </li>
+<li>Get a response from the system</li>
 </ol>
-
-<aside class="notice"> Right now, responses for trasaction status are not retrieved from the CLI. ETA is October 2017. </aside>
 <h1 id='build'>Build</h1><h2 id='docker'>Docker</h2><h3 id='git-repository'>Git repository</h3>
 <p>Clone <code>iroha</code> repository on your directory.</p>
 
@@ -907,11 +905,7 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
 </ol>
 <h2 id='create-domain'>Create domain</h2><h3 id='purpose-6'>Purpose</h3>
 <p>Purpose of <em>create domain</em> is to make new domain in Iroha network.</p>
-<h3 id='structure-6'>Structure</h3>
-<aside class="notice">
-Just in case it is not working — it was suggested to rename domain_name field into domain_id on 24th of September for consistency across the project.
-</aside>
-<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
+<h3 id='structure-6'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">domain_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">default_role</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
