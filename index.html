@@ -240,13 +240,13 @@
               </ul>
           </li>
           <li>
-            <a href="#run-irohad-on-a-local-machine" class="toc-h1 toc-link" data-title="Run Irohad on a local machine">Run Irohad on a local machine</a>
+            <a href="#run-irohad-locally" class="toc-h1 toc-link" data-title="Run irohad locally">Run irohad locally</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#generate-genesis-block" class="toc-h2 toc-link" data-title="Run Irohad on a local machine">Generate genesis block</a>
+                    <a href="#generate-genesis-block" class="toc-h2 toc-link" data-title="Run irohad locally">Generate genesis block</a>
                   </li>
                   <li>
-                    <a href="#launch-irohad" class="toc-h2 toc-link" data-title="Run Irohad on a local machine">Launch irohad</a>
+                    <a href="#launch-irohad" class="toc-h2 toc-link" data-title="Run irohad locally">Launch irohad</a>
                   </li>
               </ul>
           </li>
@@ -338,6 +338,17 @@
               </ul>
           </li>
           <li>
+            <a href="#permissions" class="toc-h1 toc-link" data-title="Permissions">Permissions</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#permission-groups" class="toc-h2 toc-link" data-title="Permissions">Permission groups</a>
+                  </li>
+                  <li>
+                    <a href="#initialisation-of-the-system" class="toc-h2 toc-link" data-title="Permissions">Initialisation of the system</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#command-line-interface" class="toc-h1 toc-link" data-title="Command Line Interface">Command Line Interface</a>
               <ul class="toc-list-h2">
                   <li>
@@ -354,6 +365,9 @@
                   </li>
                   <li>
                     <a href="#query-cli" class="toc-h2 toc-link" data-title="Command Line Interface">Query CLI</a>
+                  </li>
+                  <li>
+                    <a href="#get-transaction-status" class="toc-h2 toc-link" data-title="Command Line Interface">Get transaction status</a>
                   </li>
               </ul>
           </li>
@@ -465,7 +479,7 @@ cmake --build build -- -j4
 </blockquote>
 <pre class="highlight shell tab-shell"><code>brew tap soramitsu/iroha
 brew install iroha
-</code></pre><h1 id='run-irohad-on-a-local-machine'>Run Irohad on a local machine</h1><h2 id='generate-genesis-block'>Generate genesis block</h2>
+</code></pre><h1 id='run-irohad-locally'>Run irohad locally</h1><h2 id='generate-genesis-block'>Generate genesis block</h2>
 <ol>
 <li>Create peers.list file containing the peers&#39; addresses. For the local node suffice to add only single peer:
 <code>bash
@@ -480,6 +494,36 @@ File <code>genesis.block</code> with keypair files for Administrator account (<c
 
 <p>Pass generated genesis block to irohad using --genesis_block flag.</p>
 <h2 id='launch-irohad'>Launch irohad</h2>
+<p>To launch irohad daemon, following parameters are to be passed:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>config</td>
+<td>configuration file, containing postgres, and redis connection, and values to tune the system</td>
+</tr>
+<tr>
+<td>genesis_block</td>
+<td>initial block in the ledger</td>
+</tr>
+<tr>
+<td>keypair_name</td>
+<td>private and public key, which is used by peer to sign the blocks</td>
+</tr>
+</tbody></table>
+
+<p>Use this command to launch iroha from development branch:</p>
+
+<p><code>./build/bin/irohad --config example/config.sample --genesis_block docs/zero.block --keypair_name docs/node</code></p>
+
+<aside class="warning">
+Please, use config file and parameters above. Flags below are going to be used soon, for now (October 2017) we are improving launch and deployment process. 
+</aside>
+
 <p>To launch iroha the following flags are used:</p>
 
 <table><thead>
@@ -1851,6 +1895,183 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </tbody></table>
 <h3 id='validation-8'>Validation</h3>
 <p>?</p>
+<h1 id='permissions'>Permissions</h1>
+<p>Iroha is using role-based access control system (RBAC). 
+Permission model incorporates logic to decide which operations are allowed to be executed by certain groups of users. Also, it supports <code>Grant</code> functionality (so that an account in the system can allow to execute other account actions, like add signatory, remove signatory, set quorum). </p>
+
+<p>It is used together with cryptographic system, which confirms identity of the user (transactions, queries are be signed with private key, that belongs to account).</p>
+<h2 id='permission-groups'>Permission groups</h2><h3 id='change-operations'>Change operations</h3><h4 id='asset'>Asset</h4>
+<table><thead>
+<tr>
+<th>Operation</th>
+<th>Permissions</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>AddAssetQuantity</td>
+<td>CanAddAssetQuantity</td>
+<td></td>
+</tr>
+<tr>
+<td>RemoveAssetQuantity</td>
+<td>CanRemoveAssetQuantity</td>
+<td></td>
+</tr>
+<tr>
+<td>CreateAsset</td>
+<td>CanCreateAsset</td>
+<td></td>
+</tr>
+<tr>
+<td>TransferAsset</td>
+<td>CanTransfer &amp; CanReceive</td>
+<td>Account which transfers asset should have permission CanTransfer. Receiving account should have CanReceive permission.</td>
+</tr>
+</tbody></table>
+<h4 id='account'>Account</h4>
+<table><thead>
+<tr>
+<th>Operation</th>
+<th>Permissions</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CreateAccount</td>
+<td>CanCreateAccount</td>
+<td>Iroha is a private, invitation-based ledger</td>
+</tr>
+</tbody></table>
+<h4 id='domain'>Domain</h4>
+<table><thead>
+<tr>
+<th>Operation</th>
+<th>Permissions</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CreateDomain</td>
+<td>CanCreateDomain</td>
+</tr>
+</tbody></table>
+<h4 id='signatory'>Signatory</h4>
+<table><thead>
+<tr>
+<th>Operation</th>
+<th>Permissions</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>AddSignatory</td>
+<td>CanAddSignatory</td>
+</tr>
+<tr>
+<td>RemoveSignatory</td>
+<td>CanRemoveSignatory</td>
+</tr>
+<tr>
+<td>SetQuorum</td>
+<td>CanSetQuorum</td>
+</tr>
+</tbody></table>
+<h4 id='role'>Role</h4>
+<table><thead>
+<tr>
+<th>Operation</th>
+<th>Permissions</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>AppendRole</td>
+<td>CanAppendRole</td>
+<td>Promotes user to this role</td>
+</tr>
+<tr>
+<td>CreateRole</td>
+<td>CanCreateRole</td>
+<td></td>
+</tr>
+<tr>
+<td>SetQuorum</td>
+<td>CanSetQuorum</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id='read-operations'>Read operations</h3>
+<ul>
+<li><strong>My</strong> — operation can be executed only for the sender (subject of operation)</li>
+<li><strong>All</strong> — operation can be executed for every account</li>
+<li><strong>Domain</strong> — operation can be executed for every account in a domain of the sender</li>
+</ul>
+
+<aside class="notice">
+Domain-related permissions are not implemented yet (end of October 2017). You may help with contribution, it is relatively easy to do.
+</aside>
+
+<table><thead>
+<tr>
+<th>Operation</th>
+<th>Permissions</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>GetAccount</td>
+<td>CanGetMyAccount &amp; CanGetAllAccounts &amp; CanGetDomainAccounts</td>
+</tr>
+<tr>
+<td>GetAssetInfo</td>
+<td>CanGetAssetInfo</td>
+</tr>
+<tr>
+<td>GetSignatories</td>
+<td>CanGetMySignatories &amp; CanGetAllSignatories &amp; CanGetDomainSignatories</td>
+</tr>
+<tr>
+<td>GetAccountTransactions</td>
+<td>CanGetMyAccountTransactions &amp; CanGetAllAccountTransactions &amp; CanGetDomainAccountTransactions</td>
+</tr>
+<tr>
+<td>GetAccountAssetTransactions</td>
+<td>CanGetMyAccountAssetTransactions &amp; CanGetAllAccountAssetTransactions &amp; CanGetDomainAccountAssetTransactions</td>
+</tr>
+<tr>
+<td>GetAccountAssets</td>
+<td>CanGetMyAccountAssets &amp; CanGetAllAccountAssets &amp; CanGetDomainAccountAssets</td>
+</tr>
+<tr>
+<td>GetRoles</td>
+<td>CanGetRoles</td>
+</tr>
+</tbody></table>
+<h3 id='grant-operations'>Grant operations</h3>
+<p>Grantable permissions:
+- CanAddSignatory
+- CanRemoveSignatory
+- CanSetQuorum
+- CanTransferAsset</p>
+
+<table><thead>
+<tr>
+<th>Operation</th>
+<th>Permissions</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>GrantPermission</td>
+<td>CanGrantPermission</td>
+<td>Other account in the system can perform this action</td>
+</tr>
+<tr>
+<td>RevokePermission</td>
+<td>CanRevokePermission</td>
+<td>Other account in the system cannot longer perform this action</td>
+</tr>
+</tbody></table>
+<h2 id='initialisation-of-the-system'>Initialisation of the system</h2>
+<p>When Iroha is deployed, devops engineer needs to reuse permissions, allowed in the system to create roles by associating them with a vector of permissions. This should be done in genesis block of the system, so that a RBAC matrix is formed.</p>
 <h1 id='command-line-interface'>Command Line Interface</h1>
 <p>Iroha Command Line Interface (CLI) is a tool for creation of transaction containing commands from the command line, or sending queries to Iroha. It is intended to simplify interaction between the client side and Iroha peer. CLI could be also used for keypair generation.</p>
 
@@ -1932,7 +2153,44 @@ Currently interactive cli supports the following queries:</p>
 </ul></p>
 
 <p><img src="images/cli/image-6.png" alt="image-6" /></p>
+<h2 id='get-transaction-status'>Get transaction status</h2>
+<p>iroha-cli after it has send a transaction, prints its hash which can be used to retrieve the status of transaction:</p>
 
+<blockquote>
+<p>iroha-cli code snippet</p>
+</blockquote>
+<pre class="highlight plaintext"><code>...
+Command is formed. Choose what to do:
+1. Add one more command to the transaction (add)
+2. Send to Iroha peer (send)
+3. Go back and start a new transaction (b)
+4. Save as json file (save)
+&gt; : 2
+Peer address: 127.0.0.1
+Peer port: 50051
+Congratulation, your transaction was accepted for processing.
+Its hash is 18d3c453e0a84739d21f5dc073df04b245cf34eed5c811a3909c91efdefb496f
+In the main menu users now have an option to retrieve transaction status:
+
+Choose what to do:
+1. New transaction (tx)
+2. New query (qry)
+3. New transaction status request (st)
+&gt; : 3
+Choose action: 
+1. Get status of transaction (get_tx_info)
+0. Back (b)
+&gt; : 1
+Requested tx hash: 18d3c453e0a84739d21f5dc073df04b245cf34eed5c811a3909c91efdefb496f
+Tx hash is saved. Choose what to do:
+1. Send to Iroha peer (send)
+2. Save as json file (save)
+0. Back (b)
+&gt; : 1
+Peer address: 127.0.0.1
+Peer port: 50051
+**Transaction was successfully committed.**
+</code></pre>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
