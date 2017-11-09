@@ -1,9 +1,20 @@
 # Command Line Interface
 
-Iroha Command Line Interface (CLI) is a tool for creation of transaction containing commands from the command line, or sending queries to Iroha. It is intended to simplify interaction between the client side and Iroha peer. 
+Iroha Command Line Interface (CLI) is a tool for creation of transaction containing commands from the command line, or sending queries to Iroha. It is intended to simplify interaction between the client side and Iroha peer. CLI could be also used for keypair generation.
 
 Interactive mode of cli in a nutshell represents number of steps, where at each step user must interact with the system. 
 To choose one of the options can type short name of the command specified in parentheses, or number of the command in the menu.
+
+## Keypair generation
+
+To generate files containing private and public keys `--new_account` flag should be used.
+
+Example:
+```bash
+iroha-cli --new_account --name alice@ru --pass_phrase mysupersecretpassword
+```
+
+After that `alice@ru.priv` and `alice@ru.pub` files will be generated in the folder where iroha-cli has been launched.
 
 ## Interactive mode 
 
@@ -11,7 +22,7 @@ Run: 
 <code class="bash"> iroha-cli --interactive --name your_account_id </code>
 
 Your account_id will be used as the creator of the queries and transactions, signing up messages with accounts keys, fill up counters. 
-At the start of interactive cli will try to find locally keypairs associated with the account_id, hence these keypairs must be generated and stored locally in the folder from which iroha-cli is invoked. 
+At the start of interactive cli will try to find locally keypairs associated with the account_id, hence this keypairs must be generated and stored locally. 
 
 ## Starting menu 
 
@@ -36,7 +47,7 @@ To add command to transaction there two options:
 <ol> 
     <li> Type number of the command in the menu, or command name without parameters: 
     This will iterate through the parameters of the command and ask user to type the parameter value. 
-    For example typing "1" will create set account quorum, and ask to type account id and quorum: 
+    For example typing "1" will create set account quorum, and ask to type account id and quorum:
     ![image-3](../images/cli/image-4.png) </li> 
 
     <li> Type command name with all needed parameters . 
@@ -65,8 +76,8 @@ Currently interactive cli supports the following queries:
 
 For each query there two possible modes to run: 
 <ol>
-    <li> By typing appropriate number of query, either the corresponding abbreviation specified in parentheses. </li> 
-    <li> Typing the command abbreviation with appropriated parameters. </li> 
+    <li> By typing appropriate number of query, either the corresponding abbreviation specified in parentheses. </li>
+    <li> Typing the command abbreviation with appropriated parameters. </li>
 </ol> 
 
 After query is formed there are following options:

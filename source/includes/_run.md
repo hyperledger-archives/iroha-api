@@ -2,11 +2,16 @@
 
 ## Generate genesis block
 
-1. Create peers.list file containing the peers' addresses. For the local node suffice to add only single peer: `bash $ echo 'localhost:10001' > peers.list`
+1. Create peers.list file containing the peers' addresses. For the local node suffice to add only single peer:
+```bash
+$ echo 'localhost:10001' > peers.list
+```
 
-2. Generate genesis block using iroha-cli: `bash $ iroha-cli --genesis_block --peers_address peers.list` File genesis.block with keypair files for Administrator account (`admin@test.priv` and `admin@test.pub`) and node (`node0.priv` and `node0.pub`) should be generated in the same folder.
-
-Pass generated genesis block to irohad using --genesis_block flag.
+2. Generate genesis block using iroha-cli:
+```bash
+$ iroha-cli --genesis_block --peers_address peers.list
+```
+File genesis.block with keypair files for Administrator account (`admin@test.priv` and `admin@test.pub`) and node (`node0.priv` and `node0.pub`) should be generated in the same folder.
 
 ## Prepare config file
 
@@ -45,13 +50,13 @@ Example:
 
 ## Launch irohad
 
-To launch irohad daemon, following parameters are to be passed:
+To launch irohad daemon, following parameters must be passed:
 
 | Parameter     | Meaning                                                                                      |
 |---------------|----------------------------------------------------------------------------------------------|
 | config        | configuration file, containing postgres, and redis connection, and values to tune the system |
 | genesis_block | initial block in the ledger                                                                  |
-| keypair_name  | private and public key, which is used by peer to sign the blocks                             |
+| keypair_name  | private and public key file names without .priv or .pub extension. Used by peer to sign the blocks                             |
 
 Use this command to launch iroha from development branch:
 

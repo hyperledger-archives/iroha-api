@@ -487,7 +487,7 @@ message GrantPermission {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | id of account whom rights are granted | should be existent in the system
-Permission name | name of granted permission | permission belongs to the set of existing permissions
+Permission name | name of granted permission | permission is defined
 
 ### Validation
 
@@ -523,7 +523,7 @@ message RevokePermission {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | id of account whom rights were granted | should be existent in the system
-Permission name | name of revoked permission | permission belongs to the set of existing permissions
+Permission name | name of revoked permission | permission is defined
 
 ### Validation
 
