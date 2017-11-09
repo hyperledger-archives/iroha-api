@@ -1,6 +1,6 @@
 # Build
 
-## Docker 
+## Docker
 
 ### Git repository
 
@@ -26,12 +26,16 @@ Docker environment will be removed when you logout from the container.
 ### Build `iroha` and run tests
 
 Build:
-``` 
-cmake -H. -Bbuild; 
+```
+cmake -H. -Bbuild;
 cmake --build build -- -j$(nproc)
 ```
 
 `irohad` and `iroha-cli` binaries will be in `./build/bin` directory.
+
+### Add to irohad and iroha-cli to path (optional)
+
+export PATH=/path/to/iroha/build/bin:$PATH
 
 > How to run tests method #1
 
@@ -42,7 +46,7 @@ cmake --build build --target test
 > How to run tests method #2
 
 ``` shell
-ctest . # in build folder 
+ctest . # in build folder
 ```
 
 ### Execute `iroha-cli` with `irohad` running
@@ -100,4 +104,3 @@ cmake --build build -- -j4
 brew tap soramitsu/iroha
 brew install iroha
 ```
-

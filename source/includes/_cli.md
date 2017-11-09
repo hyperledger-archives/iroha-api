@@ -11,7 +11,7 @@ Run: 
 <code class="bash"> iroha-cli --interactive --name your_account_id </code>
 
 Your account_id will be used as the creator of the queries and transactions, signing up messages with accounts keys, fill up counters. 
-At the start of interactive cli will try to find locally keypairs associated with the account_id, hence this keypairs must be generated and stored locally. 
+At the start of interactive cli will try to find locally keypairs associated with the account_id, hence these keypairs must be generated and stored locally in the folder from which iroha-cli is invoked. 
 
 ## Starting menu 
 

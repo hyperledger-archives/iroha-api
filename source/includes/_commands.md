@@ -8,7 +8,7 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 
 ### Purpose
 
-Purpose of _add asset quantity_ is to increase amount of assets on some account. 
+Purpose of _add asset quantity_ is to increase amount of assets on some account.
 
 ### Structure
 
@@ -119,8 +119,8 @@ message AddSignatory {
         {
             "command_type": "AddSignatory",
             "account_id": "test@test",
-            "public_key": string(64) 
-        } 
+            "public_key": string(64)
+        }
     ], …
 }
 ```
@@ -156,10 +156,10 @@ message CreateAsset {
     "commands": [
         {
             "command_type": "CreateAsset",
-            "asset_name": "usd", 
-            "domain_id": "test", 
+            "asset_name": "usd",
+            "domain_id": "test",
             "precision": "2"
-        } 
+        }
     ], …
 }
 ```
@@ -194,11 +194,11 @@ message CreateAccount {
 {
     "commands": [
         {
-            "command_type": "CreateAccount", 
-            "account_name": "takemiya", 
-            "domain_id": "test", 
+            "command_type": "CreateAccount",
+            "account_name": "takemiya",
+            "domain_id": "test",
             "main_pubkey": string(64)
-        } 
+        }
     ], …
 }
 ```
@@ -235,10 +235,10 @@ message CreateDomain {
 {
     "commands": [
         {
-            "command_type": "CreateDomain", 
+            "command_type": "CreateDomain",
             "domain_name": "test2",
             "default_role": "User"
-        } 
+        }
     ], …
 }
 ```
@@ -271,17 +271,17 @@ message RemoveSignatory {
 {
     "commands": [
         {
-            "command_type": "RemoveSignatory", 
+            "command_type": "RemoveSignatory",
             "account_id": "takemiya@test",
             "public_key": string(64)
-        } 
+        }
     ], …
 }
 ```
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | ID of account to delete signatory from | already existent, `[a-z]{1,9}`
+Account ID | ID of account to delete signatory from | already existent, `[a-z]{1,9}\@[a-z]{1,9}`
 Public key | Signatory to delete | ed25519 public key
 
 ### Validation
@@ -311,7 +311,7 @@ message SetAccountQuorum {
 {
     "commands": [
         {
-            "command_type": "SetAccountQuorum", 
+            "command_type": "SetAccountQuorum",
             "account_id": "takemiya@test",
             "quorum": 5
         }
@@ -345,6 +345,7 @@ message TransferAsset {
 	string src_account_id = 1;
 	string dest_account_id = 2;
 	string asset_id = 3;
+	string description = 4;
 	Amount amount = 4;
 }
 ```
@@ -356,8 +357,9 @@ message TransferAsset {
             "src_account_id": "takemiya@test",
             "dest_account_id": "nikolai@test",
             "asset_id": "coin#test",
+						"description": "Salary payment",
             "amount": {
-                "int_part": 20, 
+                "int_part": 20,
                 "precision": 0
             }
         }
@@ -367,10 +369,10 @@ message TransferAsset {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Source account ID | ID of account to withdraw asset from | already existent, `[a-z]{1,9}`
-Destination account ID | ID of account to send asset at | already existent, `[a-z]{1,9}`
+Source account ID | ID of account to withdraw asset from | already existent, `[a-z]{1,9}\@[a-z]{1,9}`
+Destination account ID | ID of account to send asset at | already existent, `[a-z]{1,9}\@[a-z]{1,9}`
 Asset ID | ID of asset to use | already existent, `[a-z]{1,9}\#[a-z]{1,9}`
-Amount | amount of asset to transfer | 0 < amount < max_uint256 
+Amount | amount of asset to transfer | 0 < amount < max_uint256
 
 ### Validation
 
@@ -378,26 +380,6 @@ Amount | amount of asset to transfer | 0 < amount < max_uint256
 2. Precision is formed right.
 3. Source account has this amount of asset to transfer and is not zero.
 4. Source account can transfer money, and destination account can recieve money (their roles have these permissions).
-
-## Subtract asset quantity
-
-### Purpose
-
-Purpose of _subtract asset quantity_ is to decrease amount of asset, belonging to an account.
-
-### Structure
-
-<aside class="warning">
-This command is not implemented currently.
-</aside>
-
-Field | Description | Constraint
--------------- | -------------- | --------------
-? | ? | ?
-
-### Validation
-
-?
 
 ## Append role
 
@@ -427,13 +409,14 @@ message AppendRole {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | id or account to append role to | already existent, regex is **?**
+Account ID | id or account to append role to | already existent `[a-z]{1,9}\@[a-z]{1,9}`
 Role name | name of already created role | already existent
-Amount | amount of asset to transfer | **?** 
+Amount | amount of asset to transfer | 0 < amount < max_uint256
 
 ### Validation
 
-?
+1. Role should exist in the system.
+2. Account triggering command should have permissions to append role.
 
 ## Create role
 
@@ -467,7 +450,7 @@ message CreateRole {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Role name | name of role to create | **?** 
+Role name | name of role to create | `[a-z]{1,9}`
 Permissions | array of already existent permissions | set of passed permissions is fully included into set of existing permissions  
 
 ### Validation
@@ -504,7 +487,7 @@ message GrantPermission {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | id of account whom rights are granted | should be existent in the system
-Permission name | name of granted permission | **?** 
+Permission name | name of granted permission | permission belongs to the set of existing permissions
 
 ### Validation
 
@@ -540,7 +523,7 @@ message RevokePermission {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | id of account whom rights were granted | should be existent in the system
-Permission name | name of revoked permission | **?** 
+Permission name | name of revoked permission | permission belongs to the set of existing permissions
 
 ### Validation
 
