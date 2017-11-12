@@ -61,5 +61,5 @@ To launch irohad daemon, following parameters must be passed:
 Use this command to launch iroha from development branch:
 
 ```
-irohad --config example/config.sample --genesis_block docs/zero.block --keypair_name docs/node
+irohad --config example/config.sample --genesis_block example/genesis.block --keypair_name docs/node
 ```
