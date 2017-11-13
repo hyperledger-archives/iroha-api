@@ -195,7 +195,7 @@ message CreateAccount {
     "commands": [
         {
             "command_type": "CreateAccount",
-            "account_name": "takemiya",
+            "account_name": "makoto.takemiya",
             "domain_id": "test",
             "main_pubkey": string(64)
         }
@@ -205,7 +205,7 @@ message CreateAccount {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account name | domain-unique name for account | `[a-z]{1,7}`
+Account name | domain-unique name for account | A string in domain-name syntax defined in RFC1035. An account name is a list of lables separeted by a period `.`. A lable is a sequence of characters in `[a-zA-Z-]`. The length of a lable must not exceed 63 characters.
 Domain ID | target domain to make relation with | should be created before the account, `[a-z]{1,9}`
 Main pubkey| first piblic key to add into the account | ed25519 public key
 
@@ -451,12 +451,12 @@ message CreateRole {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Role name | name of role to create | `[a-z]{1,9}`
-Permissions | array of already existent permissions | set of passed permissions is fully included into set of existing permissions  
+Permissions | array of already existent permissions | set of passed permissions is fully included into set of existing permissions
 
 ### Validation
 
 1. TODO: check if role name is valid
-2. TODO: check if set of passed permissions is fully included into set of existing permissions  
+2. TODO: check if set of passed permissions is fully included into set of existing permissions
 
 ## Grant permission
 
