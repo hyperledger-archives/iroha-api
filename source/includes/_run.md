@@ -1,4 +1,4 @@
-# Run Irohad on a local machine
+# Run irohad locally
 
 ## Generate genesis block
 
@@ -6,61 +6,60 @@
 ```bash
 $ echo 'localhost:10001' > peers.list
 ```
+
 2. Generate genesis block using iroha-cli:
 ```bash
 $ iroha-cli --genesis_block --peers_address peers.list
 ```
-File `genesis.block` with keypair files for Administrator account (`admin@test.priv` and `admin@test.pub`) and node (`node0.priv` and `node0.pub`) should be generated in the same folder.
+File genesis.block with keypair files for Administrator account (`admin@test.priv` and `admin@test.pub`) and node (`node0.priv` and `node0.pub`) should be generated in the same folder.
 
-Pass generated genesis block to irohad using --genesis_block flag.
+## Prepare config file
+
+Configuration file keeps information about storage credentials and irohad parameters:
+
+| Parameter         | Type    | Meaning                                                                                       |
+|-------------------|---------|-----------------------------------------------------------------------------------------------|
+| block_store_path  | string  | Path to store blocks of committed transactions                                                |
+| torii_port        | integer | Port to access iroha node                                                                     |
+| internal_port     | integer | Port used to communicate ordering service, YAC consensus and block loader for synchronization |
+| pg_opt            | string  | Postgres credentials                                                                          |
+| redis_host        | string  | Redis host's IP address                                                                       |
+| redis_port        | integer | Port to access redis storage                                                                  |
+| max_proposal_size | integer | Maximum size of created proposals                                                             |
+| proposal_delay    | integer | The period of time (in ms) used to prepare proposal of transactions                           |
+| vote_delay        | integer | The period of time (in ms) of spreading vote across the network                               |
+| load_delay        | integer | The period of time (in ms) between synchronizations between peers                             |
+
+Example:
+
+```json
+{
+  "block_store_path" : "/tmp/block_store/",
+  "torii_port" : 50051,
+  "internal_port" : 10001,
+  "pg_opt" : "host=localhost port=5432 user=postgres password=mysecretpassword",
+  "redis_host" : "localhost",
+  "redis_port" : 6379,
+  "max_proposal_size" : 10,
+  "proposal_delay" : 5000,
+  "vote_delay" : 5000,
+  "load_delay" : 5000
+}
+
+```
 
 ## Launch irohad
 
-To launch iroha the following flags are used:
+To launch irohad daemon, following parameters must be passed:
 
-| Flag                | Meaning                                      | Type   | Default        |
-|---------------------|----------------------------------------------|--------|----------------|
-| --create            | Create new ledger with given genesis block   | bool   | false          |
-| --dbpath            | Define path to folder for block storage      | string | ""             |
-| --genesis_block     | Define path to genesis block                 | string | "genesis.json" |
-| --postgres_host     | Define host on which postgres is listening   | string | "localhost"    |
-| --postgres_port     | Define port on which postgresql is listening | int32  | 5432           |
-| --postgres_username | Define postgres user                         | string | "postgres"     |
-| --private_key       | Define path to private key                   | string | ""             |
-| --public_key        | Define path to public key                    | string | ""             |
-| --redis_host        | Define host on which redis is listening      | string | "localhost"    |
-| --redis_port        | Define port on which redis is listening      | int32  | 6379           |
-| --torii_host        | Define host for iroha to listen on           | string | "0.0.0.0"      |
-| --torii_port        | Define port for iroha to listen on           | int32  | 50051          |
+| Parameter     | Meaning                                                                                      |
+|---------------|----------------------------------------------------------------------------------------------|
+| config        | configuration file, containing postgres, and redis connection, and values to tune the system |
+| genesis_block | initial block in the ledger                                                                  |
+| keypair_name  | private and public key file names without .priv or .pub extension. Used by peer to sign the blocks                             |
 
+Use this command to launch iroha from development branch:
 
-### Launch irohad using command line arguments
-Usage:
-```bash
-$ irohad -flag1=val -flag2=val
 ```
-
-### Launch irohad using environment variables
-
-Usage:
-```bash
-$ export FLAGS_flag1=val
-$ export FLAGS_flag2=val
-$ irohad --fromenv=flag1,flag2
-```
-
-### Launch irohad using FLAG FILE
-Usage:
-```bash
-$ cat /tmp/flags
---flag1=val
---flag2=val
-$ irohad --flagfile=/tmp/flags
-```
-
-### Example
-
-Using command line arguments:
-```bash
-irohad --create --dbpath /tmp/block_store --genesis_block genesis.block --postgres_host localhost --postgres_port 5432 --postgres_username postgres --postgres_password mysecretpassword --private_key node0.priv --public_key node0.pub --redis_host localhost --redis_port 6379 --torii_host localhost --torii_port 50051
+irohad --config example/config.sample --genesis_block docs/zero.block --keypair_name docs/node
 ```
