@@ -11,6 +11,7 @@ $ echo 'localhost:10001' > peers.list
 ```bash
 $ iroha-cli --genesis_block --peers_address peers.list
 ```
+
 File genesis.block with keypair files for Administrator account (`admin@test.priv` and `admin@test.pub`) and node (`node0.priv` and `node0.pub`) should be generated in the same folder.
 
 ## Prepare config file
@@ -61,5 +62,5 @@ To launch irohad daemon, following parameters must be passed:
 Use this command to launch iroha from development branch:
 
 ```
-irohad --config example/config.sample --genesis_block example/genesis.block --keypair_name docs/node
+irohad --config example/config.sample --genesis_block example/genesis.block --keypair_name example/node
 ```
