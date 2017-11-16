@@ -1,6 +1,6 @@
 # Queries
 
-## Query structure 
+## Query structure
 
 ``` protobuf
  message Query {
@@ -28,16 +28,16 @@
 
 Each query consists of following things:
 <ol>
-    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li> 
-    <li> Signature, which signs payload </li> 
+    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li>
+    <li> Signature, which signs payload </li>
 </ol>
 
-**Payload** stores everything except signatures: 
+**Payload** stores everything except signatures:
 <ul>
-    <li> **Time of creation** (unix time, in milliseconds) </li> 
+    <li> **Time of creation** (unix time, in milliseconds) </li>
     <li> **Creator account_id** stores account id in form username@domain  </li>
     <li> **Query counter** is used to prevent replay attack and it is formed on client side </li>
-    <li> **Query object** might be any of types, described below </li> 
+    <li> **Query object** might be any of types, described below </li>
 </ul>
 
 **Signatures** contain one or many signatures (ed25519 pubkey + signature):
@@ -61,7 +61,7 @@ Given this Query, in successful case Iroha returns `AccountResponse`, which cont
 ### Structure
 
 
-#### Query 
+#### Query
 
 > Query
 
@@ -72,7 +72,7 @@ message GetAccount {
 ```
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -92,7 +92,7 @@ Account ID | account id to request its state  | username@domain
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message AccountResponse {
@@ -108,29 +108,29 @@ message Account {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id | username@domain
-Domain name | domain of account id | ?
-Permissions | set of allowed permissions for the account | ?
+Account ID | account id | `[a-z]{1,9}\@[a-z]{1,9}`
+Domain name | domain of account id | `[a-z]{1,9}`
+Permissions | set of allowed permissions for the account | subset of existing permissions
 Quorum | number of signatories needed to sign the transaction to make it valid  | integer
 
 <aside class="notice">It is better to rename `domain_name` into `domain_id` for consistency purposes</aside>
 
 ### Validation
 
-?
+Stateless validation (check timestamp and signature)
 
 ## Get signatories
 
 ### Purpose
 
-Purpose of _get signatories query is to get signatories, which act as an identity of the account.
+Purpose of _get signatories_ query is to get signatories, which act as an identity of the account.
 
 Given this Query, in successful case Iroha returns `SignatoriesResponse`, which is one or many public ed25519 keys.
 
 ### Structure
 
 
-#### Query 
+#### Query
 
 > Query
 
@@ -141,7 +141,7 @@ message GetSignatories {
 ```
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -156,12 +156,12 @@ message GetSignatories {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request signatories  | username@domain
+Account ID | account id to request signatories  | `[a-z]{1,9}\@[a-z]{1,9}`
 
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message SignatoriesResponse {
@@ -175,7 +175,7 @@ Keys | an array of public keys | ed25519
 
 ### Validation
 
-?
+Stateless validation (check timestamp and signature)
 
 ## Get account transactions
 
@@ -189,7 +189,7 @@ Given this Query, in successful case Iroha returns `TransactionsResponse`, which
 
 ### Structure
 
-#### Query 
+#### Query
 
 > Query
 
@@ -200,7 +200,7 @@ message GetAccountTransactions {
 ```
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -215,12 +215,12 @@ message GetAccountTransactions {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request transactions from  | username@domain
+Account ID | account id to request transactions from  | `[a-z]{1,9}\@[a-z]{1,9}`
 
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message TransactionsResponse {
@@ -230,11 +230,7 @@ message TransactionsResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Transactions | an array of transactions for given account | ?
-
-### Validation
-
-?
+Transactions | an array of transactions for given account | Committed transaction
 
 ## Get account asset transactions
 
@@ -246,7 +242,7 @@ Given this Query, in successful case Iroha returns `TransactionsResponse`, which
 
 ### Structure
 
-#### Query 
+#### Query
 
 > Query
 
@@ -258,7 +254,7 @@ message GetAccountAssetTransactions {
 ```
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -274,12 +270,12 @@ message GetAccountAssetTransactions {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request transactions from  | username@domain
-Asset ID | asset id in order to filter transactions containing this asset | username@domain
+Account ID | account id to request transactions from  | `[a-z]{1,9}\@[a-z]{1,9}`
+Asset ID | asset id in order to filter transactions containing this asset | `[a-z]{1,9}\#[a-z]{1,9}`
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message TransactionsResponse {
@@ -289,11 +285,7 @@ message TransactionsResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Transactions | an array of transactions for given account and asset | ?
-
-### Validation
-
-?
+Transactions | an array of transactions for given account and asset | Committed transactions
 
 ## Get account assets
 
@@ -305,7 +297,7 @@ Given this Query, in successful case Iroha returns `AccountAssetResponse`.
 
 ### Structure
 
-#### Query 
+#### Query
 
 > Query
 
@@ -318,7 +310,7 @@ message GetAccountAssets {
 
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -328,18 +320,18 @@ message GetAccountAssets {
     "query_counter": 1,
     "query_type" : "GetAccountAssets",
     "account_id": "test@test",
-    "asset_id": "coin#test", 
+    "asset_id": "coin#test",
 }
 ```
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request balance from  | username@domain
-Asset ID | asset id to know its balance | asset#domain
+Account ID | account id to request balance from  | `[a-z]{1,9}\@[a-z]{1,9}`
+Asset ID | asset id to know its balance | `[a-z]{1,9}\#[a-z]{1,9}`
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message AccountAsset {
@@ -355,25 +347,25 @@ message AccountAssetResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to knows its balance | ?
-Account ID | account which has this balance  | ?
-Balance | balance of asset | ?
+Asset ID | asset id to knows its balance | `[a-z]{1,9}\#[a-z]{1,9}`
+Account ID | account which has this balance  | `[a-z]{1,9}\@[a-z]{1,9}`
+Balance | balance of asset | > 0
 
 ### Validation
 
-?
+Stateless validation (check timestamp and signature)
 
 ## Get asset info
 
 ### Purpose
 
-In order to know precision for given asset, and other related info in future, such as description, etc. user can send `GetAssetInfo` query to Iroha network 
+In order to know precision for given asset, and other related info in future, such as description, etc. user can send `GetAssetInfo` query to Iroha network
 
-Given this Query, in successful case Iroha returns `AssetResponse` with an infomation about the asset.
+Given this Query, in successful case Iroha returns `AssetResponse` with an information about the asset.
 
 ### Structure
 
-#### Query 
+#### Query
 
 > Query
 
@@ -384,7 +376,7 @@ message GetAssetInfo {
 ```
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -393,17 +385,17 @@ message GetAssetInfo {
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetAssetInfo",
-    "asset_id": "coin#test", 
+    "asset_id": "coin#test",
 }
 ```
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to know related information | asset#domain
+Asset ID | asset id to know related information | `[a-z]{1,9}\#[a-z]{1,9}`
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message AssetResponse {
@@ -419,13 +411,13 @@ message Asset {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to get information about | ?
-Domain ID | domain related to this asset  | ?
-Precision| number of digits after comma | ?
+Asset ID | asset id to get information about | `[a-z]{1,9}`
+Domain ID | domain related to this asset  | `[a-z]{1,9}`
+Precision| number of digits after comma | uint8_t
 
 ### Validation
 
-?
+Stateless validation (check timestamp and signature)
 
 ## Get roles
 
@@ -433,11 +425,11 @@ Precision| number of digits after comma | ?
 
 To get available roles in the system, user can send `GetRoles` query to Iroha network.
 
-Given this Query, in successful case Iroha returns `RolesResponse` containing array of existing roles. 
+Given this Query, in successful case Iroha returns `RolesResponse` containing array of existing roles.
 
 ### Structure
 
-#### Query 
+#### Query
 
 > Query
 
@@ -447,7 +439,7 @@ message GetRoles {
 ```
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -461,7 +453,7 @@ message GetRoles {
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message RolesResponse {
@@ -471,11 +463,11 @@ message RolesResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Roles | array of created roles in the network | ?
+Roles | array of created roles in the network | vector of strings describing existing roles in the system
 
 ### Validation
 
-?
+Stateless validation (check timestamp and signature)
 
 ## Get role permissions
 
@@ -483,22 +475,22 @@ Roles | array of created roles in the network | ?
 
 To get available permissions per role in the system, user can send `GetRolePermissions` query to Iroha network.
 
-Given this Query, in successful case Iroha returns `RolePermissionsResponse` containing array of permissions related to the role. 
+Given this Query, in successful case Iroha returns `RolePermissionsResponse` containing array of permissions related to the role.
 
 ### Structure
 
-#### Query 
+#### Query
 
 > Query
 
 ``` protobuf
-message GetRolePermissions { 
+message GetRolePermissions {
     string role_id = 1;
 }
 ```
 ```json
 {
-    "signature": 
+    "signature":
         {
             "pubkey": "…",
             "signature": "…"
@@ -513,11 +505,11 @@ message GetRolePermissions {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Role ID | role to get permissions for | ?
+Role ID | role to get permissions for | string describing role existing in the system
 
 #### Response
 
-> Response 
+> Response
 
 ```protobuf
 message RolePermissionsResponse {
@@ -527,8 +519,8 @@ message RolePermissionsResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Permissions | array of permissions related to the role | ?
+Permissions | array of permissions related to the role | string of permissions related to the role
 
 ### Validation
 
-?
+Stateless validation (check timestamp and signature)

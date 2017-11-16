@@ -14,7 +14,7 @@ Example:
 iroha-cli --new_account --name alice@ru --pass_phrase mysupersecretpassword
 ```
 
-After that `alice@ru.priv` and `alice@ru.pub` files will be generated in the folder from which iroha-cli has been launched.
+After that `alice@ru.priv` and `alice@ru.pub` files will be generated in the folder where iroha-cli has been launched.
 
 ## Interactive mode 
 
