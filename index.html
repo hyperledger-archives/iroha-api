@@ -246,6 +246,9 @@
                     <a href="#generate-genesis-block" class="toc-h2 toc-link" data-title="Run irohad locally">Generate genesis block</a>
                   </li>
                   <li>
+                    <a href="#prepare-config-file" class="toc-h2 toc-link" data-title="Run irohad locally">Prepare config file</a>
+                  </li>
+                  <li>
                     <a href="#launch-irohad" class="toc-h2 toc-link" data-title="Run irohad locally">Launch irohad</a>
                   </li>
               </ul>
@@ -287,9 +290,6 @@
                   </li>
                   <li>
                     <a href="#transfer-asset" class="toc-h2 toc-link" data-title="Commands">Transfer asset</a>
-                  </li>
-                  <li>
-                    <a href="#subtract-asset-quantity" class="toc-h2 toc-link" data-title="Commands">Subtract asset quantity</a>
                   </li>
                   <li>
                     <a href="#append-role" class="toc-h2 toc-link" data-title="Commands">Append role</a>
@@ -338,17 +338,6 @@
               </ul>
           </li>
           <li>
-            <a href="#permissions" class="toc-h1 toc-link" data-title="Permissions">Permissions</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#permission-groups" class="toc-h2 toc-link" data-title="Permissions">Permission groups</a>
-                  </li>
-                  <li>
-                    <a href="#initialisation-of-the-system" class="toc-h2 toc-link" data-title="Permissions">Initialisation of the system</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
             <a href="#command-line-interface" class="toc-h1 toc-link" data-title="Command Line Interface">Command Line Interface</a>
               <ul class="toc-list-h2">
                   <li>
@@ -365,9 +354,6 @@
                   </li>
                   <li>
                     <a href="#query-cli" class="toc-h2 toc-link" data-title="Command Line Interface">Query CLI</a>
-                  </li>
-                  <li>
-                    <a href="#get-transaction-status" class="toc-h2 toc-link" data-title="Command Line Interface">Get transaction status</a>
                   </li>
               </ul>
           </li>
@@ -397,8 +383,10 @@ Users are authenticated by their keypair and account id, passed as the parameter
 <li>Run iroha-cli in interactive mode</li>
 <li>Select a necessary action to perform</li>
 <li>Send formed protobuf via gRPC call</li>
-<li>Get a response from the system</li>
+<li>Get a response from the system </li>
 </ol>
+
+<aside class="notice"> Right now, responses for trasaction status are not retrieved from the CLI. ETA is October 2017. </aside>
 <h1 id='build'>Build</h1><h2 id='docker'>Docker</h2><h3 id='git-repository'>Git repository</h3>
 <p>Clone <code>iroha</code> repository on your directory.</p>
 
@@ -415,11 +403,13 @@ https://github.com/hyperledger/iroha /path/to/iroha
 <h3 id='build-code-iroha-code-and-run-tests'>Build <code>iroha</code> and run tests</h3>
 <p>Build:
 <code>
-cmake -H. -Bbuild; 
+cmake -H. -Bbuild;
 cmake --build build -- -j$(nproc)
 </code></p>
 
 <p><code>irohad</code> and <code>iroha-cli</code> binaries will be in <code>./build/bin</code> directory.</p>
+<h3 id='add-to-irohad-and-iroha-cli-to-path-optional'>Add to irohad and iroha-cli to path (optional)</h3>
+<p>export PATH=/path/to/iroha/build/bin:$PATH</p>
 
 <blockquote>
 <p>How to run tests method #1</p>
@@ -429,7 +419,7 @@ cmake --build build -- -j$(nproc)
 <blockquote>
 <p>How to run tests method #2</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>ctest . <span class="c"># in build folder </span>
+<pre class="highlight shell tab-shell"><code>ctest . <span class="c"># in build folder</span>
 </code></pre><h3 id='execute-code-iroha-cli-code-with-code-irohad-code-running'>Execute <code>iroha-cli</code> with <code>irohad</code> running</h3>
 <p>Execute <code>run-iroha-dev.sh</code> again to attach to existing container.</p>
 <h2 id='linux-or-macos'>Linux or macOS</h2>
@@ -481,20 +471,95 @@ cmake --build build -- -j4
 brew install iroha
 </code></pre><h1 id='run-irohad-locally'>Run irohad locally</h1><h2 id='generate-genesis-block'>Generate genesis block</h2>
 <ol>
-<li>Create peers.list file containing the peers&#39; addresses. For the local node suffice to add only single peer:
+<li><p>Create peers.list file containing the peers&#39; addresses. For the local node suffice to add only single peer:
 <code>bash
 $ echo &#39;localhost:10001&#39; &gt; peers.list
-</code></li>
-<li>Generate genesis block using iroha-cli:
+</code></p></li>
+<li><p>Generate genesis block using iroha-cli:
 <code>bash
 $ iroha-cli --genesis_block --peers_address peers.list
-</code>
-File <code>genesis.block</code> with keypair files for Administrator account (<code>admin@test.priv</code> and <code>admin@test.pub</code>) and node (<code>node0.priv</code> and <code>node0.pub</code>) should be generated in the same folder.</li>
+</code></p></li>
 </ol>
 
-<p>Pass generated genesis block to irohad using --genesis_block flag.</p>
-<h2 id='launch-irohad'>Launch irohad</h2>
-<p>To launch irohad daemon, following parameters are to be passed:</p>
+<p>File genesis.block with keypair files for Administrator account (<code>admin@test.priv</code> and <code>admin@test.pub</code>) and node (<code>node0.priv</code> and <code>node0.pub</code>) should be generated in the same folder.</p>
+<h2 id='prepare-config-file'>Prepare config file</h2>
+<p>Configuration file keeps information about storage credentials and irohad parameters:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>block_store_path</td>
+<td>string</td>
+<td>Path to store blocks of committed transactions</td>
+</tr>
+<tr>
+<td>torii_port</td>
+<td>integer</td>
+<td>Port to access iroha node</td>
+</tr>
+<tr>
+<td>internal_port</td>
+<td>integer</td>
+<td>Port used to communicate ordering service, YAC consensus and block loader for synchronization</td>
+</tr>
+<tr>
+<td>pg_opt</td>
+<td>string</td>
+<td>Postgres credentials</td>
+</tr>
+<tr>
+<td>redis_host</td>
+<td>string</td>
+<td>Redis host&#39;s IP address</td>
+</tr>
+<tr>
+<td>redis_port</td>
+<td>integer</td>
+<td>Port to access redis storage</td>
+</tr>
+<tr>
+<td>max_proposal_size</td>
+<td>integer</td>
+<td>Maximum size of created proposals</td>
+</tr>
+<tr>
+<td>proposal_delay</td>
+<td>integer</td>
+<td>The period of time (in ms) used to prepare proposal of transactions</td>
+</tr>
+<tr>
+<td>vote_delay</td>
+<td>integer</td>
+<td>The period of time (in ms) of spreading vote across the network</td>
+</tr>
+<tr>
+<td>load_delay</td>
+<td>integer</td>
+<td>The period of time (in ms) between synchronizations between peers</td>
+</tr>
+</tbody></table>
+
+<p>Example:</p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"block_store_path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"/tmp/block_store/"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"torii_port"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50051</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"internal_port"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10001</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"pg_opt"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"host=localhost port=5432 user=postgres password=mysecretpassword"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"redis_host"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"localhost"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"redis_port"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">6379</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"max_proposal_size"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"proposal_delay"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"vote_delay"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"load_delay"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre><h2 id='launch-irohad'>Launch irohad</h2>
+<p>To launch irohad daemon, following parameters must be passed:</p>
 
 <table><thead>
 <tr>
@@ -512,14 +577,13 @@ File <code>genesis.block</code> with keypair files for Administrator account (<c
 </tr>
 <tr>
 <td>keypair_name</td>
-<td>private and public key, which is used by peer to sign the blocks</td>
+<td>private and public key file names without .priv or .pub extension. Used by peer to sign the blocks</td>
 </tr>
 </tbody></table>
 
 <p>Use this command to launch iroha from development branch:</p>
-
-<p><code>./build/bin/irohad --config example/config.sample --genesis_block docs/zero.block --keypair_name docs/node</code></p>
-<h1 id='transactions'>Transactions</h1>
+<pre class="highlight plaintext"><code>irohad --config example/config.sample --genesis_block example/genesis.block --keypair_name example/node
+</code></pre><h1 id='transactions'>Transactions</h1>
 <blockquote>
 <p>Transaction </p>
 </blockquote>
@@ -603,7 +667,7 @@ In preview version, there is no way to get current transaction counter by any me
 Currently, docs are updated. Sections with contraints and validation parts are gradually updated.
 </aside>
 <h2 id='add-asset-quantity'>Add asset quantity</h2><h3 id='purpose'>Purpose</h3>
-<p>Purpose of <em>add asset quantity</em> is to increase amount of assets on some account. </p>
+<p>Purpose of <em>add asset quantity</em> is to increase amount of assets on some account.</p>
 <h3 id='structure'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddAssetQuantity</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -716,8 +780,8 @@ Currently, docs are updated. Sections with contraints and validation parts are g
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AddSignatory"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"public_key"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w"> 
-        </span><span class="p">}</span><span class="w"> 
+            </span><span class="s2">"public_key"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -754,10 +818,10 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateAsset"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"asset_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w"> 
-            </span><span class="s2">"domain_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w"> 
+            </span><span class="s2">"asset_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usd"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"domain_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"precision"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="w">
-        </span><span class="p">}</span><span class="w"> 
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -799,11 +863,11 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateAccount"</span><span class="p">,</span><span class="w"> 
-            </span><span class="s2">"account_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya"</span><span class="p">,</span><span class="w"> 
-            </span><span class="s2">"domain_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w"> 
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateAccount"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"account_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"domain_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"main_pubkey"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
-        </span><span class="p">}</span><span class="w"> 
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -836,17 +900,21 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
 </ol>
 <h2 id='create-domain'>Create domain</h2><h3 id='purpose-6'>Purpose</h3>
 <p>Purpose of <em>create domain</em> is to make new domain in Iroha network.</p>
-<h3 id='structure-6'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
+<h3 id='structure-6'>Structure</h3>
+<aside class="notice">
+Just in case it is not working — it was suggested to rename domain_name field into domain_id on 24th of September for consistency across the project.
+</aside>
+<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">domain_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">default_role</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateDomain"</span><span class="p">,</span><span class="w"> 
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateDomain"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"domain_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test2"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"default_role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="w">
-        </span><span class="p">}</span><span class="w"> 
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -882,10 +950,10 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RemoveSignatory"</span><span class="p">,</span><span class="w"> 
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RemoveSignatory"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"public_key"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
-        </span><span class="p">}</span><span class="w"> 
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -899,7 +967,7 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
 <tr>
 <td>Account ID</td>
 <td>ID of account to delete signatory from</td>
-<td>already existent, <code>[a-z]{1,9}</code></td>
+<td>already existent, <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Public key</td>
@@ -923,7 +991,7 @@ Case 2. Transaction creator was granted with CanRemoveSignatory permission to re
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SetAccountQuorum"</span><span class="p">,</span><span class="w"> 
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SetAccountQuorum"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"quorum"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
         </span><span class="p">}</span><span class="w">
@@ -961,7 +1029,7 @@ Case 2. Transaction creator was granted with CanRemoveSignatory permission to re
     <span class="kt">string</span> <span class="na">dest_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">description</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-    <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+    <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -970,9 +1038,9 @@ Case 2. Transaction creator was granted with CanRemoveSignatory permission to re
             </span><span class="s2">"src_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"dest_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nikolai@test"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"description example"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Salary payment"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"int_part"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> 
+                </span><span class="s2">"int_part"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
                 </span><span class="s2">"precision"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">}</span><span class="w">
@@ -989,22 +1057,17 @@ Case 2. Transaction creator was granted with CanRemoveSignatory permission to re
 <tr>
 <td>Source account ID</td>
 <td>ID of account to withdraw asset from</td>
-<td>already existent, <code>[a-z]{1,9}</code></td>
+<td>already existent, <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Destination account ID</td>
 <td>ID of account to send asset at</td>
-<td>already existent, <code>[a-z]{1,9}</code></td>
+<td>already existent, <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Asset ID</td>
 <td>ID of asset to use</td>
 <td>already existent, <code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Description</td>
-<td>message to attach with a transfer</td>
-<td>?</td>
 </tr>
 <tr>
 <td>Amount</td>
@@ -1019,31 +1082,9 @@ Case 2. Transaction creator was granted with CanRemoveSignatory permission to re
 <li>Source account has this amount of asset to transfer and is not zero.</li>
 <li>Source account can transfer money, and destination account can recieve money (their roles have these permissions).</li>
 </ol>
-<h2 id='subtract-asset-quantity'>Subtract asset quantity</h2><h3 id='purpose-10'>Purpose</h3>
-<p>Purpose of <em>subtract asset quantity</em> is to decrease amount of asset, belonging to an account.</p>
-<h3 id='structure-10'>Structure</h3>
-<aside class="warning">
-This command is not implemented currently.
-</aside>
-
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Constraint</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-</tbody></table>
-<h3 id='validation-10'>Validation</h3>
-<p>?</p>
-<h2 id='append-role'>Append role</h2><h3 id='purpose-11'>Purpose</h3>
+<h2 id='append-role'>Append role</h2><h3 id='purpose-10'>Purpose</h3>
 <p>Purpose of <em>append role</em> is to promote an account to some created role in the system, where role is a set or permissions account has to perform an action (command or query).</p>
-<h3 id='structure-11'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AppendRole</span> <span class="p">{</span>
+<h3 id='structure-10'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AppendRole</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1067,7 +1108,7 @@ This command is not implemented currently.
 <tr>
 <td>Account ID</td>
 <td>id or account to append role to</td>
-<td>already existent, regex is <strong>?</strong></td>
+<td>already existent <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Role name</td>
@@ -1077,15 +1118,18 @@ This command is not implemented currently.
 <tr>
 <td>Amount</td>
 <td>amount of asset to transfer</td>
-<td><strong>?</strong></td>
+<td>0 &lt; amount &lt; max_uint256</td>
 </tr>
 </tbody></table>
-<h3 id='validation-11'>Validation</h3>
-<p>?</p>
-<h2 id='create-role'>Create role</h2><h3 id='purpose-12'>Purpose</h3>
+<h3 id='validation-10'>Validation</h3>
+<ol>
+<li>Role should exist in the system.</li>
+<li>Account triggering command should have permissions to append role.</li>
+</ol>
+<h2 id='create-role'>Create role</h2><h3 id='purpose-11'>Purpose</h3>
 <p>Purpose of <em>create role</em> is to create new role in the system from the set of permissions.
 Combining different permissions into roles, maintainers of Iroha peer network can create customized security model.</p>
-<h3 id='structure-12'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateRole</span> <span class="p">{</span>
+<h3 id='structure-11'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateRole</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="k">repeated</span> <span class="kt">string</span> <span class="na">permissions</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1112,7 +1156,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Role name</td>
 <td>name of role to create</td>
-<td><strong>?</strong></td>
+<td><code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Permissions</td>
@@ -1120,14 +1164,14 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>set of passed permissions is fully included into set of existing permissions</td>
 </tr>
 </tbody></table>
-<h3 id='validation-12'>Validation</h3>
+<h3 id='validation-11'>Validation</h3>
 <ol>
 <li>TODO: check if role name is valid</li>
 <li>TODO: check if set of passed permissions is fully included into set of existing permissions<br></li>
 </ol>
-<h2 id='grant-permission'>Grant permission</h2><h3 id='purpose-13'>Purpose</h3>
+<h2 id='grant-permission'>Grant permission</h2><h3 id='purpose-12'>Purpose</h3>
 <p>Purpose of <em>grant permission</em> is to give another account in the system rights to perform actions over account of transaction sender (give someone right to do something with my account).</p>
-<h3 id='structure-13'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GrantPermission</span> <span class="p">{</span>
+<h3 id='structure-12'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GrantPermission</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">permission_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1156,17 +1200,17 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Permission name</td>
 <td>name of granted permission</td>
-<td><strong>?</strong></td>
+<td>permission is defined</td>
 </tr>
 </tbody></table>
-<h3 id='validation-13'>Validation</h3>
+<h3 id='validation-12'>Validation</h3>
 <ol>
 <li>Account exists</li>
 <li>Transaction creator is permitted to grant this permission</li>
 </ol>
-<h2 id='revoke-permission'>Revoke permission</h2><h3 id='purpose-14'>Purpose</h3>
+<h2 id='revoke-permission'>Revoke permission</h2><h3 id='purpose-13'>Purpose</h3>
 <p>Purpose of <em>revoke permission</em> is to revoke or dismiss given grant permission to another account in the network.</p>
-<h3 id='structure-14'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RevokePermission</span> <span class="p">{</span>
+<h3 id='structure-13'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RevokePermission</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">permission_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1195,10 +1239,10 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Permission name</td>
 <td>name of revoked permission</td>
-<td><strong>?</strong></td>
+<td>permission is defined</td>
 </tr>
 </tbody></table>
-<h3 id='validation-14'>Validation</h3>
+<h3 id='validation-13'>Validation</h3>
 <ol>
 <li>Transaction creator should have previously granted this permission to target account</li>
 </ol>
@@ -1226,16 +1270,16 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </code></pre>
 <p>Each query consists of following things:
 <ol>
-    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li> 
-    <li> Signature, which signs payload </li> 
+    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li>
+    <li> Signature, which signs payload </li>
 </ol></p>
 
-<p><strong>Payload</strong> stores everything except signatures: 
+<p><strong>Payload</strong> stores everything except signatures:
 <ul>
-    <li> <strong>Time of creation</strong> (unix time, in milliseconds) </li> 
+    <li> <strong>Time of creation</strong> (unix time, in milliseconds) </li>
     <li> <strong>Creator account_id</strong> stores account id in form username@domain  </li>
     <li> <strong>Query counter</strong> is used to prevent replay attack and it is formed on client side </li>
-    <li> <strong>Query object</strong> might be any of types, described below </li> 
+    <li> <strong>Query object</strong> might be any of types, described below </li>
 </ul></p>
 
 <p><strong>Signatures</strong> contain one or many signatures (ed25519 pubkey + signature):</p>
@@ -1259,7 +1303,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1286,7 +1330,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </tbody></table>
 <h4 id='response'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AccountResponse</span> <span class="p">{</span>
     <span class="n">Account</span> <span class="na">account</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1308,17 +1352,17 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id</td>
-<td>username@domain</td>
+<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Domain name</td>
 <td>domain of account id</td>
-<td>?</td>
+<td><code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Permissions</td>
 <td>set of allowed permissions for the account</td>
-<td>?</td>
+<td>subset of existing permissions</td>
 </tr>
 <tr>
 <td>Quorum</td>
@@ -1329,9 +1373,9 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 
 <aside class="notice">It is better to rename `domain_name` into `domain_id` for consistency purposes</aside>
 <h3 id='validation'>Validation</h3>
-<p>?</p>
+<p>Stateless validation (check timestamp and signature)</p>
 <h2 id='get-signatories'>Get signatories</h2><h3 id='purpose-2'>Purpose</h3>
-<p>Purpose of _get signatories query is to get signatories, which act as an identity of the account.</p>
+<p>Purpose of <em>get signatories</em> query is to get signatories, which act as an identity of the account.</p>
 
 <p>Given this Query, in successful case Iroha returns <code>SignatoriesResponse</code>, which is one or many public ed25519 keys.</p>
 <h3 id='structure-2'>Structure</h3><h4 id='query-2'>Query</h4>
@@ -1342,7 +1386,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1364,12 +1408,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request signatories</td>
-<td>username@domain</td>
+<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 </tbody></table>
 <h4 id='response-2'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SignatoriesResponse</span> <span class="p">{</span>
     <span class="k">repeated</span> <span class="kt">bytes</span> <span class="na">keys</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1389,7 +1433,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </tr>
 </tbody></table>
 <h3 id='validation-2'>Validation</h3>
-<p>?</p>
+<p>Stateless validation (check timestamp and signature)</p>
 <h2 id='get-account-transactions'>Get account transactions</h2><h3 id='purpose-3'>Purpose</h3>
 <p>In case when a list of transactions per user is needed, <code>GetAccountTransactions</code> query can be formed.</p>
 
@@ -1404,7 +1448,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1426,12 +1470,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request transactions from</td>
-<td>username@domain</td>
+<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 </tbody></table>
 <h4 id='response-3'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransactionsResponse</span> <span class="p">{</span>
     <span class="k">repeated</span> <span class="n">Transaction</span> <span class="na">transactions</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1447,11 +1491,9 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Transactions</td>
 <td>an array of transactions for given account</td>
-<td>?</td>
+<td>Committed transaction</td>
 </tr>
 </tbody></table>
-<h3 id='validation-3'>Validation</h3>
-<p>?</p>
 <h2 id='get-account-asset-transactions'>Get account asset transactions</h2><h3 id='purpose-4'>Purpose</h3>
 <p>When an information about transaction per user using certain asset is needed, <code>GetAccountAssetTransactions</code> query is sent.</p>
 
@@ -1465,7 +1507,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1488,17 +1530,17 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request transactions from</td>
-<td>username@domain</td>
+<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Asset ID</td>
 <td>asset id in order to filter transactions containing this asset</td>
-<td>username@domain</td>
+<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
 </tr>
 </tbody></table>
 <h4 id='response-4'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransactionsResponse</span> <span class="p">{</span>
     <span class="k">repeated</span> <span class="n">Transaction</span> <span class="na">transactions</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1514,11 +1556,9 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Transactions</td>
 <td>an array of transactions for given account and asset</td>
-<td>?</td>
+<td>Committed transactions</td>
 </tr>
 </tbody></table>
-<h3 id='validation-4'>Validation</h3>
-<p>?</p>
 <h2 id='get-account-assets'>Get account assets</h2><h3 id='purpose-5'>Purpose</h3>
 <p>To know the state of an asset per account (balance), <code>GetAccountAssets</code> query can be formed.</p>
 
@@ -1532,7 +1572,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
  <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1542,7 +1582,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     </span><span class="s2">"query_counter"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
     </span><span class="s2">"query_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"GetAccountAssets"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@test"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w"> 
+    </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <table><thead>
@@ -1555,17 +1595,17 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request balance from</td>
-<td>username@domain</td>
+<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Asset ID</td>
 <td>asset id to know its balance</td>
-<td>asset#domain</td>
+<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
 </tr>
 </tbody></table>
 <h4 id='response-5'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AccountAsset</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1587,25 +1627,25 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Asset ID</td>
 <td>asset id to knows its balance</td>
-<td>?</td>
+<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Account ID</td>
 <td>account which has this balance</td>
-<td>?</td>
+<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Balance</td>
 <td>balance of asset</td>
-<td>?</td>
+<td>&gt; 0</td>
 </tr>
 </tbody></table>
-<h3 id='validation-5'>Validation</h3>
-<p>?</p>
+<h3 id='validation-3'>Validation</h3>
+<p>Stateless validation (check timestamp and signature)</p>
 <h2 id='get-asset-info'>Get asset info</h2><h3 id='purpose-6'>Purpose</h3>
-<p>In order to know precision for given asset, and other related info in future, such as description, etc. user can send <code>GetAssetInfo</code> query to Iroha network </p>
+<p>In order to know precision for given asset, and other related info in future, such as description, etc. user can send <code>GetAssetInfo</code> query to Iroha network</p>
 
-<p>Given this Query, in successful case Iroha returns <code>AssetResponse</code> with an infomation about the asset.</p>
+<p>Given this Query, in successful case Iroha returns <code>AssetResponse</code> with an information about the asset.</p>
 <h3 id='structure-6'>Structure</h3><h4 id='query-6'>Query</h4>
 <blockquote>
 <p>Query</p>
@@ -1614,7 +1654,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1623,7 +1663,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     </span><span class="s2">"creator_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin@test"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"query_counter"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
     </span><span class="s2">"query_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"GetAssetInfo"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w"> 
+    </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <table><thead>
@@ -1636,12 +1676,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Asset ID</td>
 <td>asset id to know related information</td>
-<td>asset#domain</td>
+<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
 </tr>
 </tbody></table>
 <h4 id='response-6'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AssetResponse</span> <span class="p">{</span>
 <span class="n">Asset</span> <span class="na">asset</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1663,25 +1703,25 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Asset ID</td>
 <td>asset id to get information about</td>
-<td>?</td>
+<td><code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Domain ID</td>
 <td>domain related to this asset</td>
-<td>?</td>
+<td><code>[a-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Precision</td>
 <td>number of digits after comma</td>
-<td>?</td>
+<td>uint8_t</td>
 </tr>
 </tbody></table>
-<h3 id='validation-6'>Validation</h3>
-<p>?</p>
+<h3 id='validation-4'>Validation</h3>
+<p>Stateless validation (check timestamp and signature)</p>
 <h2 id='get-roles'>Get roles</h2><h3 id='purpose-7'>Purpose</h3>
 <p>To get available roles in the system, user can send <code>GetRoles</code> query to Iroha network.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>RolesResponse</code> containing array of existing roles. </p>
+<p>Given this Query, in successful case Iroha returns <code>RolesResponse</code> containing array of existing roles.</p>
 <h3 id='structure-7'>Structure</h3><h4 id='query-7'>Query</h4>
 <blockquote>
 <p>Query</p>
@@ -1689,7 +1729,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GetRoles</span> <span class="p">{</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1701,7 +1741,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h4 id='response-7'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RolesResponse</span> <span class="p">{</span>
     <span class="k">repeated</span> <span class="kt">string</span> <span class="na">roles</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1717,24 +1757,24 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Roles</td>
 <td>array of created roles in the network</td>
-<td>?</td>
+<td>vector of strings describing existing roles in the system</td>
 </tr>
 </tbody></table>
-<h3 id='validation-7'>Validation</h3>
-<p>?</p>
+<h3 id='validation-5'>Validation</h3>
+<p>Stateless validation (check timestamp and signature)</p>
 <h2 id='get-role-permissions'>Get role permissions</h2><h3 id='purpose-8'>Purpose</h3>
 <p>To get available permissions per role in the system, user can send <code>GetRolePermissions</code> query to Iroha network.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>RolePermissionsResponse</code> containing array of permissions related to the role. </p>
+<p>Given this Query, in successful case Iroha returns <code>RolePermissionsResponse</code> containing array of permissions related to the role.</p>
 <h3 id='structure-8'>Structure</h3><h4 id='query-8'>Query</h4>
 <blockquote>
 <p>Query</p>
 </blockquote>
-<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GetRolePermissions</span> <span class="p">{</span> 
+<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GetRolePermissions</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">role_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> 
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
@@ -1756,12 +1796,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Role ID</td>
 <td>role to get permissions for</td>
-<td>?</td>
+<td>string describing role existing in the system</td>
 </tr>
 </tbody></table>
 <h4 id='response-8'>Response</h4>
 <blockquote>
-<p>Response </p>
+<p>Response</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RolePermissionsResponse</span> <span class="p">{</span>
     <span class="k">repeated</span> <span class="kt">string</span> <span class="na">permissions</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -1777,188 +1817,11 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Permissions</td>
 <td>array of permissions related to the role</td>
-<td>?</td>
+<td>string of permissions related to the role</td>
 </tr>
 </tbody></table>
-<h3 id='validation-8'>Validation</h3>
-<p>?</p>
-<h1 id='permissions'>Permissions</h1>
-<p>Iroha is using role-based access control system (RBAC). 
-Permission model incorporates logic to decide which operations are allowed to be executed by certain groups of users. Also, it supports <code>Grant</code> functionality (so that an account in the system can allow to execute other account actions, like add signatory, remove signatory, set quorum). </p>
-
-<p>It is used together with cryptographic system, which confirms identity of the user (transactions, queries are be signed with private key, that belongs to account).</p>
-<h2 id='permission-groups'>Permission groups</h2><h3 id='change-operations'>Change operations</h3><h4 id='asset'>Asset</h4>
-<table><thead>
-<tr>
-<th>Operation</th>
-<th>Permissions</th>
-<th>Notes</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>AddAssetQuantity</td>
-<td>CanAddAssetQuantity</td>
-<td></td>
-</tr>
-<tr>
-<td>RemoveAssetQuantity</td>
-<td>CanRemoveAssetQuantity</td>
-<td></td>
-</tr>
-<tr>
-<td>CreateAsset</td>
-<td>CanCreateAsset</td>
-<td></td>
-</tr>
-<tr>
-<td>TransferAsset</td>
-<td>CanTransfer &amp; CanReceive</td>
-<td>Account which transfers asset should have permission CanTransfer. Receiving account should have CanReceive permission.</td>
-</tr>
-</tbody></table>
-<h4 id='account'>Account</h4>
-<table><thead>
-<tr>
-<th>Operation</th>
-<th>Permissions</th>
-<th>Notes</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>CreateAccount</td>
-<td>CanCreateAccount</td>
-<td>Iroha is a private, invitation-based ledger</td>
-</tr>
-</tbody></table>
-<h4 id='domain'>Domain</h4>
-<table><thead>
-<tr>
-<th>Operation</th>
-<th>Permissions</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>CreateDomain</td>
-<td>CanCreateDomain</td>
-</tr>
-</tbody></table>
-<h4 id='signatory'>Signatory</h4>
-<table><thead>
-<tr>
-<th>Operation</th>
-<th>Permissions</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>AddSignatory</td>
-<td>CanAddSignatory</td>
-</tr>
-<tr>
-<td>RemoveSignatory</td>
-<td>CanRemoveSignatory</td>
-</tr>
-<tr>
-<td>SetQuorum</td>
-<td>CanSetQuorum</td>
-</tr>
-</tbody></table>
-<h4 id='role'>Role</h4>
-<table><thead>
-<tr>
-<th>Operation</th>
-<th>Permissions</th>
-<th>Notes</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>AppendRole</td>
-<td>CanAppendRole</td>
-<td>Promotes user to this role</td>
-</tr>
-<tr>
-<td>CreateRole</td>
-<td>CanCreateRole</td>
-<td></td>
-</tr>
-<tr>
-<td>SetQuorum</td>
-<td>CanSetQuorum</td>
-<td></td>
-</tr>
-</tbody></table>
-<h3 id='read-operations'>Read operations</h3>
-<ul>
-<li><strong>My</strong> — operation can be executed only for the sender (subject of operation)</li>
-<li><strong>All</strong> — operation can be executed for every account</li>
-<li><strong>Domain</strong> — operation can be executed for every account in a domain of the sender</li>
-</ul>
-
-<aside class="notice">
-Domain-related permissions are not implemented yet (end of October 2017). You may help with contribution, it is relatively easy to do.
-</aside>
-
-<table><thead>
-<tr>
-<th>Operation</th>
-<th>Permissions</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>GetAccount</td>
-<td>CanGetMyAccount &amp; CanGetAllAccounts &amp; CanGetDomainAccounts</td>
-</tr>
-<tr>
-<td>GetAssetInfo</td>
-<td>CanGetAssetInfo</td>
-</tr>
-<tr>
-<td>GetSignatories</td>
-<td>CanGetMySignatories &amp; CanGetAllSignatories &amp; CanGetDomainSignatories</td>
-</tr>
-<tr>
-<td>GetAccountTransactions</td>
-<td>CanGetMyAccountTransactions &amp; CanGetAllAccountTransactions &amp; CanGetDomainAccountTransactions</td>
-</tr>
-<tr>
-<td>GetAccountAssetTransactions</td>
-<td>CanGetMyAccountAssetTransactions &amp; CanGetAllAccountAssetTransactions &amp; CanGetDomainAccountAssetTransactions</td>
-</tr>
-<tr>
-<td>GetAccountAssets</td>
-<td>CanGetMyAccountAssets &amp; CanGetAllAccountAssets &amp; CanGetDomainAccountAssets</td>
-</tr>
-<tr>
-<td>GetRoles</td>
-<td>CanGetRoles</td>
-</tr>
-</tbody></table>
-<h3 id='grant-operations'>Grant operations</h3>
-<p>Grantable permissions:
-- CanAddSignatory
-- CanRemoveSignatory
-- CanSetQuorum
-- CanTransferAsset</p>
-
-<table><thead>
-<tr>
-<th>Operation</th>
-<th>Permissions</th>
-<th>Notes</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>GrantPermission</td>
-<td>CanGrantPermission</td>
-<td>Other account in the system can perform this action</td>
-</tr>
-<tr>
-<td>RevokePermission</td>
-<td>CanRevokePermission</td>
-<td>Other account in the system cannot longer perform this action</td>
-</tr>
-</tbody></table>
-<h2 id='initialisation-of-the-system'>Initialisation of the system</h2>
-<p>When Iroha is deployed, devops engineer needs to reuse permissions, allowed in the system to create roles by associating them with a vector of permissions. This should be done in genesis block of the system, so that a RBAC matrix is formed.</p>
+<h3 id='validation-6'>Validation</h3>
+<p>Stateless validation (check timestamp and signature)</p>
 <h1 id='command-line-interface'>Command Line Interface</h1>
 <p>Iroha Command Line Interface (CLI) is a tool for creation of transaction containing commands from the command line, or sending queries to Iroha. It is intended to simplify interaction between the client side and Iroha peer. CLI could be also used for keypair generation.</p>
 
@@ -1972,7 +1835,7 @@ To choose one of the options can type short name of the command specified in par
 iroha-cli --new_account --name alice@ru --pass_phrase mysupersecretpassword
 </code></p>
 
-<p>After that <code>alice@ru.priv</code> and <code>alice@ru.pub</code> files will be generated in the folder from which iroha-cli has been launched.</p>
+<p>After that <code>alice@ru.priv</code> and <code>alice@ru.pub</code> files will be generated in the folder where iroha-cli has been launched.</p>
 <h2 id='interactive-mode'>Interactive mode </h2>
 <p>Run: 
 <code class="bash"> iroha-cli --interactive --name your_account_id </code></p>
@@ -2040,44 +1903,7 @@ Currently interactive cli supports the following queries:</p>
 </ul></p>
 
 <p><img src="images/cli/image-6.png" alt="image-6" /></p>
-<h2 id='get-transaction-status'>Get transaction status</h2>
-<p>iroha-cli after it has send a transaction, prints its hash which can be used to retrieve the status of transaction:</p>
 
-<blockquote>
-<p>iroha-cli code snippet</p>
-</blockquote>
-<pre class="highlight plaintext"><code>...
-Command is formed. Choose what to do:
-1. Add one more command to the transaction (add)
-2. Send to Iroha peer (send)
-3. Go back and start a new transaction (b)
-4. Save as json file (save)
-&gt; : 2
-Peer address: 127.0.0.1
-Peer port: 50051
-Congratulation, your transaction was accepted for processing.
-Its hash is 18d3c453e0a84739d21f5dc073df04b245cf34eed5c811a3909c91efdefb496f
-In the main menu users now have an option to retrieve transaction status:
-
-Choose what to do:
-1. New transaction (tx)
-2. New query (qry)
-3. New transaction status request (st)
-&gt; : 3
-Choose action: 
-1. Get status of transaction (get_tx_info)
-0. Back (b)
-&gt; : 1
-Requested tx hash: 18d3c453e0a84739d21f5dc073df04b245cf34eed5c811a3909c91efdefb496f
-Tx hash is saved. Choose what to do:
-1. Send to Iroha peer (send)
-2. Save as json file (save)
-0. Back (b)
-&gt; : 1
-Peer address: 127.0.0.1
-Peer port: 50051
-**Transaction was successfully committed.**
-</code></pre>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
