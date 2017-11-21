@@ -545,20 +545,19 @@ $ iroha-cli --genesis_block --peers_address peers.list
 </tbody></table>
 
 <p>Example:</p>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"block_store_path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"/tmp/block_store/"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"torii_port"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50051</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"internal_port"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10001</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"pg_opt"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"host=localhost port=5432 user=postgres password=mysecretpassword"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"redis_host"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"localhost"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"redis_port"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">6379</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"max_proposal_size"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"proposal_delay"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"vote_delay"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"load_delay"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="w">
-</span><span class="p">}</span><span class="w">
-
-</span></code></pre><h2 id='launch-irohad'>Launch irohad</h2>
+<pre class="highlight plaintext"><code>{
+  "block_store_path" : "/tmp/block_store/",
+  "torii_port" : 50051,
+  "internal_port" : 10001,
+  "pg_opt" : "host=localhost port=5432 user=postgres password=mysecretpassword",
+  "redis_host" : "localhost",
+  "redis_port" : 6379,
+  "max_proposal_size" : 10,
+  "proposal_delay" : 5000,
+  "vote_delay" : 5000,
+  "load_delay" : 5000
+}
+</code></pre><h2 id='launch-irohad'>Launch irohad</h2>
 <p>To launch irohad daemon, following parameters must be passed:</p>
 
 <table><thead>
