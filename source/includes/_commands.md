@@ -205,7 +205,7 @@ message CreateAccount {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account name | domain-unique name for account | A string in domain-name syntax defined in RFC1035. An account name is a list of lables separeted by a period `.`. A lable is a sequence of characters in `[a-zA-Z-]`. The length of a lable must not exceed 63 characters.
+Account name | domain-unique name for account | A string in domain-name syntax defined in RFC1035. An account name is a list of lables separated by a period `.`. A lable is a sequence of characters in `[a-zA-Z-]`. The length of a lable must not exceed 63 characters.
 Domain ID | target domain to make relation with | should be created before the account, `[a-z]{1,9}`
 Main pubkey| first piblic key to add into the account | ed25519 public key
 
