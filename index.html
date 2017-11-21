@@ -254,6 +254,17 @@
               </ul>
           </li>
           <li>
+            <a href="#block-structure" class="toc-h1 toc-link" data-title="Block structure">Block structure</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#outside-payload" class="toc-h2 toc-link" data-title="Block structure">Outside payload</a>
+                  </li>
+                  <li>
+                    <a href="#inside-payload" class="toc-h2 toc-link" data-title="Block structure">Inside payload</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#transactions" class="toc-h1 toc-link" data-title="Transactions">Transactions</a>
               <ul class="toc-list-h2">
                   <li>
@@ -582,7 +593,25 @@ $ iroha-cli --genesis_block --peers_address peers.list
 
 <p>Use this command to launch iroha from development branch:</p>
 <pre class="highlight plaintext"><code>irohad --config example/config.sample --genesis_block example/genesis.block --keypair_name example/node
-</code></pre><h1 id='transactions'>Transactions</h1>
+</code></pre><h1 id='block-structure'>Block structure</h1>
+<p><img src="images/block.png" title="Block structure" alt="Block" /></p>
+
+<p>In order to understand contents of the block better, this section tells about its parts:</p>
+<h3 id='outside-payload'>Outside payload</h3>
+<ul>
+<li>hash — SHA3-512 hash of block protobuf payload</li>
+<li>signatures — signatures of peers, which voted for the block during consensus round</li>
+</ul>
+<h3 id='inside-payload'>Inside payload</h3>
+<ul>
+<li>height — a quantity of blocks in the chain up to the block</li>
+<li>timestamp — unix time (in millis) of block forming by a peer</li>
+<li>body — transactions, which successfully passed validation and consensus step</li>
+<li>merkle root — is used for fast checks of <a href="https://en.wikipedia.org/wiki/Merkle_tree">chain integrity</a></li>
+<li>transactions quantity</li>
+<li>previous hash of block</li>
+</ul>
+<h1 id='transactions'>Transactions</h1>
 <blockquote>
 <p>Transaction </p>
 </blockquote>
