@@ -107,7 +107,7 @@ main() {
     # deploy_branch exists in $repo; make sure we have the latest version
 
     disable_expanded_output
-    git fetch --force $repo $deploy_branch:$deploy_branch
+    git fetch --force --update-head-ok $repo $deploy_branch:$deploy_branch
     enable_expanded_output
   fi
 
@@ -148,11 +148,11 @@ incremental_deploy() {
 
 commit+push() {
   set_user_id
-  git --work-tree "$deploy_directory" commit -m "$commit_message"
+  git --work-tree "$deploy_directory" commit -s -m "$commit_message"
 
   disable_expanded_output
   #--quiet is important here to avoid outputting the repo URL, which may contain a secret token
-  git push --quiet $repo $deploy_branch
+  git push --quiet --force $repo $deploy_branch
   enable_expanded_output
 }
 

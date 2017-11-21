@@ -33,7 +33,7 @@ Configuration file keeps information about storage credentials and irohad parame
 
 Example:
 
-```json
+```
 {
   "block_store_path" : "/tmp/block_store/",
   "torii_port" : 50051,
@@ -46,7 +46,6 @@ Example:
   "vote_delay" : 5000,
   "load_delay" : 5000
 }
-
 ```
 
 ## Launch irohad

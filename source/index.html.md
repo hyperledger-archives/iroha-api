@@ -13,6 +13,7 @@ includes:
   - overview
   - build
   - run
+  - block
   - transactions
   - commands
   - queries
