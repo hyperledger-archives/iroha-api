@@ -17,4 +17,3 @@ To try out a basic API request, do the following:
 4. Send formed protobuf via gRPC call
 5. Get a response from the system 
 
-<aside class="notice"> Right now, responses for trasaction status are not retrieved from the CLI. ETA is October 2017. </aside>
