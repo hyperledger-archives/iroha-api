@@ -101,8 +101,8 @@ message AccountResponse {
 message Account {
     string account_id = 1;
     string domain_name = 2;
-    Permissions permissions = 3;
-    uint32 quorum = 4;
+    uint32 quorum = 3;
+    string json_data = 4;
 }
 ```
 
@@ -110,8 +110,8 @@ Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | account id | `[a-z]{1,9}\@[a-z]{1,9}`
 Domain name | domain of account id | `[a-z]{1,9}`
-Permissions | set of allowed permissions for the account | subset of existing permissions
 Quorum | number of signatories needed to sign the transaction to make it valid  | integer
+json_data | key-value information | properly formed json information
 
 <aside class="notice">It is better to rename `domain_name` into `domain_id` for consistency purposes</aside>
 

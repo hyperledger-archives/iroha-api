@@ -528,3 +528,41 @@ Permission name | name of revoked permission | permission is defined
 ### Validation
 
 1. Transaction creator should have previously granted this permission to target account
+
+## Set account detail
+
+### Purpose
+
+Purpose of _set account detail_ is to set account's key-value information
+
+### Structure
+
+```protobuf
+message SetAccountDetail{
+    string account_id = 1;
+    string key = 2;
+    string value = 3;
+}
+```
+```json
+{
+    "commands": [
+        {
+            "command_type": "SetAccountDetail",
+            "account_id": "takemiya@soramitsu",
+            "key": "position",
+			"value": "Co-CEO"
+        }
+    ], …
+}
+```
+
+Field | Description | Constraint
+-------------- | -------------- | --------------
+Account ID | id of account whom key-value information was set | should be existent in the system
+Key | key of information being set | `[A-Za-z0-9_]{1,}`
+Value | value for corresponding key | -
+
+### Validation
+
+1. Creators of transaction consisting that command only can add key-value information for theirs accounts
