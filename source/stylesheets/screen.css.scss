@@ -612,3 +612,13 @@ html, body {
 .highlight, .highlight .w {
   background-color: $code-bg;
 }
+
+.gist {
+  margin-right: 35%;
+  padding: 0 28px;
+  box-sizing: border-box;
+  display: block;
+  margin-bottom: 1em;
+  overflow: auto;
+  border: 0 !important;
+}

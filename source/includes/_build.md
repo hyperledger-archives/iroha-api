@@ -26,12 +26,12 @@ Run the script `run-iroha-dev.sh`, contained in the folder `scripts`: `sh .../ir
 After you execute this script, following things happen:
 
  1. It checks if you don't have containers with Iroha already running. If yes — it will reattach you to interactive shell. Assuming if you don't have any, then:
- 2. The script will download iroha-docker-develop, redis and postgres images. Iroha image contains all development dependencies and is based on top of ubuntu:16.04.
+ 2. The script will download iroha-docker-develop, redis and postgres images. Iroha image contains all development dependencies, and is based on top of ubuntu:16.04.
  3. Three containers are created and launched.
- 4. User is attached to interactive environment for development and testing with `iroha` folder mounted from host machine.
+ 4. The user is attached to the interactive environment for development and testing with `iroha` folder mounted from the host machine.
 
 <aside class="notice">
-Docker environment will be removed when you logout from the container.
+Docker environment will be removed when you detach from the container.
 </aside>
 
 
@@ -50,7 +50,7 @@ On macOS $(nproc) variable does not work. Check number of logical cores with sys
 
 We use CMake to build platform-dependent build files. Run shell commands from "Build" section on the right. Built binaries (`irohad` and `iroha-cli`) will be in `./build/bin` directory.
 
-After you built whole project — please run tests to check the operability of the daemon.
+After you built the project — please run tests to check the operability of the daemon.
 
 ### Add to irohad and iroha-cli to path (optional)
 
@@ -78,8 +78,6 @@ Execute `run-iroha-dev.sh` again to attach to existing container.
 
 ## Linux or macOS
 
-To launch Iroha daemon, running postgres and redis services are required. You may launch them on your local machine, or use docker containers, as provided in the right side.
-
 > Launching Docker and Postgres in Docker
 
 ``` shell
@@ -91,10 +89,23 @@ docker run --name some-postgres \
 -p 5432:5432 -d postgres:9.5
 ```
 
+To launch Iroha daemon, running postgres and redis services are required. You may launch them on your local machine, or use docker containers, as provided on the right side.
+
 ### Linux (debian-based)
 
-To install dependencies, clone and build the project please [use this gist](https://gist.github.com/neewy/39557aa444c3317aeffbdedd9f0f51e2).
+To install dependencies, clone, and build the project, please use this code:
+<script src="https://gist.github.com/neewy/39557aa444c3317aeffbdedd9f0f51e2.js"></script>
 
+#### Outdated dependencies 
+
+In case that some dependencies are outdated in apt, you are advised to use following sources to install dependencies:
+
+##### Boost
+To install Boost libraries (`libboost-all-dev`), use [current release](http://www.boost.org/users/download/) from Boost webpage.
+Exact dependencies are system and filesystem, so use `./bootstrap.sh --with-libraries=system,filesystem` when you are building the project.
+
+##### CMake
+To install CMake tool (`cmake`), use [latest release](https://cmake.org/download/) from CMake webpage.
 
 ### macOS
 
@@ -105,4 +116,5 @@ brew tap soramitsu/iroha
 brew install iroha
 ```
 
-To install dependencies, clone and build the project please [use this gist](https://gist.github.com/neewy/bc0fea777592a5381aa4ab6e68bfe699).
+To install dependencies, clone, and build the project, please use this code:
+<script src="https://gist.github.com/neewy/bc0fea777592a5381aa4ab6e68bfe699.js"></script>
