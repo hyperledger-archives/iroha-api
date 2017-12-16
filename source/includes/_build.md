@@ -16,7 +16,7 @@ Clone Iroha [repository](https://github.com/hyperledger/iroha) in any convenient
 
 ``` shell
 git clone -b develop --depth=1 \
-https://github.com/hyperledger/iroha /path/to/iroha
+https://github.com/hyperledger/iroha
 ```
 
 ### How to run development environment
@@ -25,10 +25,10 @@ Run the script `run-iroha-dev.sh`, contained in the folder `scripts`: `sh .../ir
 
 After you execute this script, following things happen:
 
- 1. It checks if you don't have containers with Iroha already running. If yes — it will reattach you to interactive shell. Assuming if you don't have any, then:
+ 1. The script if you don't have containers with Iroha already running. It ends up with reattaching you to interactive shell upon succesful completion.
  2. The script will download iroha-docker-develop, redis and postgres images. Iroha image contains all development dependencies, and is based on top of ubuntu:16.04.
  3. Three containers are created and launched.
- 4. The user is attached to the interactive environment for development and testing with `iroha` folder mounted from the host machine.
+ 4. The user is attached to the interactive environment for development and testing with `iroha` folder mounted from the host machine. Iroha folder is mounted to `/opt/iroha` in Docker container.
 
 <aside class="notice">
 Docker environment will be removed when you detach from the container.
@@ -45,7 +45,7 @@ cmake --build build -- -j$(nproc)
 ```
 
 <aside class="notice">
-On macOS $(nproc) variable does not work. Check number of logical cores with sysctl -n hw.ncpu
+On macOS $(nproc) variable does not work. Check number of logical cores with <code>sysctl -n hw.ncpu</code>
 </aside>
 
 We use CMake to build platform-dependent build files. Run shell commands from "Build" section on the right. Built binaries (`irohad` and `iroha-cli`) will be in `./build/bin` directory.
@@ -54,7 +54,7 @@ After you built the project — please run tests to check the operability of the
 
 ### Add to irohad and iroha-cli to path (optional)
 
-export PATH=/path/to/iroha/build/bin:$PATH
+`export PATH=.../iroha/build/bin:$PATH`
 
 <aside class="notice">
 Write this to your shell configuration to make it persistent.
@@ -81,12 +81,15 @@ Execute `run-iroha-dev.sh` again to attach to existing container.
 > Launching Docker and Postgres in Docker
 
 ``` shell
-docker run --name some-redis \
--p 6379:6379 -d redis:3.2.8
-docker run --name some-postgres \
--e POSTGRES_USER=iroha \
--e POSTGRES_PASSWORD=helloworld \
--p 5432:5432 -d postgres:9.5
+docker run --name some-redis 
+    -p 6379:6379\
+    -d redis:3.2.8
+
+docker run --name some-postgres 
+    -e POSTGRES_USER=postgres \
+    -e POSTGRES_PASSWORD=mysecretpassword \
+    -p 5432:5432 \
+    -d postgres:9.5
 ```
 
 To launch Iroha daemon, running postgres and redis services are required. You may launch them on your local machine, or use docker containers, as provided on the right side.
@@ -101,8 +104,8 @@ To install dependencies, clone, and build the project, please use this code:
 In case that some dependencies are outdated in apt, you are advised to use following sources to install dependencies:
 
 ##### Boost
-To install Boost libraries (`libboost-all-dev`), use [current release](http://www.boost.org/users/download/) from Boost webpage.
-Exact dependencies are system and filesystem, so use `./bootstrap.sh --with-libraries=system,filesystem` when you are building the project.
+To install Boost libraries (`libboost-all-dev`), use [current release](http://www.boost.org/users/download/) from Boost webpage, or use [debian repository](https://packages.debian.org/sid/libboost-all-dev) for latest library.
+The only dependencies are system and filesystem, so use `./bootstrap.sh --with-libraries=system,filesystem` when you are building the project.
 
 ##### CMake
 To install CMake tool (`cmake`), use [latest release](https://cmake.org/download/) from CMake webpage.
