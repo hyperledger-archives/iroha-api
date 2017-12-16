@@ -25,7 +25,7 @@ Run the script `run-iroha-dev.sh`, contained in the folder `scripts`: `sh .../ir
 
 After you execute this script, following things happen:
 
- 1. The script if you don't have containers with Iroha already running. It ends up with reattaching you to interactive shell upon succesful completion.
+ 1. The script checks if you don't have containers with Iroha already running. It ends up with reattaching you to interactive shell upon succesful completion.
  2. The script will download iroha-docker-develop, redis and postgres images. Iroha image contains all development dependencies, and is based on top of ubuntu:16.04.
  3. Three containers are created and launched.
  4. The user is attached to the interactive environment for development and testing with `iroha` folder mounted from the host machine. Iroha folder is mounted to `/opt/iroha` in Docker container.
