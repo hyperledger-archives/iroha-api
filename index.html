@@ -227,6 +227,17 @@
       <div id="toc" class="toc-list-h1">
           <li>
             <a href="#overview" class="toc-h1 toc-link" data-title="Overview">Overview</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#elevator-pitch-for-iroha" class="toc-h2 toc-link" data-title="Overview">Elevator pitch for Iroha</a>
+                  </li>
+                  <li>
+                    <a href="#purpose-of-the-docs-you-are-reading" class="toc-h2 toc-link" data-title="Overview">Purpose of the docs you are reading</a>
+                  </li>
+                  <li>
+                    <a href="#try-it-yourself" class="toc-h2 toc-link" data-title="Overview">Try it yourself</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#build" class="toc-h1 toc-link" data-title="Build">Build</a>
@@ -240,16 +251,16 @@
               </ul>
           </li>
           <li>
-            <a href="#run-irohad-locally" class="toc-h1 toc-link" data-title="Run irohad locally">Run irohad locally</a>
+            <a href="#run-the-daemon-irohad" class="toc-h1 toc-link" data-title="Run the daemon (irohad)">Run the daemon (irohad)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#generate-genesis-block" class="toc-h2 toc-link" data-title="Run irohad locally">Generate genesis block</a>
+                    <a href="#create-genesis-block" class="toc-h2 toc-link" data-title="Run the daemon (irohad)">Create genesis block</a>
                   </li>
                   <li>
-                    <a href="#prepare-config-file" class="toc-h2 toc-link" data-title="Run irohad locally">Prepare config file</a>
+                    <a href="#prepare-configuration-file" class="toc-h2 toc-link" data-title="Run the daemon (irohad)">Prepare configuration file</a>
                   </li>
                   <li>
-                    <a href="#launch-irohad" class="toc-h2 toc-link" data-title="Run irohad locally">Launch irohad</a>
+                    <a href="#launch-irohad" class="toc-h2 toc-link" data-title="Run the daemon (irohad)">Launch irohad</a>
                   </li>
               </ul>
           </li>
@@ -269,6 +280,9 @@
               <ul class="toc-list-h2">
                   <li>
                     <a href="#transaction-structure" class="toc-h2 toc-link" data-title="Transactions">Transaction structure</a>
+                  </li>
+                  <li>
+                    <a href="#transaction-statuses" class="toc-h2 toc-link" data-title="Transactions">Transaction statuses</a>
                   </li>
               </ul>
           </li>
@@ -382,46 +396,80 @@
       <div class="content">
         <h1 id='overview'>Overview</h1>
 <p>Welcome to the Hyperledger Iroha API docs!</p>
+<h2 id='elevator-pitch-for-iroha'>Elevator pitch for Iroha</h2>
+<p>The system is a distributed ledger platform, capable of storing all history of state-changing actions (called transactions) in immutable linear history (called blockchain). The system is intended to be used in enterprise or between untrusted agents as <strong>private chain platform</strong>, but not as a public chain — key difference is that not everyone is allowed to store the whole history. A subset of users can only query some data (perform a query) if their accounts have required permissions, while others maintain a peer (Iroha is a peer network), which stores history. </p>
 
-<iframe width="560" height="315" style="padding-left: 28px" src="https://www.youtube.com/embed/Hf_5j0b6TZM" frameborder="0" allowfullscreen></iframe>
+<p>Reliability and security are provided with cryptographic capabilities and <strong>Byzantine Fault Tolerant</strong> consensus algorithm. The system is targeted to environments, where client applications are very diverse (desktop, various mobile platforms), and peer hardware varies from embedded systems to enterprise-class servers.</p>
+<h2 id='purpose-of-the-docs-you-are-reading'>Purpose of the docs you are reading</h2>
+<p>The documentation describes the endpoints for users to send transactions to peer network, containing one or many commands to perform allowed actions in the system, and also make queries to know the current state. Also the documentation contains explanation how to build the system, how to run it and other applicable tutorials. </p>
 
-<p>This API allows users to send transactions to peer network, containing one or many commands to perform allowed actions in the system, and also make queries to know current state.
-Users are authenticated by their keypair and account id, passed as the parameter with their transactions or queries.</p>
+<p>The API is organized around protobuf format, as Iroha is using gRPC in transport level. Iroha CLI and block store use JSON format to provide developer-friendly experience for contributors. Feel free to check both sections for protobuf and JSON while exploring docs.</p>
+<h2 id='try-it-yourself'>Try it yourself</h2>
+<p>To try out a basic API functionality, do the following:</p>
 
-<p>The API is organized around protobuf format, as Iroha is using gRPC on transport level. Iroha CLI and blockstore works with JSON format to provide developer-friendly experience for community members.  </p>
-
-<p>To try out a basic API request, do the following:</p>
+<aside class="notice">
+In case you have troubles understanding some specific terminology used — refer to the <a href="#glossary">glossary</a>.
+</aside>
 
 <ol>
-<li>Run the system (<code>irohad</code> daemon) on a single node</li>
-<li>Run iroha-cli in interactive mode</li>
-<li>Select a necessary action to perform</li>
-<li>Send formed protobuf via gRPC call</li>
-<li>Get a response from the system </li>
+<li>Run the system (<code>irohad</code> daemon) on a single node.</li>
+<li>Run iroha-cli in interactive mode. Command Line Interface app is a client, showing the capabilities of the system.</li>
+<li>Select a necessary action to perform. As you created an initial configuration in genesis block — use the account from genesis block to send transaction or make a query.</li>
+<li>When you fill all the necessary details for commands and formed a transaction; or if you formed a query — you are ready to send it to Iroha peer. Tell the network address and port (by default it is 50051).</li>
 </ol>
-<h1 id='build'>Build</h1><h2 id='docker'>Docker</h2><h3 id='git-repository'>Git repository</h3>
-<p>Clone <code>iroha</code> repository on your directory.</p>
+
+<aside class="success">
+If everything went well and you were successful to form transaction or query with valid fields — you will get either transaction hash, which is used for querying transaction state, or query response object (see query subsection for more details).
+</aside>
+<h1 id='build'>Build</h1>
+<p>To launch Iroha peer network, an executable daemon should be launched. Currently we support Unix-like systems (we are basically targeting at popular Linux distros and macOS), while Windows remains to be a challenge for community and we don&#39;t have any plans to support it so far.</p>
+
+<p>If you happen to have Windows or you don&#39;t want to spend time figuring out troubles with dependencies on your system — please use Docker environment, made with care for new contributors of Iroha (and hostages of Windows).</p>
+<h2 id='docker'>Docker</h2>
+<p>Please, use latest available docker daemon and docker-compose. If you have troubles launching Docker container — it is likely that you have an outdated version.</p>
+<h3 id='clone-git-repository'>Clone Git repository</h3>
+<p>Clone Iroha <a href="https://github.com/hyperledger/iroha">repository</a> in any convenient folder on your machine.</p>
 
 <blockquote>
 <p>Cloning Iroha</p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code>git clone -b develop --depth<span class="o">=</span>1 <span class="se">\</span>
-https://github.com/hyperledger/iroha /path/to/iroha
-</code></pre><h3 id='how-to-run-development-environment'>How to run development environment</h3><pre class="highlight shell tab-shell"><code>/path/to/iroha/scripts/run-iroha-dev.sh
+https://github.com/hyperledger/iroha
+</code></pre><h3 id='how-to-run-development-environment'>How to run development environment</h3>
+<p>Run the script <code>run-iroha-dev.sh</code>, contained in the folder <code>scripts</code>: <code>sh .../iroha/scripts/run-iroha-dev.sh</code></p>
+
+<p>After you execute this script, following things happen:</p>
+
+<ol>
+<li>The script checks if you don&#39;t have containers with Iroha already running. It ends up with reattaching you to interactive shell upon succesful completion.</li>
+<li>The script will download iroha-docker-develop, redis and postgres images. Iroha image contains all development dependencies, and is based on top of ubuntu:16.04.</li>
+<li>Three containers are created and launched.</li>
+<li>The user is attached to the interactive environment for development and testing with <code>iroha</code> folder mounted from the host machine. Iroha folder is mounted to <code>/opt/iroha</code> in Docker container.</li>
+</ol>
+
+<aside class="notice">
+Docker environment will be removed when you detach from the container.
+</aside>
+<h3 id='build-project-and-run-tests'>Build project and run tests</h3>
+<blockquote>
+<p>Build</p>
+</blockquote>
+<pre class="highlight shell"><code>cmake -H. -Bbuild;
+cmake --build build -- -j<span class="k">$(</span>nproc<span class="k">)</span>
 </code></pre>
-<p>You will be attached to interactive environment for development and testing with <code>iroha</code> folder mounted from host machine.</p>
+<aside class="notice">
+On macOS $(nproc) variable does not work. Check number of logical cores with <code>sysctl -n hw.ncpu</code>
+</aside>
 
-<p>Docker environment will be removed when you logout from the container.</p>
-<h3 id='build-code-iroha-code-and-run-tests'>Build <code>iroha</code> and run tests</h3>
-<p>Build:
-<code>
-cmake -H. -Bbuild;
-cmake --build build -- -j$(nproc)
-</code></p>
+<p>We use CMake to build platform-dependent build files. Run shell commands from &quot;Build&quot; section on the right. Built binaries (<code>irohad</code> and <code>iroha-cli</code>) will be in <code>./build/bin</code> directory.</p>
 
-<p><code>irohad</code> and <code>iroha-cli</code> binaries will be in <code>./build/bin</code> directory.</p>
+<p>After you built the project — please run tests to check the operability of the daemon.</p>
 <h3 id='add-to-irohad-and-iroha-cli-to-path-optional'>Add to irohad and iroha-cli to path (optional)</h3>
-<p>export PATH=/path/to/iroha/build/bin:$PATH</p>
+<p><code>export PATH=.../iroha/build/bin:$PATH</code></p>
+
+<aside class="notice">
+Write this to your shell configuration to make it persistent.
+</aside>
 
 <blockquote>
 <p>How to run tests method #1</p>
@@ -435,66 +483,88 @@ cmake --build build -- -j$(nproc)
 </code></pre><h3 id='execute-code-iroha-cli-code-with-code-irohad-code-running'>Execute <code>iroha-cli</code> with <code>irohad</code> running</h3>
 <p>Execute <code>run-iroha-dev.sh</code> again to attach to existing container.</p>
 <h2 id='linux-or-macos'>Linux or macOS</h2>
-<p>For Iroha, a provisioning of Postgres and Redis are required. You may launch them on your local machine, or use docker containers, as provided.</p>
-
 <blockquote>
 <p>Launching Docker and Postgres in Docker</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>docker run --name some-redis -p 6379:6379 -d redis:3.2.8
-docker run --name some-postgres -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword -p 5432:5432 -d postgres:9.5
+<pre class="highlight shell tab-shell"><code>docker run --name some-redis 
+    -p 6379:6379<span class="se">\</span>
+    -d redis:3.2.8
+
+docker run --name some-postgres 
+    -e <span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres <span class="se">\</span>
+    -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword <span class="se">\</span>
+    -p 5432:5432 <span class="se">\</span>
+    -d postgres:9.5
 </code></pre>
-<blockquote>
-<p>Linux</p>
-</blockquote>
-<pre class="highlight shell tab-shell"><code>apt-get -y --no-install-recommends install <span class="se">\</span>
-        build-essential python-software-properties <span class="se">\</span>
-        automake libtool <span class="se">\</span>
-        libssl-dev zlib1g-dev libboost-all-dev <span class="se">\</span>
-        libc6-dbg golang <span class="se">\</span>
-        git ssh tar gzip ca-certificates <span class="se">\</span>
-        python3 python3-pip python3-setuptools <span class="se">\</span>
-        lcov <span class="se">\</span>
-        wget curl cmake file unzip gdb <span class="se">\</span>
-        iputils-ping vim ccache <span class="se">\</span>
-        gcovr vera++ cppcheck doxygen <span class="se">\</span>
-        graphviz graphviz-dev; <span class="se">\</span>
-    apt-get -y clean
-git clone https://github.com/hyperledger/iroha -b develop
-<span class="nb">cd </span>iroha
-cmake -H. -Bbuild
-cmake --build build -- -j4
-</code></pre>
-<blockquote>
-<p>macOS</p>
-</blockquote>
-<pre class="highlight shell tab-shell"><code>xcode-select --install
-<span class="c"># if you dont't have brew installed</span>
-ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/homebrew/install/master/install<span class="k">)</span><span class="s2">"</span>
-brew install cmake boost postgres grpc autoconf automake libtool golang
-git clone https://github.com/hyperledger/iroha -b develop
-<span class="nb">cd </span>iroha
-cmake -H. -Bbuild
-cmake --build build -- -j4
-</code></pre>
+<p>To launch Iroha daemon, running postgres and redis services are required. You may launch them on your local machine, or use docker containers, as provided on the right side.</p>
+<h3 id='linux-debian-based'>Linux (debian-based)</h3>
+<p>To install dependencies, clone, and build the project, please use this code:
+<script src="https://gist.github.com/neewy/39557aa444c3317aeffbdedd9f0f51e2.js"></script></p>
+<h4 id='outdated-dependencies'>Outdated dependencies</h4>
+<p>In case that some dependencies are outdated in apt, you are advised to use following sources to install dependencies:</p>
+<h5 id='boost'>Boost</h5>
+<p>To install Boost libraries (<code>libboost-all-dev</code>), use <a href="http://www.boost.org/users/download/">current release</a> from Boost webpage, or use <a href="https://packages.debian.org/sid/libboost-all-dev">debian repository</a> for latest library.
+The only dependencies are system and filesystem, so use <code>./bootstrap.sh --with-libraries=system,filesystem</code> when you are building the project.</p>
+<h5 id='cmake'>CMake</h5>
+<p>To install CMake tool (<code>cmake</code>), use <a href="https://cmake.org/download/">latest release</a> from CMake webpage.</p>
+<h3 id='macos'>macOS</h3>
 <blockquote>
 <p>macOS brew</p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code>brew tap soramitsu/iroha
 brew install iroha
-</code></pre><h1 id='run-irohad-locally'>Run irohad locally</h1><h2 id='generate-genesis-block'>Generate genesis block</h2>
-<ol>
-<li><p>Create peers.list file containing the peers&#39; addresses. For the local node suffice to add only single peer:
-<code>bash
-$ echo &#39;localhost:10001&#39; &gt; peers.list
-</code></p></li>
-<li><p>Generate genesis block using iroha-cli:
-<code>bash
-$ iroha-cli --genesis_block --peers_address peers.list
-</code></p></li>
-</ol>
+</code></pre>
+<p>To install dependencies, clone, and build the project, please use this code:
+<script src="https://gist.github.com/neewy/bc0fea777592a5381aa4ab6e68bfe699.js"></script></p>
+<h1 id='run-the-daemon-irohad'>Run the daemon (irohad)</h1><h2 id='create-genesis-block'>Create genesis block</h2>
+<p>A genesis block is the first block in the chain.</p>
 
-<p>File genesis.block with keypair files for Administrator account (<code>admin@test.priv</code> and <code>admin@test.pub</code>) and node (<code>node0.priv</code> and <code>node0.pub</code>) should be generated in the same folder.</p>
-<h2 id='prepare-config-file'>Prepare config file</h2>
+<p><b>Important:</b> each peer in the initialized network should have exactly the same genesis block, so create it once and distribute across peers. This block may have <b>any</b> data, as no-one validates it in the peer network.</p>
+<h3 id='using-iroha-cli'>Using iroha-cli</h3><h4 id='create-list-of-peers'>Create list of peers</h4>
+<p>Create peers.list file containing network addresses of peers&#39; internal ports in the network (a single peer address goes on new line. If you want to run Iroha on single peer, it is sufficient to mention only localhost: <br> <code>$ echo &#39;localhost:10001&#39; &gt; peers.list</code></p>
+
+<p>Composing <code>peers.list</code> for multiple peers is a bit trickier at the moment: the first line should contain the address of a peer, which is the ordering service (and the address should include internal port). The remaining addresses are the network addresses of all other peers in the network, including the torii (external API) port. </p>
+
+<p>As an example, for 4 peers the file will look like the following:
+<ul>
+  <li>10.128.13.1:10001</li>
+  <li>10.128.13.2:50051</li>
+  <li>10.128.13.3:50051</li>
+  <li>10.128.13.4:50051</li>
+</ul></p>
+
+<p>where <code>10.128.13.1:10001</code> is the address of the first peer, acting as an ordering service, while the rest of the list are peers&#39; addresses with Torii port.</p>
+
+<aside class="notice">
+Internal port is used for communication of internal components. Each peer potentially may have different, adjustable internal port numbers.
+</aside>
+<h4 id='use-iroha-cli'>Use iroha-cli</h4>
+<p>Generate genesis block using iroha-cli (see shell command on the right side).</p>
+
+<p>Iroha-cli tool is used to generate keypairs for every peer, mentioned in the peers list. This is done only for convenience — in production environment please consider using manual or more trusted approach.</p>
+
+<blockquote>
+<p>Generating genesis block</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span>iroha-cli --genesis_block <span class="se">\ </span>
+--peers_address peers.list
+</code></pre>
+<p>Executing this command will result in generation of following files:</p>
+
+<ul>
+<li><code>admin@test.priv</code> and <code>admin@test.pub</code> — keypair for user with admin and asset creator rights</li>
+<li><code>test@test.priv</code> and <code>test@test.pub</code> — keypair for user with user rights</li>
+<li><code>node0.priv</code> and <code>node0.pub</code> — keypair for first node, mentioned in the <code>peers.list</code></li>
+<li>If mentioned more than one peer address in <code>peers.list</code>: <code>nodeX.priv</code> and <code>nodeX.pub</code> — keypair for #X node, mentioned in the peers.list, (where X is starts from 1) </li>
+<li><code>genesis.block</code> — genesis block itself</li>
+</ul>
+
+<aside class="notice">
+What are those asset creator, admin, user rights? Iroha supports role-based access control, so initial roles for accounts should be created in genesis block. Check <a href="#permission-model">permission model</a> section of the documentation to find out more. 
+</aside>
+<h3 id='manually'>Manually</h3>
+<p>Follow JSON structure of the block, as it is reflected in <a href="https://gist.github.com/neewy/4e347bc8493951733998e01af633dbbb">JSON schema for the block</a>.</p>
+<h2 id='prepare-configuration-file'>Prepare configuration file</h2>
 <p>Configuration file keeps information about storage credentials and irohad parameters:</p>
 
 <table><thead>
@@ -507,17 +577,17 @@ $ iroha-cli --genesis_block --peers_address peers.list
 <tr>
 <td>block_store_path</td>
 <td>string</td>
-<td>Path to store blocks of committed transactions</td>
+<td>Path to store blocks of committed transactions (flat file storage)</td>
 </tr>
 <tr>
 <td>torii_port</td>
 <td>integer</td>
-<td>Port to access iroha node</td>
+<td>Port to access iroha node gRPC (default 50051)</td>
 </tr>
 <tr>
 <td>internal_port</td>
 <td>integer</td>
-<td>Port used to communicate ordering service, YAC consensus and block loader for synchronization</td>
+<td>Port for communication between ordering service, YAC consensus and block loader for synchronization (default 10001)</td>
 </tr>
 <tr>
 <td>pg_opt</td>
@@ -527,7 +597,7 @@ $ iroha-cli --genesis_block --peers_address peers.list
 <tr>
 <td>redis_host</td>
 <td>string</td>
-<td>Redis host&#39;s IP address</td>
+<td>Redis host IP address</td>
 </tr>
 <tr>
 <td>redis_port</td>
@@ -557,19 +627,9 @@ $ iroha-cli --genesis_block --peers_address peers.list
 </tbody></table>
 
 <p>Example:</p>
-<pre class="highlight plaintext"><code>{
-  "block_store_path" : "/tmp/block_store/",
-  "torii_port" : 50051,
-  "internal_port" : 10001,
-  "pg_opt" : "host=localhost port=5432 user=postgres password=mysecretpassword",
-  "redis_host" : "localhost",
-  "redis_port" : 6379,
-  "max_proposal_size" : 10,
-  "proposal_delay" : 5000,
-  "vote_delay" : 5000,
-  "load_delay" : 5000
-}
-</code></pre><h2 id='launch-irohad'>Launch irohad</h2>
+
+<script src="https://gist.github.com/neewy/1ebe653de074dac1675f74eb19824b2e.js"></script>
+<h2 id='launch-irohad'>Launch irohad</h2>
 <p>To launch irohad daemon, following parameters must be passed:</p>
 
 <table><thead>
@@ -588,13 +648,14 @@ $ iroha-cli --genesis_block --peers_address peers.list
 </tr>
 <tr>
 <td>keypair_name</td>
-<td>private and public key file names without .priv or .pub extension. Used by peer to sign the blocks</td>
+<td>private and public key file names without file extension. Used by peer to sign the blocks</td>
 </tr>
 </tbody></table>
 
-<p>Use this command to launch iroha from development branch:</p>
-<pre class="highlight plaintext"><code>irohad --config example/config.sample --genesis_block example/genesis.block --keypair_name example/node
-</code></pre><h1 id='block-structure'>Block structure</h1>
+<p>Use this command to launch iroha:</p>
+
+<p><code>irohad --config example/config.sample --genesis_block example/genesis.block --keypair_name example/node0</code></p>
+<h1 id='block-structure'>Block structure</h1>
 <p><img src="images/block.png" title="Block structure" alt="Block" /></p>
 
 <p>In order to understand contents of the block better, this section tells about its parts:</p>
@@ -608,7 +669,6 @@ $ iroha-cli --genesis_block --peers_address peers.list
 <li>height — a quantity of blocks in the chain up to the block</li>
 <li>timestamp — unix time (in millis) of block forming by a peer</li>
 <li>body — transactions, which successfully passed validation and consensus step</li>
-<li>merkle root — is used for fast checks of <a href="https://en.wikipedia.org/wiki/Merkle_tree">chain integrity</a></li>
 <li>transactions quantity</li>
 <li>previous hash of block</li>
 </ul>
@@ -691,7 +751,7 @@ $ iroha-cli --genesis_block --peers_address peers.list
 <aside class="notice">
 In preview version, there is no way to get current transaction counter by any means. You have to remember it on a client side and increment it. In future version this will be changed, and client application may retrieve this information.
 </aside>
-<h1 id='commands'>Commands</h1>
+<h2 id='transaction-statuses'>Transaction statuses</h2><h1 id='commands'>Commands</h1>
 <aside class="warning">
 Currently, docs are updated. Sections with contraints and validation parts are gradually updated.
 </aside>
