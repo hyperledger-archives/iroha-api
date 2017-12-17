@@ -12,6 +12,5 @@ In order to understand contents of the block better, this section tells about it
 * height — a quantity of blocks in the chain up to the block
 * timestamp — unix time (in millis) of block forming by a peer
 * body — transactions, which successfully passed validation and consensus step
-* merkle root — is used for fast checks of [chain integrity](https://en.wikipedia.org/wiki/Merkle_tree)
 * transactions quantity
 * previous hash of block

@@ -90,3 +90,5 @@ message Signature {
 <aside class="notice">
 In preview version, there is no way to get current transaction counter by any means. You have to remember it on a client side and increment it. In future version this will be changed, and client application may retrieve this information.
 </aside>
+
+## Transaction statuses
