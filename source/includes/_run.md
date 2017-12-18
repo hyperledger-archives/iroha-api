@@ -9,19 +9,15 @@ A genesis block is the first block in the chain.
 ### Using iroha-cli
 
 #### Create list of peers
-Create peers.list file containing network addresses of peers' internal ports in the network (a single peer address goes on new line. If you want to run Iroha on single peer, it is sufficient to mention only localhost: <br> `$ echo 'localhost:10001' > peers.list`
-
-Composing `peers.list` for multiple peers is a bit trickier at the moment: the first line should contain the address of a peer, which is the ordering service (and the address should include internal port). The remaining addresses are the network addresses of all other peers in the network, including the torii (external API) port. 
+Create peers.list file containing network addresses of peers' internal ports in the network (`10001` by default) a single peer address goes on new line. If you want to run Iroha on single peer, it is sufficient to mention only localhost: <br> `$ echo 'localhost:10001' > peers.list`
 
 As an example, for 4 peers the file will look like the following:
 <ul>
   <li>10.128.13.1:10001</li>
-  <li>10.128.13.2:50051</li>
-  <li>10.128.13.3:50051</li>
-  <li>10.128.13.4:50051</li>
+  <li>10.128.13.2:10001</li>
+  <li>10.128.13.3:10001</li>
+  <li>10.128.13.4:10001</li>
 </ul>
-
-where `10.128.13.1:10001` is the address of the first peer, acting as an ordering service, while the rest of the list are peers' addresses with Torii port.
 
 <aside class="notice">
 Internal port is used for communication of internal components. Each peer potentially may have different, adjustable internal port numbers.
