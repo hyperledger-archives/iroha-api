@@ -86,7 +86,7 @@ message Signature {
 <ul>
     <li> Time of creation (unix time, in milliseconds) </li> 
     <li> Account ID of transaction creator (username@domain) </li>
-    <li> Transaction counter. It counts how many times transaction creator send transactions in total. Counter is used to prevent replay attack, and is formed on client side </li>
+    <li> Transaction counter. It counts how many times transaction creator sent transactions in total. Counter is used to prevent replay attack, and is formed on client side </li>
     <li> Repeated commands which are described in details in <a href="#commands">commands section</a> </li> 
 </ul>
 
@@ -104,7 +104,7 @@ This section describes the set of states and matches them with transaction lifec
 
 ![Block](../images/tx_status.png "Block structure")
 
- * `NOT_RECEIVED`: as a client can query the peer, which may not have this transaction, the response indicates such situation.
+ * `NOT_RECEIVED`: the peer does not this transaction.
  * `STATELESS_VALIDATION_FAILED`: the transaction was formed with some fields, not meeting constraints. This status is returned to a client, who formed transaction, right after the transaction was sent. 
  * `STATELESS_VALIDATION_SUCCESS`: the transaction has successfully passed stateless validation. This status is returned to a client, who formed transaction, right after the transaction was sent. 
  * `STATEFUL_VALIDATION_FAILED`: the transaction has commands, which violate validation rules, checking state of the chain (e.g. asset balance, account permissions, etc.) 
