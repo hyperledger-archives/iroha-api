@@ -104,10 +104,10 @@ This section describes the set of states and matches them with transaction lifec
 
 ![Block](../images/tx_status.png "Block structure")
 
- * `NOT_RECEIVED`: the peer does not this transaction.
+ * `NOT_RECEIVED`: the peer does not have this transaction.
  * `STATELESS_VALIDATION_FAILED`: the transaction was formed with some fields, not meeting constraints. This status is returned to a client, who formed transaction, right after the transaction was sent. 
  * `STATELESS_VALIDATION_SUCCESS`: the transaction has successfully passed stateless validation. This status is returned to a client, who formed transaction, right after the transaction was sent. 
  * `STATEFUL_VALIDATION_FAILED`: the transaction has commands, which violate validation rules, checking state of the chain (e.g. asset balance, account permissions, etc.) 
  * `STATEFUL_VALIDATION_SUCCESS`: the transaction has successfully passed stateful validation.
- * `IN_PROGRESS`: the transaction is the part of a block, which is on voting during current consensus round.
+ * `IN_PROGRESS`: the transaction was received, but not yet processed by stateless validator
  * `COMMITTED`: the transaction is the part of a block, which gained enough votes and is in the block store at the moment. 
