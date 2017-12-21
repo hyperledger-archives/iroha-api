@@ -12,13 +12,14 @@
        GetSignatories get_account_signatories = 4;
        GetAccountTransactions get_account_transactions = 5;
        GetAccountAssetTransactions get_account_asset_transactions = 6;
-       GetAccountAssets get_account_assets = 7;
-       GetRoles get_roles = 8;
-       GetAssetInfo get_asset_info = 9;
+       GetTransactions get_transactions = 7;
+       GetAccountAssets get_account_assets = 8;
+       GetRoles get_roles = 9;
        GetRolePermissions get_role_permissions = 10;
+       GetAssetInfo get_asset_info = 11;
      }
      // used to prevent replay attacks.
-     uint64 query_counter = 11;
+     uint64 query_counter = 12;
   }
 
   Payload payload = 1;
@@ -40,7 +41,16 @@ Each query consists of following things:
     <li> **Query object** might be any of types, described below </li>
 </ul>
 
-**Signatures** contain one or many signatures (ed25519 pubkey + signature):
+**Signatures** contain one or many signatures (ed25519 pubkey + signature).
+
+## Validation
+
+The validation for all commands includes:
+
+ * timestamp — it should be in more than time of the peer minus 24 hours
+ * signature of query creator — is used for checking the identity of query creator
+ * query counter — is checked to be incremented with every subsequent query from this query creator
+ * roles — depending on the role of query creator, it can be applied to the same account, account in the domain, in the whole system or not allowed at all
 
 ## Get account
 
@@ -56,10 +66,9 @@ Given this Query, in successful case Iroha returns `AccountResponse`, which cont
     <li>quorum — the quantity of signatures to pass within transaction to execute commands for this account </li>
 </ul>
 
-<aside class="warning"> `AccountResponse` should not contain array of permissions, but an array of `Role` object instead. It will be reworked. </aside>
+and also returns the array of account roles.
 
 ### Structure
-
 
 #### Query
 
@@ -97,10 +106,11 @@ Account ID | account id to request its state  | username@domain
 ```protobuf
 message AccountResponse {
     Account account = 1;
+    repeated string account_roles = 2;
 }
 message Account {
     string account_id = 1;
-    string domain_name = 2;
+    string domain_id = 2;
     uint32 quorum = 3;
     string json_data = 4;
 }
@@ -108,16 +118,10 @@ message Account {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id | `[a-z]{1,9}\@[a-z]{1,9}`
-Domain name | domain of account id | `[a-z]{1,9}`
+Account ID | account id | username@domain
+Domain ID | domain of account id | `[A-Za-z0-9]{1,9}`
 Quorum | number of signatories needed to sign the transaction to make it valid  | integer
 json_data | key-value information | properly formed json information
-
-<aside class="notice">It is better to rename `domain_name` into `domain_id` for consistency purposes</aside>
-
-### Validation
-
-Stateless validation (check timestamp and signature)
 
 ## Get signatories
 
@@ -156,8 +160,7 @@ message GetSignatories {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request signatories  | `[a-z]{1,9}\@[a-z]{1,9}`
-
+Account ID | account id to request signatories  | username@domain
 
 #### Response
 
@@ -173,10 +176,6 @@ Field | Description | Constraint
 -------------- | -------------- | --------------
 Keys | an array of public keys | ed25519
 
-### Validation
-
-Stateless validation (check timestamp and signature)
-
 ## Get account transactions
 
 ### Purpose
@@ -184,8 +183,6 @@ Stateless validation (check timestamp and signature)
 In case when a list of transactions per user is needed, `GetAccountTransactions` query can be formed.
 
 Given this Query, in successful case Iroha returns `TransactionsResponse`, which is a collection of transactions.
-
-<aside class="notice">Team of Iroha maintainers is implementing pagination for this query, so that user can retrive transactions partially, using tx_hash as head, and quantity as size of page</aside>
 
 ### Structure
 
@@ -215,7 +212,7 @@ message GetAccountTransactions {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request transactions from  | `[a-z]{1,9}\@[a-z]{1,9}`
+Account ID | account id to request transactions from  | username@domain
 
 
 #### Response
@@ -236,7 +233,7 @@ Transactions | an array of transactions for given account | Committed transactio
 
 ### Purpose
 
-When an information about transaction per user using certain asset is needed, `GetAccountAssetTransactions` query is sent.
+When an information about transaction per user who is using certain asset is needed, `GetAccountAssetTransactions` query is sent.
 
 Given this Query, in successful case Iroha returns `TransactionsResponse`, which is a collection of transactions.
 
@@ -270,8 +267,60 @@ message GetAccountAssetTransactions {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request transactions from  | `[a-z]{1,9}\@[a-z]{1,9}`
-Asset ID | asset id in order to filter transactions containing this asset | `[a-z]{1,9}\#[a-z]{1,9}`
+Account ID | account id to request transactions from  | username@domain
+Asset ID | asset id in order to filter transactions containing this asset | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
+
+#### Response
+
+> Response
+
+```protobuf
+message TransactionsResponse {
+    repeated Transaction transactions = 1;
+}
+```
+
+Field | Description | Constraint
+-------------- | -------------- | --------------
+Transactions | an array of transactions for given account and asset | Committed transactions
+
+## Get transactions
+
+### Purpose
+
+`GetTransactions` is used for retrieving information about transactions, based on their hashes.
+
+Given this Query, in successful case Iroha returns `TransactionsResponse`, which is a collection of transactions.
+
+### Structure
+
+#### Query
+
+> Query
+
+```protobuf
+message GetTransactions {
+    repeated bytes tx_hashes = 1;
+}
+```
+```json
+{
+    "signature":
+        {
+            "pubkey": "…",
+            "signature": "…"
+        },
+    "created_ts": …,
+    "creator_account_id": "admin@test",
+    "query_counter": 1,
+    "query_type" : "GetTransactions",
+    "tx_hashes": [string(64),…]
+}
+```
+
+Field | Description | Constraint
+-------------- | -------------- | --------------
+Transactions hashes | transactions' hashes to request transactions from  | (proto) array of 32 bytes, (json) 64 size of hex strings
 
 #### Response
 
@@ -326,8 +375,8 @@ message GetAccountAssets {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Account ID | account id to request balance from  | `[a-z]{1,9}\@[a-z]{1,9}`
-Asset ID | asset id to know its balance | `[a-z]{1,9}\#[a-z]{1,9}`
+Account ID | account id to request balance from  | username@domain
+Asset ID | asset id to know its balance | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
 
 #### Response
 
@@ -347,19 +396,15 @@ message AccountAssetResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to knows its balance | `[a-z]{1,9}\#[a-z]{1,9}`
-Account ID | account which has this balance  | `[a-z]{1,9}\@[a-z]{1,9}`
+Asset ID | asset id to knows its balance | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
+Account ID | account which has this balance  | username@domain
 Balance | balance of asset | > 0
-
-### Validation
-
-Stateless validation (check timestamp and signature)
 
 ## Get asset info
 
 ### Purpose
 
-In order to know precision for given asset, and other related info in future, such as description, etc. user can send `GetAssetInfo` query to Iroha network
+In order to know precision for given asset, and other related info in future, such as description of asset, etc. user can send `GetAssetInfo` query to Iroha network
 
 Given this Query, in successful case Iroha returns `AssetResponse` with an information about the asset.
 
@@ -391,7 +436,7 @@ message GetAssetInfo {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to know related information | `[a-z]{1,9}\#[a-z]{1,9}`
+Asset ID | asset id to know related information | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
 
 #### Response
 
@@ -411,13 +456,9 @@ message Asset {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to get information about | `[a-z]{1,9}`
-Domain ID | domain related to this asset  | `[a-z]{1,9}`
+Asset ID | asset id to get information about | `[A-Za-z0-9]{1,9}`
+Domain ID | domain related to this asset  | `[A-Za-z0-9]{1,9}`
 Precision| number of digits after comma | uint8_t
-
-### Validation
-
-Stateless validation (check timestamp and signature)
 
 ## Get roles
 
@@ -464,10 +505,6 @@ message RolesResponse {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Roles | array of created roles in the network | vector of strings describing existing roles in the system
-
-### Validation
-
-Stateless validation (check timestamp and signature)
 
 ## Get role permissions
 
@@ -520,7 +557,3 @@ message RolePermissionsResponse {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Permissions | array of permissions related to the role | string of permissions related to the role
-
-### Validation
-
-Stateless validation (check timestamp and signature)
