@@ -56,7 +56,7 @@ The validation for all commands includes:
 
 ### Purpose
 
-Purpose of _get account_ query is to get state of an account.
+Purpose of _get account_ query is to get the state of an account.
 
 Given this Query, in successful case Iroha returns `AccountResponse`, which contains Account object with following fields:
 <ul>
@@ -129,7 +129,7 @@ json_data | key-value information | properly formed json information
 
 Purpose of _get signatories_ query is to get signatories, which act as an identity of the account.
 
-Given this Query, in successful case Iroha returns `SignatoriesResponse`, which is one or many public ed25519 keys.
+Given this Query, in successful case, Iroha returns `SignatoriesResponse`, which is one or many public ed25519 keys.
 
 ### Structure
 
@@ -180,9 +180,9 @@ Keys | an array of public keys | ed25519
 
 ### Purpose
 
-In case when a list of transactions per user is needed, `GetAccountTransactions` query can be formed.
+In a case when a list of transactions per user is needed, `GetAccountTransactions` query can be formed.
 
-Given this Query, in successful case Iroha returns `TransactionsResponse`, which is a collection of transactions.
+Given this Query, in successful case, Iroha returns `TransactionsResponse`, which is a collection of transactions.
 
 ### Structure
 
@@ -235,7 +235,7 @@ Transactions | an array of transactions for given account | Committed transactio
 
 When an information about transaction per user who is using certain asset is needed, `GetAccountAssetTransactions` query is sent.
 
-Given this Query, in successful case Iroha returns `TransactionsResponse`, which is a collection of transactions.
+Given this Query, in successful case, Iroha returns `TransactionsResponse`, which is a collection of transactions.
 
 ### Structure
 
@@ -290,7 +290,7 @@ Transactions | an array of transactions for given account and asset | Committed 
 
 `GetTransactions` is used for retrieving information about transactions, based on their hashes.
 
-Given this Query, in successful case Iroha returns `TransactionsResponse`, which is a collection of transactions.
+Given this Query, in successful case, Iroha returns `TransactionsResponse`, which is a collection of transactions.
 
 ### Structure
 
@@ -342,7 +342,7 @@ Transactions | an array of transactions for given account and asset | Committed 
 
 To know the state of an asset per account (balance), `GetAccountAssets` query can be formed.
 
-Given this Query, in successful case Iroha returns `AccountAssetResponse`.
+Given this Query, in successful case, Iroha returns `AccountAssetResponse`.
 
 ### Structure
 
@@ -406,7 +406,7 @@ Balance | balance of asset | > 0
 
 In order to know precision for given asset, and other related info in future, such as description of asset, etc. user can send `GetAssetInfo` query to Iroha network
 
-Given this Query, in successful case Iroha returns `AssetResponse` with an information about the asset.
+Given this Query, in successful case, Iroha returns `AssetResponse` with an information about the asset.
 
 ### Structure
 
@@ -464,9 +464,9 @@ Precision| number of digits after comma | uint8_t
 
 ### Purpose
 
-To get available roles in the system, user can send `GetRoles` query to Iroha network.
+To get available roles in the system, a user can send `GetRoles` query to Iroha network.
 
-Given this Query, in successful case Iroha returns `RolesResponse` containing array of existing roles.
+Given this Query, in successful case, Iroha returns `RolesResponse` containing an array of existing roles.
 
 ### Structure
 
@@ -510,9 +510,9 @@ Roles | array of created roles in the network | vector of strings describing exi
 
 ### Purpose
 
-To get available permissions per role in the system, user can send `GetRolePermissions` query to Iroha network.
+To get available permissions per role in the system, a user can send `GetRolePermissions` query to Iroha network.
 
-Given this Query, in successful case Iroha returns `RolePermissionsResponse` containing array of permissions related to the role.
+Given this Query, in successful case, Iroha returns `RolePermissionsResponse` containing an array of permissions related to the role.
 
 ### Structure
 
