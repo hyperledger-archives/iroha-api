@@ -252,7 +252,7 @@ Precision | number of digits after comma/dot | 0 <= precision <= uint32 max
 ### Validation
 
 1. Transaction creator has permission to create assets
-2. Asset name is valid and unique per domain
+2. Asset name is unique per domain
 
 ## Create domain
 
@@ -287,7 +287,7 @@ Default role | role for any created user in the domain | one of the existing rol
 
 ### Validation
 
-1. _domain id_ is unique and valid against regex
+1. _domain id_ is unique
 2. Account, who sends this command in transaction, has role with permission to create domain
 3. Role, which will be assigned to created user by default
 
@@ -328,8 +328,7 @@ Permissions | array of already existent permissions | set of passed permissions 
 
 ### Validation
 
-1. Role name is valid
-2. Set of passed permissions is fully included into set of existing permissions, and is not empty
+1. Set of passed permissions is fully included into set of existing permissions, and is not empty
 
 ## Detach role
 
