@@ -328,7 +328,7 @@ Permissions | array of already existent permissions | set of passed permissions 
 
 ### Validation
 
-1. Set of passed permissions is fully included into set of existing permissions, and is not empty
+1. Set of passed permissions is fully included into set of existing permissions
 
 ## Detach role
 
