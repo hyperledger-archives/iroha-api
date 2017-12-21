@@ -3,7 +3,7 @@
 ## Query structure
 
 ``` protobuf
- message Query {
+message Query {
   message Payload {
     uint64 created_time = 1;
     string creator_account_id = 2;
@@ -12,13 +12,14 @@
        GetSignatories get_account_signatories = 4;
        GetAccountTransactions get_account_transactions = 5;
        GetAccountAssetTransactions get_account_asset_transactions = 6;
-       GetAccountAssets get_account_assets = 7;
-       GetRoles get_roles = 8;
-       GetAssetInfo get_asset_info = 9;
-       GetRolePermissions get_role_permissions = 10;
+       GetTransactions get_transactions = 7;
+       GetAccountAssets get_account_assets = 8;
+       GetRoles get_roles = 9;
+       GetAssetInfo get_asset_info = 10;
+       GetRolePermissions get_role_permissions = 11;
      }
      // used to prevent replay attacks.
-     uint64 query_counter = 11;
+     uint64 query_counter = 12;
   }
 
   Payload payload = 1;
@@ -272,6 +273,58 @@ Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | account id to request transactions from  | `[a-z]{1,9}\@[a-z]{1,9}`
 Asset ID | asset id in order to filter transactions containing this asset | `[a-z]{1,9}\#[a-z]{1,9}`
+
+#### Response
+
+> Response
+
+```protobuf
+message TransactionsResponse {
+    repeated Transaction transactions = 1;
+}
+```
+
+Field | Description | Constraint
+-------------- | -------------- | --------------
+Transactions | an array of transactions for given account and asset | Committed transactions
+
+## Get transactions
+
+### Purpose
+
+`GetTransactions` serves for retrieving information about transactions by its hashes.
+
+Given this Query, in successful case Iroha returns `TransactionsResponse`, which is a collection of transactions.
+
+### Structure
+
+#### Query
+
+> Query
+
+```protobuf
+message GetTransactions {
+    repeated bytes tx_hashes = 1;
+}
+```
+```json
+{
+    "signature":
+        {
+            "pubkey": "…",
+            "signature": "…"
+        },
+    "created_ts": …,
+    "creator_account_id": "admin@test",
+    "query_counter": 1,
+    "query_type" : "GetTransactions",
+    "tx_hashes": [string(64),…]
+}
+```
+
+Field | Description | Constraint
+-------------- | -------------- | --------------
+Transactions hashes | transactions' hashes to request transactions from  | (proto) array of 32 bytes, (json) 64 size of hex strings
 
 #### Response
 
