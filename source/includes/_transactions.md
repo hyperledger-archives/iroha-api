@@ -10,8 +10,8 @@ message Transaction {
 ```
 ```json
 {
-	/* Transaction */
-	"signatures": array of objects,
+    /* Transaction */
+    "signatures": array of objects,
     "created_ts": int(13),
     "creator_account_id": string(?),
     "tx_counter": int,
@@ -19,7 +19,7 @@ message Transaction {
 }
 ```
 
-Transaction is a state-chaging set of actions in the system. When a transaction passes validation and consensus stages, it is written in block and saved in immutable block store (block chain). 
+A transaction is a state-changing set of actions in the system. When a transaction passes validation and consensus stages, it is written in a block and saved in immutable block store (blockchain). 
 
 Transactions consist of commands, performing an action over an entity in the system. The entity might be an account, asset, etc. — more in [entity-relationship model](#er-model) page. 
 
@@ -28,8 +28,8 @@ Iroha API follows command-query separation principle, which is described <a href
 </aside>
 
 
-Communication between Iroha peer and client application is maintained via [gRPC framework](https://grpc.io/about/). 
-Client applications should follow descibed protocol and form transactions accordingly to description below.
+Communication between Iroha peer and a client application is maintained via [gRPC framework](https://grpc.io/about/). 
+Client applications should follow described protocol and form transactions accordingly to the description below.
 
 ## Transaction structure 
 
@@ -90,24 +90,24 @@ message Signature {
     <li> Repeated commands which are described in details in <a href="#commands">commands section</a> </li> 
 </ul>
 
-**Signatures** contain one or many signatures (ed25519 pubkey + signature):
+**Signatures** contain one or many signatures (ed25519 public key + signature):
 
 <aside class="notice">
-In current version, there is no way to get current transaction counter by any means. You have to remember it on a client side and increment it. In future version this will be changed, and client application may retrieve this information.
+In the current version, there is no way to get current transaction counter by any means. You have to remember it on a client side and increment it. In a future version, this will be changed, and client application may retrieve this information.
 </aside>
 
 ## Transaction statuses
 
-Current version of Iroha peer follows client [pull principle](https://en.wikipedia.org/wiki/Pull_technology) for networking. It means that client should be proactive and request the state of transaction from peer. 
+The current version of Iroha peer follows client [pull principle](https://en.wikipedia.org/wiki/Pull_technology) for networking. It means that client should be proactive and request the state of a transaction from a peer. 
 
-This section describes the set of states and mathes them with transaction lifecycle.
+This section describes the set of states and matches them with transaction lifecycle.
 
 ![Block](../images/tx_status.png "Block structure")
 
- * `NOT_RECEIVED`: as client can query the peer, which may not have this transaction, the response indicates about such situation.
- * `STATELESS_VALIDATION_FAILED`: the transaction was formed with some fields, not meeting constraints. This status is returned to client, who formed transaction, right after the transaction was sent. 
- * `STATELESS_VALIDATION_SUCCESS`: the transaction has successfully passed stateless validation. This status is returned to client, who formed transaction, right after the transaction was sent. 
+ * `NOT_RECEIVED`: as a client can query the peer, which may not have this transaction, the response indicates such situation.
+ * `STATELESS_VALIDATION_FAILED`: the transaction was formed with some fields, not meeting constraints. This status is returned to a client, who formed transaction, right after the transaction was sent. 
+ * `STATELESS_VALIDATION_SUCCESS`: the transaction has successfully passed stateless validation. This status is returned to a client, who formed transaction, right after the transaction was sent. 
  * `STATEFUL_VALIDATION_FAILED`: the transaction has commands, which violate validation rules, checking state of the chain (e.g. asset balance, account permissions, etc.) 
  * `STATEFUL_VALIDATION_SUCCESS`: the transaction has successfully passed stateful validation.
- * `ON_PROCESS`: the transaction is the part of block, which is on voting during current consensus round.
- * `COMMITTED`: the transaction is the part of block, which gained enough votes and is in the block store at the moment. 
+ * `IN_PROGRESS`: the transaction is the part of a block, which is on voting during current consensus round.
+ * `COMMITTED`: the transaction is the part of a block, which gained enough votes and is in the block store at the moment. 
