@@ -63,7 +63,7 @@ Amount  | positive amount of the asset to add | > 0
 
 ### Purpose
 
-The purpose of _add peer_ is to write into ledger the fact of peer addition into the peer network. After the peer was added, consensus and synchronization components will start to use it.
+The purpose of _add peer_ is to write into ledger the fact of peer addition into the peer network. After the peer was added, consensus and synchronization components will start using it.
 
 ### Structure
 
@@ -142,7 +142,7 @@ Granting specific rights in the system allows other account to perform actions o
 
 ### Purpose
 
-The purpose of _append role_ is to promote an account to some created role in the system, where role is a set or permissions account has to perform an action (command or query).
+The purpose of _append role_ is to promote an account to some created role in the system, where role is a set of permissions account has to perform an action (command or query).
 
 ### Structure
 
@@ -173,7 +173,7 @@ Role name | name of already created role | already existent, `[A-Za-z0-9_]{1,7}`
 
 1. Role should exist in the system
 2. Transaction creator should have permissions to append role (CanAppendRole)
-3. Account, which appends role, has set of permissions in his roles bigger or equal to the size of permission set of appended role.
+3. Account, which appends role, has set of permissions in his roles bigger than or equal to the size of permission set of appended role.
 
 ## Create account
 
@@ -364,7 +364,7 @@ Role name | detached role | existing role
 
 ### Validation
 
-1. Role is existing in the system
+1. Role exists in the system
 2. Account has such role
 
 ## Grant permission
@@ -401,7 +401,7 @@ Permission name | name of granted permission | permission is defined
 ### Validation
 
 1. Account exists
-2. Transaction creator is permitted to grant this permission
+2. Transaction creator is allowed to grant this permission
 
 ## Remove signatory
 
@@ -437,7 +437,7 @@ Public key | Signatory to delete | ed25519 public key
 ### Validation
 
 When signatory is deleted, we should check if invariant of **size(signatories) >= quorum** holds.
-Signatory should be added previously to the account.
+Signatory should have been previously added to the account
 
 Two cases:
 Case 1. When transaction creator wants to remove signatory from their account and he or she has permission CanRemoveSignatory
@@ -447,7 +447,7 @@ Case 2. Transaction creator was granted with CanRemoveSignatory permission to re
 
 ### Purpose
 
-The purpose of _revoke permission_ is to revoke or dismiss given grant permission to another account in the network.
+The purpose of _revoke permission_ is to revoke or dismiss given granted permission from another account in the network.
 
 ### Structure
 
