@@ -27,9 +27,9 @@
 }
 ```
 
-Each query consists of following things:
+Each query consists of the following fields:
 <ol>
-    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li>
+    <li> Payload, which contains one created time, id of account creator, query counter and a query</li>
     <li> Signature, which signs payload </li>
 </ol>
 
@@ -38,19 +38,19 @@ Each query consists of following things:
     <li> **Time of creation** (unix time, in milliseconds) </li>
     <li> **Creator account_id** stores account id in form username@domain  </li>
     <li> **Query counter** is used to prevent replay attack and it is formed on client side </li>
-    <li> **Query object** might be any of types, described below </li>
+    <li> **Query object** might be of any type, described below </li>
 </ul>
 
-**Signatures** contain one or many signatures (ed25519 pubkey + signature).
+**Signatures** contain one or many signatures ([ed25519](https://ed25519.cr.yp.to) pubkey + signature).
 
 ## Validation
 
 The validation for all commands includes:
 
- * timestamp — it should be in more than time of the peer minus 24 hours
- * signature of query creator — is used for checking the identity of query creator
- * query counter — is checked to be incremented with every subsequent query from this query creator
- * roles — depending on the role of query creator, it can be applied to the same account, account in the domain, in the whole system or not allowed at all
+ * timestamp — should not be older than 24 hours from the peer's time
+ * signature of query creator — used for checking the identity of query creator
+ * query counter — checked to be incremented with every subsequent query from query creator
+ * roles — depending on the query creator's role, it can be applied to the same account, account in the domain, in the whole system or not allowed at all
 
 ## Get account
 
@@ -58,15 +58,13 @@ The validation for all commands includes:
 
 Purpose of _get account_ query is to get the state of an account.
 
-Given this Query, in successful case Iroha returns `AccountResponse`, which contains Account object with following fields:
+This Query returns `AccountResponse`, which contains array with roles of the account and `Account` object with following fields:
 <ul>
     <li>account_id </li>
     <li>domain_name </li>
     <li>permissions object </li>
     <li>quorum — the quantity of signatures to pass within transaction to execute commands for this account </li>
 </ul>
-
-and also returns the array of account roles.
 
 ### Structure
 
@@ -129,7 +127,7 @@ json_data | key-value information | properly formed json information
 
 Purpose of _get signatories_ query is to get signatories, which act as an identity of the account.
 
-Given this Query, in successful case, Iroha returns `SignatoriesResponse`, which is one or many public ed25519 keys.
+This Query returns `SignatoriesResponse`, which is one or many public [ed25519](https://ed25519.cr.yp.to) keys.
 
 ### Structure
 
@@ -174,15 +172,15 @@ message SignatoriesResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Keys | an array of public keys | ed25519
+Keys | an array of public keys | [ed25519](https://ed25519.cr.yp.to)
 
 ## Get account transactions
 
 ### Purpose
 
-In a case when a list of transactions per user is needed, `GetAccountTransactions` query can be formed.
+In a case when a list of transactions per account is needed, `GetAccountTransactions` query can be formed.
 
-Given this Query, in successful case, Iroha returns `TransactionsResponse`, which is a collection of transactions.
+This Query returns `TransactionsResponse`, which is a collection of transactions.
 
 ### Structure
 
@@ -233,9 +231,9 @@ Transactions | an array of transactions for given account | Committed transactio
 
 ### Purpose
 
-When an information about transaction per user who is using certain asset is needed, `GetAccountAssetTransactions` query is sent.
+`GetAccountAssetTransactions` query returns all transactions associated with given account and asset
 
-Given this Query, in successful case, Iroha returns `TransactionsResponse`, which is a collection of transactions.
+This Query returns `TransactionsResponse`, which is a collection of transactions.
 
 ### Structure
 
@@ -268,7 +266,7 @@ message GetAccountAssetTransactions {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | account id to request transactions from  | username@domain
-Asset ID | asset id in order to filter transactions containing this asset | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
+Asset ID | asset id in order to filter transactions containing this asset | asset_name#domain
 
 #### Response
 
@@ -290,7 +288,7 @@ Transactions | an array of transactions for given account and asset | Committed 
 
 `GetTransactions` is used for retrieving information about transactions, based on their hashes.
 
-Given this Query, in successful case, Iroha returns `TransactionsResponse`, which is a collection of transactions.
+This Query returns `TransactionsResponse`, which is a collection of transactions.
 
 ### Structure
 
@@ -342,7 +340,7 @@ Transactions | an array of transactions for given account and asset | Committed 
 
 To know the state of an asset per account (balance), `GetAccountAssets` query can be formed.
 
-Given this Query, in successful case, Iroha returns `AccountAssetResponse`.
+This Query returns `AccountAssetResponse`.
 
 ### Structure
 
@@ -376,7 +374,7 @@ message GetAccountAssets {
 Field | Description | Constraint
 -------------- | -------------- | --------------
 Account ID | account id to request balance from  | username@domain
-Asset ID | asset id to know its balance | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
+Asset ID | asset id to know its balance | asset_name#domain
 
 #### Response
 
@@ -396,7 +394,7 @@ message AccountAssetResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to knows its balance | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
+Asset ID | asset id to knows its balance | asset_name#domain
 Account ID | account which has this balance  | username@domain
 Balance | balance of asset | > 0
 
@@ -404,9 +402,9 @@ Balance | balance of asset | > 0
 
 ### Purpose
 
-In order to know precision for given asset, and other related info in future, such as description of asset, etc. user can send `GetAssetInfo` query to Iroha network
+In order to know precision for given asset, and other related info in future, such as description of asset, etc. user can send `GetAssetInfo` query.
 
-Given this Query, in successful case, Iroha returns `AssetResponse` with an information about the asset.
+This Query returns `AssetResponse` with an information about the asset.
 
 ### Structure
 
@@ -436,7 +434,7 @@ message GetAssetInfo {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to know related information | `[A-Za-z0-9]{1,9}\#[A-Za-z0-9]{1,9}`
+Asset ID | asset id to know related information | asset_name#domain
 
 #### Response
 
@@ -464,9 +462,9 @@ Precision| number of digits after comma | uint8_t
 
 ### Purpose
 
-To get available roles in the system, a user can send `GetRoles` query to Iroha network.
+To get existing roles in the system, a user can send `GetRoles` query to Iroha network.
 
-Given this Query, in successful case, Iroha returns `RolesResponse` containing an array of existing roles.
+This Query returns `RolesResponse` containing an array of existing roles.
 
 ### Structure
 
@@ -512,7 +510,7 @@ Roles | array of created roles in the network | vector of strings describing exi
 
 To get available permissions per role in the system, a user can send `GetRolePermissions` query to Iroha network.
 
-Given this Query, in successful case, Iroha returns `RolePermissionsResponse` containing an array of permissions related to the role.
+This Query returns `RolePermissionsResponse` containing an array of permissions related to the role.
 
 ### Structure
 
