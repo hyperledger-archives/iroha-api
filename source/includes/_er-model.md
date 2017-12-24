@@ -63,9 +63,3 @@ This section describes the contents of World State View, or in other words — t
 * account_id — identifier of account, references existing account. This account gives grantable permission to perform operation over itself to permittee.
 * permittee_account_id — identifier of account, references existing account. This account is given permission to perform operation over account_id.
 * permission_id — identifier of grantable_permission
-
-
-
-
-
-
