@@ -29,7 +29,7 @@
 
 Each query consists of the following fields:
 <ol>
-    <li> Payload, which contains created time, id of account creator, query counter and a query </li>
+    <li> Payload, which contains created time, id of account creator, query counter and a query object</li>
     <li> Signature, which signs payload </li>
 </ol>
 
