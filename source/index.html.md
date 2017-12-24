@@ -17,6 +17,7 @@ includes:
   - transactions
   - commands
   - queries
+  - er-model
   - cli
 
 search: true
