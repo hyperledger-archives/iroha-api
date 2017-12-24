@@ -402,7 +402,7 @@ Balance | balance of asset | > 0
 
 ### Purpose
 
-In order to know precision for given asset, and other related info in future, such as description of asset, etc. user can send `GetAssetInfo` query.
+In order to know precision for given asset, and other related info in the future, such as a description of the asset, etc. user can send `GetAssetInfo` query.
 
 This Query returns `AssetResponse` with an information about the asset.
 
