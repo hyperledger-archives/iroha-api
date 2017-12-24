@@ -394,7 +394,7 @@ message AccountAssetResponse {
 
 Field | Description | Constraint
 -------------- | -------------- | --------------
-Asset ID | asset id to knows its balance | asset_name#domain
+Asset ID | identifier of asset used for checking the balance | asset_name#domain
 Account ID | account which has this balance  | username@domain
 Balance | balance of asset | > 0
 
