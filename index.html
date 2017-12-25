@@ -299,37 +299,43 @@
                     <a href="#add-signatory" class="toc-h2 toc-link" data-title="Commands">Add signatory</a>
                   </li>
                   <li>
-                    <a href="#create-asset" class="toc-h2 toc-link" data-title="Commands">Create asset</a>
+                    <a href="#append-role" class="toc-h2 toc-link" data-title="Commands">Append role</a>
                   </li>
                   <li>
                     <a href="#create-account" class="toc-h2 toc-link" data-title="Commands">Create account</a>
                   </li>
                   <li>
+                    <a href="#create-asset" class="toc-h2 toc-link" data-title="Commands">Create asset</a>
+                  </li>
+                  <li>
                     <a href="#create-domain" class="toc-h2 toc-link" data-title="Commands">Create domain</a>
-                  </li>
-                  <li>
-                    <a href="#remove-signatory" class="toc-h2 toc-link" data-title="Commands">Remove signatory</a>
-                  </li>
-                  <li>
-                    <a href="#set-account-quorum" class="toc-h2 toc-link" data-title="Commands">Set account quorum</a>
-                  </li>
-                  <li>
-                    <a href="#transfer-asset" class="toc-h2 toc-link" data-title="Commands">Transfer asset</a>
-                  </li>
-                  <li>
-                    <a href="#append-role" class="toc-h2 toc-link" data-title="Commands">Append role</a>
                   </li>
                   <li>
                     <a href="#create-role" class="toc-h2 toc-link" data-title="Commands">Create role</a>
                   </li>
                   <li>
+                    <a href="#detach-role" class="toc-h2 toc-link" data-title="Commands">Detach role</a>
+                  </li>
+                  <li>
                     <a href="#grant-permission" class="toc-h2 toc-link" data-title="Commands">Grant permission</a>
+                  </li>
+                  <li>
+                    <a href="#remove-signatory" class="toc-h2 toc-link" data-title="Commands">Remove signatory</a>
                   </li>
                   <li>
                     <a href="#revoke-permission" class="toc-h2 toc-link" data-title="Commands">Revoke permission</a>
                   </li>
                   <li>
                     <a href="#set-account-detail" class="toc-h2 toc-link" data-title="Commands">Set account detail</a>
+                  </li>
+                  <li>
+                    <a href="#set-account-quorum" class="toc-h2 toc-link" data-title="Commands">Set account quorum</a>
+                  </li>
+                  <li>
+                    <a href="#subtract-asset-quantity" class="toc-h2 toc-link" data-title="Commands">Subtract asset quantity</a>
+                  </li>
+                  <li>
+                    <a href="#transfer-asset" class="toc-h2 toc-link" data-title="Commands">Transfer asset</a>
                   </li>
               </ul>
           </li>
@@ -338,6 +344,9 @@
               <ul class="toc-list-h2">
                   <li>
                     <a href="#query-structure" class="toc-h2 toc-link" data-title="Queries">Query structure</a>
+                  </li>
+                  <li>
+                    <a href="#validation" class="toc-h2 toc-link" data-title="Queries">Validation</a>
                   </li>
                   <li>
                     <a href="#get-account" class="toc-h2 toc-link" data-title="Queries">Get account</a>
@@ -352,6 +361,9 @@
                     <a href="#get-account-asset-transactions" class="toc-h2 toc-link" data-title="Queries">Get account asset transactions</a>
                   </li>
                   <li>
+                    <a href="#get-transactions" class="toc-h2 toc-link" data-title="Queries">Get transactions</a>
+                  </li>
+                  <li>
                     <a href="#get-account-assets" class="toc-h2 toc-link" data-title="Queries">Get account assets</a>
                   </li>
                   <li>
@@ -362,6 +374,29 @@
                   </li>
                   <li>
                     <a href="#get-role-permissions" class="toc-h2 toc-link" data-title="Queries">Get role permissions</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#entity-relationship-model" class="toc-h1 toc-link" data-title="Entity-relationship model">Entity-relationship model</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#peer" class="toc-h2 toc-link" data-title="Entity-relationship model">Peer</a>
+                  </li>
+                  <li>
+                    <a href="#asset" class="toc-h2 toc-link" data-title="Entity-relationship model">Asset</a>
+                  </li>
+                  <li>
+                    <a href="#signatory" class="toc-h2 toc-link" data-title="Entity-relationship model">Signatory</a>
+                  </li>
+                  <li>
+                    <a href="#domain" class="toc-h2 toc-link" data-title="Entity-relationship model">Domain</a>
+                  </li>
+                  <li>
+                    <a href="#role" class="toc-h2 toc-link" data-title="Entity-relationship model">Role</a>
+                  </li>
+                  <li>
+                    <a href="#account" class="toc-h2 toc-link" data-title="Entity-relationship model">Account</a>
                   </li>
               </ul>
           </li>
@@ -521,19 +556,15 @@ brew install iroha
 
 <p><b>Important:</b> each peer in the initialized network should have exactly the same genesis block, so create it once and distribute across peers. This block may have <b>any</b> data, as no-one validates it in the peer network.</p>
 <h3 id='using-iroha-cli'>Using iroha-cli</h3><h4 id='create-list-of-peers'>Create list of peers</h4>
-<p>Create peers.list file containing network addresses of peers&#39; internal ports in the network (a single peer address goes on new line. If you want to run Iroha on single peer, it is sufficient to mention only localhost: <br> <code>$ echo &#39;localhost:10001&#39; &gt; peers.list</code></p>
-
-<p>Composing <code>peers.list</code> for multiple peers is a bit trickier at the moment: the first line should contain the address of a peer, which is the ordering service (and the address should include internal port). The remaining addresses are the network addresses of all other peers in the network, including the torii (external API) port. </p>
+<p>Create peers.list file containing network addresses of peers&#39; internal ports in the network (<code>10001</code> by default) a single peer address goes on new line. If you want to run Iroha on single peer, it is sufficient to mention only localhost: <br> <code>$ echo &#39;localhost:10001&#39; &gt; peers.list</code></p>
 
 <p>As an example, for 4 peers the file will look like the following:
 <ul>
   <li>10.128.13.1:10001</li>
-  <li>10.128.13.2:50051</li>
-  <li>10.128.13.3:50051</li>
-  <li>10.128.13.4:50051</li>
+  <li>10.128.13.2:10001</li>
+  <li>10.128.13.3:10001</li>
+  <li>10.128.13.4:10001</li>
 </ul></p>
-
-<p>where <code>10.128.13.1:10001</code> is the address of the first peer, acting as an ordering service, while the rest of the list are peers&#39; addresses with Torii port.</p>
 
 <aside class="notice">
 Internal port is used for communication of internal components. Each peer potentially may have different, adjustable internal port numbers.
@@ -689,9 +720,16 @@ What are those asset creator, admin, user rights? Iroha supports role-based acce
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="err">array</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">objects</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>To provide connectivity with Iroha, currently Google RPC is used. To form a transaction with one or many commands, or send a query JSON format is used in CLI.</p>
+<p>A transaction is a state-changing set of actions in the system. When a transaction passes validation and consensus stages, it is written in a block and saved in immutable block store (blockchain). </p>
 
-<p>Client application should follow descibed protocol and form transactions accordingly to description below.</p>
+<p>Transactions consist of commands, performing an action over an entity in the system. The entity might be an account, asset, etc. — more in <a href="#er-model">entity-relationship model</a> page. </p>
+
+<aside class="notice">
+Iroha API follows command-query separation principle, which is described <a href="https://en.wikipedia.org/wiki/Command–query_separation">here</a>.
+</aside>
+
+<p>Communication between Iroha peer and a client application is maintained via <a href="https://grpc.io/about/">gRPC framework</a>. 
+Client applications should follow described protocol and form transactions accordingly to the description below.</p>
 <h2 id='transaction-structure'>Transaction structure</h2>
 <p>Each transaction consists of two parts:
 <ul>
@@ -722,8 +760,6 @@ What are those asset creator, admin, user rights? Iroha supports role-based acce
 </span></code></pre>
 <blockquote>
 <p>Signature </p>
-
-<p>one or more signatures of payload</p>
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">Signature</span> <span class="p">{</span>
    <span class="kt">bytes</span> <span class="na">pubkey</span>    <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -738,25 +774,39 @@ What are those asset creator, admin, user rights? Iroha supports role-based acce
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p><strong>Payload</strong> stores everything except signatures: 
+<p><strong>Payload</strong> stores all transaction fields, except signatures: 
 <ul>
     <li> Time of creation (unix time, in milliseconds) </li> 
-    <li> ID of transaction creator (username@domain) </li>
-    <li> Transaction counter — counts how many times transaction creator send transactions in total. Counter is used to prevent replays, and is formed on client side. </li>
-    <li> Repeated commands which would be described in details later</li> 
+    <li> Account ID of transaction creator (username@domain) </li>
+    <li> Transaction counter. It counts how many times transaction creator sent transactions in total. Counter is used to prevent replay attack, and is formed on client side </li>
+    <li> Repeated commands which are described in details in <a href="#commands">commands section</a> </li> 
 </ul></p>
 
-<p><strong>Signatures</strong> contain one or many signatures (ed25519 pubkey + signature):</p>
+<p><strong>Signatures</strong> contain one or many signatures (ed25519 public key + signature):</p>
 
 <aside class="notice">
-In preview version, there is no way to get current transaction counter by any means. You have to remember it on a client side and increment it. In future version this will be changed, and client application may retrieve this information.
+In the current version, there is no way to get current transaction counter by any means. You have to remember it on a client side and increment it. In a future version, this will be changed, and client application may retrieve this information.
 </aside>
-<h2 id='transaction-statuses'>Transaction statuses</h2><h1 id='commands'>Commands</h1>
-<aside class="warning">
-Currently, docs are updated. Sections with contraints and validation parts are gradually updated.
-</aside>
+<h2 id='transaction-statuses'>Transaction statuses</h2>
+<p>The current version of Iroha peer follows client <a href="https://en.wikipedia.org/wiki/Pull_technology">pull principle</a> for networking. It means that client should be proactive and request the state of a transaction from a peer. </p>
+
+<p>This section describes the set of states and matches them with transaction lifecycle.</p>
+
+<p><img src="images/tx_status.png" title="Block structure" alt="Block" /></p>
+
+<ul>
+<li><code>NOT_RECEIVED</code>: the peer does not have this transaction.</li>
+<li><code>STATELESS_VALIDATION_FAILED</code>: the transaction was formed with some fields, not meeting constraints. This status is returned to a client, who formed transaction, right after the transaction was sent. </li>
+<li><code>STATELESS_VALIDATION_SUCCESS</code>: the transaction has successfully passed stateless validation. This status is returned to a client, who formed transaction, right after the transaction was sent. </li>
+<li><code>STATEFUL_VALIDATION_FAILED</code>: the transaction has commands, which violate validation rules, checking state of the chain (e.g. asset balance, account permissions, etc.) </li>
+<li><code>STATEFUL_VALIDATION_SUCCESS</code>: the transaction has successfully passed stateful validation.</li>
+<li><code>IN_PROGRESS</code>: the transaction was received, but not yet processed by stateless validator</li>
+<li><code>COMMITTED</code>: the transaction is the part of a block, which gained enough votes and is in the block store at the moment. </li>
+</ul>
+<h1 id='commands'>Commands</h1>
+<p>A command changes the state, called World State View, by performing an action over an entity (asset, account) in the system. Any command should be included in a transaction to perform an action.</p>
 <h2 id='add-asset-quantity'>Add asset quantity</h2><h3 id='purpose'>Purpose</h3>
-<p>Purpose of <em>add asset quantity</em> is to increase amount of assets on some account.</p>
+<p>The purpose of <em>add asset quantity</em> command is to increase the quantity of an asset on account of transaction creator. Use case scenario is to increase the number of mutable asset in the system, which can act as a claim on a commodity (e.g. money, gold, etc.)</p>
 <h3 id='structure'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddAssetQuantity</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -799,7 +849,7 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 <tr>
 <td>Account ID</td>
 <td>account id in which to add asset</td>
-<td>username@domain</td>
+<td>account_name@domain</td>
 </tr>
 <tr>
 <td>Asset ID</td>
@@ -816,12 +866,11 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 <ol>
 <li>Asset and account should exist</li>
 <li>Added quantity precision should be equal to asset precision</li>
-<li>User should have this asset in AccountHasAsset relation (&quot;wallet&quot;)</li>
-<li>Creator of transaction should has role which has permissions for issuing assets</li>
+<li>Creator of transaction should have role which has permissions for issuing assets</li>
 <li>Creator of transaction adds account quantity to his/her account only</li>
 </ol>
 <h2 id='add-peer'>Add peer</h2><h3 id='purpose-2'>Purpose</h3>
-<p>Purpose of <em>add peer</em> is to write into ledger the fact of peer addition into the peer network.</p>
+<p>The purpose of <em>add peer</em> command is to write into ledger the fact of peer addition into the peer network. After the peer was added, consensus and synchronization components will start using it.</p>
 <h3 id='structure-2'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddPeer</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">address</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">bytes</span> <span class="na">peer_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -856,10 +905,11 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 </tbody></table>
 <h3 id='validation-2'>Validation</h3>
 <ol>
-<li>Creator of transaction has role which has CanAddPeer permission.</li>
+<li>Creator of the transaction has a role which has CanAddPeer permission.</li>
+<li>Such network address has not been already added.</li>
 </ol>
 <h2 id='add-signatory'>Add signatory</h2><h3 id='purpose-3'>Purpose</h3>
-<p>Purpose of <em>add signatory</em> is to add identity to the account. It can be the public key of another device or public key of another user.</p>
+<p>The purpose of <em>add signatory</em> command is to add an identifier to the account. Such identifier is a public key of another device or a public key of another user.</p>
 <h3 id='structure-3'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddSignatory</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">bytes</span> <span class="na">public_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -883,8 +933,8 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 </thead><tbody>
 <tr>
 <td>Account ID</td>
-<td>Account in which to add signatory (username@domain)</td>
-<td>username@domain</td>
+<td>Account to which to add signatory</td>
+<td>account_name@domain</td>
 </tr>
 <tr>
 <td>Public key</td>
@@ -894,11 +944,102 @@ Currently, docs are updated. Sections with contraints and validation parts are g
 </tbody></table>
 <h3 id='validation-3'>Validation</h3>
 <p>Two cases:
-Case 1. When transaction creator wants to add signatory to their account and he or she has permission CanAddSignatory
-Case 2. Transaction creator was granted with CanAddSignatory permission to add signatory to this account</p>
-<h2 id='create-asset'>Create asset</h2><h3 id='purpose-4'>Purpose</h3>
-<p>Purpose of <em>сreate asset</em> is to create new type of asset, specific for a domain.</p>
-<h3 id='structure-4'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAsset</span> <span class="p">{</span>
+Case 1. Transaction creator wants to add signatory to his or her account, having permission CanAddSignatory
+Case 2. CanAddSignatory was granted to transaction creator</p>
+
+<aside class="notice">
+Granting specific rights in the system allows other account to perform actions over the account, which granted such rights. They can be revoked if needed, and for more information — please check <a href="#permission-model">permission model</a> section.
+</aside>
+<h2 id='append-role'>Append role</h2><h3 id='purpose-4'>Purpose</h3>
+<p>The purpose of <em>append role</em> command is to promote an account to some created role in the system, where role is a set of permissions account has to perform an action (command or query).</p>
+<h3 id='structure-4'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AppendRole</span> <span class="p">{</span>
+   <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AppendRole"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"role_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Administrator"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Account ID</td>
+<td>id or account to append role to</td>
+<td>already existent, account_name@domain</td>
+</tr>
+<tr>
+<td>Role name</td>
+<td>name of already created role</td>
+<td>already existent, <code>[A-Za-z0-9_]{1,7}</code></td>
+</tr>
+</tbody></table>
+<h3 id='validation-4'>Validation</h3>
+<ol>
+<li>Role should exist in the system</li>
+<li>Transaction creator should have permissions to append role (CanAppendRole)</li>
+<li>Account, which appends role, has set of permissions in his roles bigger than or equal to the size of permission set of appended role.</li>
+</ol>
+<h2 id='create-account'>Create account</h2><h3 id='purpose-5'>Purpose</h3>
+<p>The purpose of <em>create account</em> command is to make entity in the system, capable of sending transactions or queries, storing signatories, personal data and identifiers.</p>
+<h3 id='structure-5'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAccount</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">account_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">bytes</span> <span class="na">main_pubkey</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateAccount"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"account_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"makoto.takemiya"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"domain_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"main_pubkey"</span><span class="p">:</span><span class="w"> </span><span class="err">string</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Account name</td>
+<td>domain-unique name for account</td>
+<td>A string in domain-name syntax defined in RFC1035. An account name is a list of labels separated by a period <code>.</code>. A label is a sequence of characters in <code>[a-zA-Z-]</code>. The length of a label must not exceed 63 characters</td>
+</tr>
+<tr>
+<td>Domain ID</td>
+<td>target domain to make relation with</td>
+<td>should be created before the account, <code>[0-9A-Za-z]{1,9}</code></td>
+</tr>
+<tr>
+<td>Main pubkey</td>
+<td>first public key to add to the account</td>
+<td>ed25519 public key</td>
+</tr>
+</tbody></table>
+<h3 id='validation-5'>Validation</h3>
+<ol>
+<li>Transaction creator has permission to create account</li>
+<li>Domain, passed as domain_id, has already been created in the system</li>
+<li>Such public key has not been added before as first public key of account or added to multi-signature account </li>
+</ol>
+<h2 id='create-asset'>Create asset</h2><h3 id='purpose-6'>Purpose</h3>
+<p>The purpose of <em>сreate asset</em> command is to create a new type of asset, unique in a domain. An asset is a countable representation of a commodity. </p>
+<h3 id='structure-6'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAsset</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">asset_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
     <span class="kt">uint32</span> <span class="na">precision</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
@@ -924,12 +1065,12 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
 <tr>
 <td>Asset name</td>
 <td>domain-unique name for asset</td>
-<td><code>[a-z]{1,9}</code></td>
+<td><code>[A-Za-z0-9]{1,9}</code></td>
 </tr>
 <tr>
 <td>Domain ID</td>
 <td>target domain to make relation with</td>
-<td>should be created before the asset, <code>[a-z]{1,9}</code></td>
+<td>should be created before the asset, <code>[A-Za-z0-9]{1,9}</code></td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -937,71 +1078,22 @@ Case 2. Transaction creator was granted with CanAddSignatory permission to add s
 <td>0 &lt;= precision &lt;= uint32 max</td>
 </tr>
 </tbody></table>
-<h3 id='validation-4'>Validation</h3>
+<h3 id='validation-6'>Validation</h3>
 <ol>
 <li>Transaction creator has permission to create assets</li>
-<li>Asset name is valid and unique per domain</li>
+<li>Asset name is unique per domain</li>
 </ol>
-<h2 id='create-account'>Create account</h2><h3 id='purpose-5'>Purpose</h3>
-<p>Purpose of <em>create account</em> is to make new entity similar to wallet, which stores assets and identities.</p>
-<h3 id='structure-5'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateAccount</span> <span class="p">{</span>
-    <span class="kt">string</span> <span class="na">account_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="kt">bytes</span> <span class="na">main_pubkey</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateAccount"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"account_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"domain_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"main_pubkey"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Constraint</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Account name</td>
-<td>domain-unique name for account</td>
-<td><code>[a-z]{1,7}</code></td>
-</tr>
-<tr>
-<td>Domain ID</td>
-<td>target domain to make relation with</td>
-<td>should be created before the account, <code>[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Main pubkey</td>
-<td>first piblic key to add into the account</td>
-<td>ed25519 public key</td>
-</tr>
-</tbody></table>
-<h3 id='validation-5'>Validation</h3>
-<ol>
-<li>Transaction creator has permission to create account</li>
-</ol>
-<h2 id='create-domain'>Create domain</h2><h3 id='purpose-6'>Purpose</h3>
-<p>Purpose of <em>create domain</em> is to make new domain in Iroha network.</p>
-<h3 id='structure-6'>Structure</h3>
-<aside class="notice">
-Just in case it is not working — it was suggested to rename domain_name field into domain_id on 24th of September for consistency across the project.
-</aside>
-<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
-    <span class="kt">string</span> <span class="na">domain_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<h2 id='create-domain'>Create domain</h2><h3 id='purpose-7'>Purpose</h3>
+<p>The purpose of <em>create domain</em> command is to make new domain in Iroha network, which is a group of accounts.</p>
+<h3 id='structure-7'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateDomain</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">default_role</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CreateDomain"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"domain_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"domain_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test2"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"default_role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
@@ -1017,208 +1109,24 @@ Just in case it is not working — it was suggested to rename domain_name field 
 <tr>
 <td>Domain ID</td>
 <td>ID for created domain</td>
-<td>unique, <code>[a-z]{1,9}</code></td>
+<td>unique, <code>[0-9A-Za-z]{1,9}</code></td>
 </tr>
 <tr>
 <td>Default role</td>
 <td>role for any created user in the domain</td>
-<td>one of existing roles</td>
-</tr>
-</tbody></table>
-<h3 id='validation-6'>Validation</h3>
-<ol>
-<li><em>domain id</em> is unique and valid against regex</li>
-<li>Account, who sends this command in transaction, has role with permission to create domain</li>
-</ol>
-<h2 id='remove-signatory'>Remove signatory</h2><h3 id='purpose-7'>Purpose</h3>
-<p>Purpose of <em>remove signatory</em> is to remove public key, associated with an identity, from an account</p>
-<h3 id='structure-7'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RemoveSignatory</span> <span class="p">{</span>
-    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">bytes</span> <span class="na">public_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RemoveSignatory"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"public_key"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Constraint</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Account ID</td>
-<td>ID of account to delete signatory from</td>
-<td>already existent, <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Public key</td>
-<td>Signatory to delete</td>
-<td>ed25519 public key</td>
+<td>one of the existing roles</td>
 </tr>
 </tbody></table>
 <h3 id='validation-7'>Validation</h3>
-<p>When signatory is deleted, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds.
-Signatory should be added previously to the account.</p>
-
-<p>Two cases:
-Case 1. When transaction creator wants to remove signatory from their account and he or she has permission CanRemoveSignatory
-Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account</p>
-<h2 id='set-account-quorum'>Set account quorum</h2><h3 id='purpose-8'>Purpose</h3>
-<p>Purpose of <em>set account quorum</em> is to set the number of signatories needed to confirm the identity of person, sending the transaction or is to set amount of people to agree on transaction contents.</p>
-<h3 id='structure-8'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountQuorum</span> <span class="p">{</span>
-    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SetAccountQuorum"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"quorum"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Constraint</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Account ID</td>
-<td>ID of account to set quorum</td>
-<td>already existent, <code>[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Quorum</td>
-<td>number of signatories needed to be included with a transaction from this account</td>
-<td>0 &lt; quorum &lt; 10</td>
-</tr>
-</tbody></table>
-<h3 id='validation-8'>Validation</h3>
-<p>When quorum is set, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds.</p>
-
-<p>Two cases:
-Case 1. When transaction creator wants to set quorum for his/her account and he or she has permission CanRemoveSignatory
-Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account</p>
-<h2 id='transfer-asset'>Transfer asset</h2><h3 id='purpose-9'>Purpose</h3>
-<p>Purpose of <em>transfer asset</em> is to share assets across the network, so that source account can transfer assets to target account.</p>
-<h3 id='structure-9'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransferAsset</span> <span class="p">{</span>
-    <span class="kt">string</span> <span class="na">src_account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="na">dest_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="na">description</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-    <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TransferAsset"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"src_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"dest_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nikolai@test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w">
-                        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Salary payment"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"int_part"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"precision"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Constraint</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Source account ID</td>
-<td>ID of account to withdraw asset from</td>
-<td>already existent, <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Destination account ID</td>
-<td>ID of account to send asset at</td>
-<td>already existent, <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Asset ID</td>
-<td>ID of asset to use</td>
-<td>already existent, <code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Amount</td>
-<td>amount of asset to transfer</td>
-<td>0 &lt; amount &lt; max_uint256</td>
-</tr>
-</tbody></table>
-<h3 id='validation-9'>Validation</h3>
 <ol>
-<li>Source and destination accounts have this asset in their AccountHasAsset relations.</li>
-<li>Precision is formed right.</li>
-<li>Source account has this amount of asset to transfer and is not zero.</li>
-<li>Source account can transfer money, and destination account can recieve money (their roles have these permissions).</li>
+<li><em>domain id</em> is unique</li>
+<li>Account, who sends this command in transaction, has role with permission to create domain</li>
+<li>Role, which will be assigned to created user by default</li>
 </ol>
-<h2 id='append-role'>Append role</h2><h3 id='purpose-10'>Purpose</h3>
-<p>Purpose of <em>append role</em> is to promote an account to some created role in the system, where role is a set or permissions account has to perform an action (command or query).</p>
-<h3 id='structure-10'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AppendRole</span> <span class="p">{</span>
-   <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-   <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AppendRole"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"role_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Administrator"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Constraint</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Account ID</td>
-<td>id or account to append role to</td>
-<td>already existent <code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
-</tr>
-<tr>
-<td>Role name</td>
-<td>name of already created role</td>
-<td>already existent</td>
-</tr>
-<tr>
-<td>Amount</td>
-<td>amount of asset to transfer</td>
-<td>0 &lt; amount &lt; max_uint256</td>
-</tr>
-</tbody></table>
-<h3 id='validation-10'>Validation</h3>
-<ol>
-<li>Role should exist in the system.</li>
-<li>Account triggering command should have permissions to append role.</li>
-</ol>
-<h2 id='create-role'>Create role</h2><h3 id='purpose-11'>Purpose</h3>
-<p>Purpose of <em>create role</em> is to create new role in the system from the set of permissions.
+<h2 id='create-role'>Create role</h2><h3 id='purpose-8'>Purpose</h3>
+<p>The purpose of <em>create role</em> command is to create new role in the system from the set of permissions.
 Combining different permissions into roles, maintainers of Iroha peer network can create customized security model.</p>
-<h3 id='structure-11'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateRole</span> <span class="p">{</span>
+<h3 id='structure-8'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">CreateRole</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="k">repeated</span> <span class="kt">string</span> <span class="na">permissions</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1245,7 +1153,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Role name</td>
 <td>name of role to create</td>
-<td><code>[a-z]{1,9}</code></td>
+<td><code>[A-Za-z0-9_]{1,7}</code></td>
 </tr>
 <tr>
 <td>Permissions</td>
@@ -1253,14 +1161,53 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>set of passed permissions is fully included into set of existing permissions</td>
 </tr>
 </tbody></table>
-<h3 id='validation-11'>Validation</h3>
+<h3 id='validation-8'>Validation</h3>
 <ol>
-<li>TODO: check if role name is valid</li>
-<li>TODO: check if set of passed permissions is fully included into set of existing permissions<br></li>
+<li>Set of passed permissions is fully included into set of existing permissions</li>
 </ol>
-<h2 id='grant-permission'>Grant permission</h2><h3 id='purpose-12'>Purpose</h3>
-<p>Purpose of <em>grant permission</em> is to give another account in the system rights to perform actions over account of transaction sender (give someone right to do something with my account).</p>
-<h3 id='structure-12'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GrantPermission</span> <span class="p">{</span>
+<h2 id='detach-role'>Detach role</h2><h3 id='purpose-9'>Purpose</h3>
+<p>The purpose of <em>detach role</em> command is to detach a role from the set of roles of an account.
+By executing this command it is possible to decrease the number of possible actions in the system for the user.</p>
+<h3 id='structure-9'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">DetachRole</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">role_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DetachRole"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"role_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Account ID</td>
+<td>ID of account where role will be deleted</td>
+<td>already existent, account_name@domain</td>
+</tr>
+<tr>
+<td>Role name</td>
+<td>detached role</td>
+<td>existing role</td>
+</tr>
+</tbody></table>
+<h3 id='validation-9'>Validation</h3>
+<ol>
+<li>Role exists in the system</li>
+<li>Account has such role</li>
+</ol>
+<h2 id='grant-permission'>Grant permission</h2><h3 id='purpose-10'>Purpose</h3>
+<p>The purpose of <em>grant permission</em> command is to give another account rights to perform actions over the account of transaction sender (give someone right to do something with my account).</p>
+<h3 id='structure-10'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GrantPermission</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">permission_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1284,7 +1231,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>id of account whom rights are granted</td>
-<td>should be existent in the system</td>
+<td>already existent, account_name@domain</td>
 </tr>
 <tr>
 <td>Permission name</td>
@@ -1292,14 +1239,55 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>permission is defined</td>
 </tr>
 </tbody></table>
-<h3 id='validation-12'>Validation</h3>
+<h3 id='validation-10'>Validation</h3>
 <ol>
 <li>Account exists</li>
-<li>Transaction creator is permitted to grant this permission</li>
+<li>Transaction creator is allowed to grant this permission</li>
 </ol>
-<h2 id='revoke-permission'>Revoke permission</h2><h3 id='purpose-13'>Purpose</h3>
-<p>Purpose of <em>revoke permission</em> is to revoke or dismiss given grant permission to another account in the network.</p>
-<h3 id='structure-13'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RevokePermission</span> <span class="p">{</span>
+<h2 id='remove-signatory'>Remove signatory</h2><h3 id='purpose-11'>Purpose</h3>
+<p>Purpose of <em>remove signatory</em> command is to remove public key, associated with an identity, from an account</p>
+<h3 id='structure-11'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RemoveSignatory</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">bytes</span> <span class="na">public_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RemoveSignatory"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"public_key"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Account ID</td>
+<td>ID of account to delete signatory from</td>
+<td>already existent, account_name@domain</td>
+</tr>
+<tr>
+<td>Public key</td>
+<td>Signatory to delete</td>
+<td>ed25519 public key</td>
+</tr>
+</tbody></table>
+<h3 id='validation-11'>Validation</h3>
+<p>When signatory is deleted, we should check if invariant of <strong>size(signatories) &gt;= quorum</strong> holds.
+Signatory should have been previously added to the account</p>
+
+<p>Two cases:
+Case 1. When transaction creator wants to remove signatory from their account and he or she has permission CanRemoveSignatory
+Case 2. CanRemoveSignatory was granted to transaction creator</p>
+<h2 id='revoke-permission'>Revoke permission</h2><h3 id='purpose-12'>Purpose</h3>
+<p>The purpose of <em>revoke permission</em> command is to revoke or dismiss given granted permission from another account in the network.</p>
+<h3 id='structure-12'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">RevokePermission</span> <span class="p">{</span>
    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
    <span class="kt">string</span> <span class="na">permission_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1323,7 +1311,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>id of account whom rights were granted</td>
-<td>should be existent in the system</td>
+<td>already existent, account_name@domain</td>
 </tr>
 <tr>
 <td>Permission name</td>
@@ -1331,13 +1319,13 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>permission is defined</td>
 </tr>
 </tbody></table>
-<h3 id='validation-13'>Validation</h3>
+<h3 id='validation-12'>Validation</h3>
 <ol>
 <li>Transaction creator should have previously granted this permission to target account</li>
 </ol>
-<h2 id='set-account-detail'>Set account detail</h2><h3 id='purpose-14'>Purpose</h3>
-<p>Purpose of <em>set account detail</em> is to set account&#39;s key-value information</p>
-<h3 id='structure-14'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountDetail</span><span class="p">{</span>
+<h2 id='set-account-detail'>Set account detail</h2><h3 id='purpose-13'>Purpose</h3>
+<p>Purpose of <em>set account detail</em> command is to set key-value information for a given account</p>
+<h3 id='structure-13'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountDetail</span><span class="p">{</span>
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">value</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
@@ -1363,7 +1351,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>id of account whom key-value information was set</td>
-<td>should be existent in the system</td>
+<td>already existent, account_name@domain</td>
 </tr>
 <tr>
 <td>Key</td>
@@ -1372,13 +1360,182 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </tr>
 <tr>
 <td>Value</td>
-<td>value for corresponding key</td>
+<td>value of corresponding key</td>
 <td>-</td>
 </tr>
 </tbody></table>
+<h3 id='validation-13'>Validation</h3>
+<p>Two cases:
+Case 1. When transaction creator wants to set account detail to his/her account and he or she has permission CanSetAccountInfo
+Case 2. CanSetAccountInfo was granted to transaction creator</p>
+<h2 id='set-account-quorum'>Set account quorum</h2><h3 id='purpose-14'>Purpose</h3>
+<p>The purpose of <em>set account quorum</em> command is to set the number of signatories required to confirm the identity of user, who creates the transaction. Use case scenario is to set the number of different users, utilizing single account, to sign off the transaction.</p>
+<h3 id='structure-14'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">SetAccountQuorum</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SetAccountQuorum"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"quorum"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Account ID</td>
+<td>ID of account to set quorum</td>
+<td>already existent, account_name@domain</td>
+</tr>
+<tr>
+<td>Quorum</td>
+<td>number of signatories needed to be included with a transaction from this account</td>
+<td>0 &lt; quorum &lt; 10</td>
+</tr>
+</tbody></table>
 <h3 id='validation-14'>Validation</h3>
+<p>When quorum is set, it is checked if invariant of <strong>size(signatories) &gt;= quorum</strong> holds.</p>
+
+<p>Two cases:
+Case 1. When transaction creator wants to set quorum for his/her account and he or she has permission CanRemoveSignatory
+Case 2. CanRemoveSignatory was granted to transaction creator</p>
+<h2 id='subtract-asset-quantity'>Subtract asset quantity</h2><h3 id='purpose-15'>Purpose</h3>
+<p>The purpose of <em>subtract asset quantity</em> command is the opposite of AddAssetQuantity commands — to decrease the number of assets on account of transaction creator. </p>
+<h3 id='structure-15'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddAssetQuantity</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span> <span class="nc">uint256</span> <span class="p">{</span>
+   <span class="kt">uint64</span> <span class="na">first</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kt">uint64</span> <span class="na">second</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+   <span class="kt">uint64</span> <span class="na">third</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+   <span class="kt">uint64</span> <span class="na">fourth</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span> <span class="nc">Amount</span> <span class="p">{</span>
+   <span class="n">uint256</span> <span class="na">value</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kt">uint32</span> <span class="na">precision</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SubtractAssetQuantity"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="err">string</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"precision"</span><span class="p">:</span><span class="w"> </span><span class="err">int</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Account ID</td>
+<td>account id from which to subtract asset</td>
+<td>account_name@domain</td>
+</tr>
+<tr>
+<td>Asset ID</td>
+<td>id of the asset</td>
+<td>asset#account</td>
+</tr>
+<tr>
+<td>Amount</td>
+<td>positive amount of the asset to add</td>
+<td>&gt; 0</td>
+</tr>
+</tbody></table>
+<h3 id='validation-15'>Validation</h3>
 <ol>
-<li>Creators of transaction consisting that command only can add key-value information for theirs accounts</li>
+<li>Asset and account should exist</li>
+<li>Added quantity precision should be equal to asset precision</li>
+<li>Creator of transaction should have role which has permissions for subtraction of assets</li>
+<li>Creator of transaction subtracts account quantity in his/her account only</li>
+</ol>
+<h2 id='transfer-asset'>Transfer asset</h2><h3 id='purpose-16'>Purpose</h3>
+<p>The purpose of <em>transfer asset</em> command is to share assets within the account in peer network: in the way that source account transfers assets to target account.</p>
+<h3 id='structure-16'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransferAsset</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">src_account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">dest_account_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">asset_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">description</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="n">Amount</span> <span class="na">amount</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TransferAsset"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"src_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"takemiya@test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dest_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nikolai@test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"asset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coin#test"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Salary payment"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"int_part"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"precision"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Source account ID</td>
+<td>ID of account to withdraw asset from</td>
+<td>already existent, account_name@domain</td>
+</tr>
+<tr>
+<td>Destination account ID</td>
+<td>ID of account to send asset at</td>
+<td>already existent, account_name@domain</td>
+</tr>
+<tr>
+<td>Asset ID</td>
+<td>ID of asset to use</td>
+<td>already existent, asset_name#domain</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Message to attach to transfer</td>
+<td>No constraints</td>
+</tr>
+<tr>
+<td>Amount</td>
+<td>amount of asset to transfer</td>
+<td>0 &lt; amount &lt; max_uint256</td>
+</tr>
+</tbody></table>
+<h3 id='validation-16'>Validation</h3>
+<ol>
+<li>Source account has this asset in its AccountHasAsset relation</li>
+<li>An amount is a positive number and asset precision is consistent with the asset definition</li>
+<li>Source account has enough amount of asset to transfer and is not zero</li>
+<li>Source account can transfer money, and destination account can receive money (their roles have these permissions)</li>
 </ol>
 <h1 id='queries'>Queries</h1><h2 id='query-structure'>Query structure</h2><pre class="highlight protobuf tab-protobuf"><code> <span class="kd">message</span> <span class="nc">Query</span> <span class="p">{</span>
   <span class="kd">message</span> <span class="nc">Payload</span> <span class="p">{</span>
@@ -1389,22 +1546,23 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
        <span class="n">GetSignatories</span> <span class="na">get_account_signatories</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
        <span class="n">GetAccountTransactions</span> <span class="na">get_account_transactions</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
        <span class="n">GetAccountAssetTransactions</span> <span class="na">get_account_asset_transactions</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-       <span class="n">GetAccountAssets</span> <span class="na">get_account_assets</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
-       <span class="n">GetRoles</span> <span class="na">get_roles</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
-       <span class="n">GetAssetInfo</span> <span class="na">get_asset_info</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+       <span class="n">GetTransactions</span> <span class="na">get_transactions</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+       <span class="n">GetAccountAssets</span> <span class="na">get_account_assets</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+       <span class="n">GetRoles</span> <span class="na">get_roles</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
        <span class="n">GetRolePermissions</span> <span class="na">get_role_permissions</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+       <span class="n">GetAssetInfo</span> <span class="na">get_asset_info</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
      <span class="p">}</span>
      <span class="c1">// used to prevent replay attacks.
-</span>     <span class="kt">uint64</span> <span class="na">query_counter</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+</span>     <span class="kt">uint64</span> <span class="na">query_counter</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
   <span class="p">}</span>
 
   <span class="n">Payload</span> <span class="na">payload</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
   <span class="n">Signature</span> <span class="na">signature</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre>
-<p>Each query consists of following things:
+<p>Each query consists of the following fields:
 <ol>
-    <li> Payload, which contains one created time, id of account creator, query counter and a query of one of possible types </li>
+    <li> Payload, which contains created time, id of account creator, query counter and a query object</li>
     <li> Signature, which signs payload </li>
 </ol></p>
 
@@ -1413,22 +1571,29 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     <li> <strong>Time of creation</strong> (unix time, in milliseconds) </li>
     <li> <strong>Creator account_id</strong> stores account id in form username@domain  </li>
     <li> <strong>Query counter</strong> is used to prevent replay attack and it is formed on client side </li>
-    <li> <strong>Query object</strong> might be any of types, described below </li>
+    <li> <strong>Query object</strong> might be of any type, described below </li>
 </ul></p>
 
-<p><strong>Signatures</strong> contain one or many signatures (ed25519 pubkey + signature):</p>
-<h2 id='get-account'>Get account</h2><h3 id='purpose'>Purpose</h3>
-<p>Purpose of <em>get account</em> query is to get state of an account.</p>
+<p><strong>Signatures</strong> contain one or many signatures (<a href="https://ed25519.cr.yp.to">ed25519</a> pubkey + signature).</p>
+<h2 id='validation'>Validation</h2>
+<p>The validation for all commands includes:</p>
 
-<p>Given this Query, in successful case Iroha returns <code>AccountResponse</code>, which contains Account object with following fields:
+<ul>
+<li>timestamp — should not be older than 24 hours from the peer&#39;s time</li>
+<li>signature of query creator — used for checking the identity of query creator</li>
+<li>query counter — checked to be incremented with every subsequent query from query creator</li>
+<li>roles — depending on the query creator&#39;s role, it can be applied to the same account, account in the domain, in the whole system or not allowed at all</li>
+</ul>
+<h2 id='get-account'>Get account</h2><h3 id='purpose'>Purpose</h3>
+<p>Purpose of <em>get account</em> query is to get the state of an account.</p>
+
+<p>This Query returns <code>AccountResponse</code>, which contains array with roles of the account and <code>Account</code> object with following fields:
 <ul>
     <li>account_id </li>
     <li>domain_name </li>
     <li>permissions object </li>
     <li>quorum — the quantity of signatures to pass within transaction to execute commands for this account </li>
 </ul></p>
-
-<aside class="warning"> `AccountResponse` should not contain array of permissions, but an array of `Role` object instead. It will be reworked. </aside>
 <h3 id='structure'>Structure</h3><h4 id='query'>Query</h4>
 <blockquote>
 <p>Query</p>
@@ -1468,10 +1633,11 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </blockquote>
 <pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AccountResponse</span> <span class="p">{</span>
     <span class="n">Account</span> <span class="na">account</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">repeated</span> <span class="kt">string</span> <span class="na">account_roles</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="kd">message</span> <span class="nc">Account</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">account_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="na">domain_name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="na">domain_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
     <span class="kt">uint32</span> <span class="na">quorum</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
     <span class="kt">string</span> <span class="na">json_data</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1486,12 +1652,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id</td>
-<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
+<td>username@domain</td>
 </tr>
 <tr>
-<td>Domain name</td>
+<td>Domain ID</td>
 <td>domain of account id</td>
-<td><code>[a-z]{1,9}</code></td>
+<td><code>[A-Za-z0-9]{1,9}</code></td>
 </tr>
 <tr>
 <td>Quorum</td>
@@ -1504,14 +1670,10 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>properly formed json information</td>
 </tr>
 </tbody></table>
-
-<aside class="notice">It is better to rename `domain_name` into `domain_id` for consistency purposes</aside>
-<h3 id='validation'>Validation</h3>
-<p>Stateless validation (check timestamp and signature)</p>
 <h2 id='get-signatories'>Get signatories</h2><h3 id='purpose-2'>Purpose</h3>
 <p>Purpose of <em>get signatories</em> query is to get signatories, which act as an identity of the account.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>SignatoriesResponse</code>, which is one or many public ed25519 keys.</p>
+<p>This Query returns <code>SignatoriesResponse</code>, which is one or many public <a href="https://ed25519.cr.yp.to">ed25519</a> keys.</p>
 <h3 id='structure-2'>Structure</h3><h4 id='query-2'>Query</h4>
 <blockquote>
 <p>Query</p>
@@ -1542,7 +1704,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request signatories</td>
-<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
+<td>username@domain</td>
 </tr>
 </tbody></table>
 <h4 id='response-2'>Response</h4>
@@ -1563,17 +1725,13 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Keys</td>
 <td>an array of public keys</td>
-<td>ed25519</td>
+<td><a href="https://ed25519.cr.yp.to">ed25519</a></td>
 </tr>
 </tbody></table>
-<h3 id='validation-2'>Validation</h3>
-<p>Stateless validation (check timestamp and signature)</p>
 <h2 id='get-account-transactions'>Get account transactions</h2><h3 id='purpose-3'>Purpose</h3>
-<p>In case when a list of transactions per user is needed, <code>GetAccountTransactions</code> query can be formed.</p>
+<p>In a case when a list of transactions per account is needed, <code>GetAccountTransactions</code> query can be formed.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>TransactionsResponse</code>, which is a collection of transactions.</p>
-
-<aside class="notice">Team of Iroha maintainers is implementing pagination for this query, so that user can retrive transactions partially, using tx_hash as head, and quantity as size of page</aside>
+<p>This Query returns <code>TransactionsResponse</code>, which is a collection of transactions.</p>
 <h3 id='structure-3'>Structure</h3><h4 id='query-3'>Query</h4>
 <blockquote>
 <p>Query</p>
@@ -1604,7 +1762,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request transactions from</td>
-<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
+<td>username@domain</td>
 </tr>
 </tbody></table>
 <h4 id='response-3'>Response</h4>
@@ -1629,9 +1787,9 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </tr>
 </tbody></table>
 <h2 id='get-account-asset-transactions'>Get account asset transactions</h2><h3 id='purpose-4'>Purpose</h3>
-<p>When an information about transaction per user using certain asset is needed, <code>GetAccountAssetTransactions</code> query is sent.</p>
+<p><code>GetAccountAssetTransactions</code> query returns all transactions associated with given account and asset</p>
 
-<p>Given this Query, in successful case Iroha returns <code>TransactionsResponse</code>, which is a collection of transactions.</p>
+<p>This Query returns <code>TransactionsResponse</code>, which is a collection of transactions.</p>
 <h3 id='structure-4'>Structure</h3><h4 id='query-4'>Query</h4>
 <blockquote>
 <p>Query</p>
@@ -1664,12 +1822,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request transactions from</td>
-<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
+<td>username@domain</td>
 </tr>
 <tr>
 <td>Asset ID</td>
 <td>asset id in order to filter transactions containing this asset</td>
-<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
+<td>asset_name#domain</td>
 </tr>
 </tbody></table>
 <h4 id='response-4'>Response</h4>
@@ -1693,11 +1851,69 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>Committed transactions</td>
 </tr>
 </tbody></table>
-<h2 id='get-account-assets'>Get account assets</h2><h3 id='purpose-5'>Purpose</h3>
+<h2 id='get-transactions'>Get transactions</h2><h3 id='purpose-5'>Purpose</h3>
+<p><code>GetTransactions</code> is used for retrieving information about transactions, based on their hashes.</p>
+
+<p>This Query returns <code>TransactionsResponse</code>, which is a collection of transactions.</p>
+<h3 id='structure-5'>Structure</h3><h4 id='query-5'>Query</h4>
+<blockquote>
+<p>Query</p>
+</blockquote>
+<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">GetTransactions</span> <span class="p">{</span>
+    <span class="k">repeated</span> <span class="kt">bytes</span> <span class="na">tx_hashes</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"signature"</span><span class="p">:</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"created_ts"</span><span class="p">:</span><span class="w"> </span><span class="err">…</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"creator_account_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin@test"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"query_counter"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"query_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"GetTransactions"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"tx_hashes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="p">,</span><span class="err">…</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Transactions hashes</td>
+<td>transactions&#39; hashes to request transactions from</td>
+<td>(proto) array of 32 bytes, (json) 64 size of hex strings</td>
+</tr>
+</tbody></table>
+<h4 id='response-5'>Response</h4>
+<blockquote>
+<p>Response</p>
+</blockquote>
+<pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">TransactionsResponse</span> <span class="p">{</span>
+    <span class="k">repeated</span> <span class="n">Transaction</span> <span class="na">transactions</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Constraint</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Transactions</td>
+<td>an array of transactions for given account and asset</td>
+<td>Committed transactions</td>
+</tr>
+</tbody></table>
+<h2 id='get-account-assets'>Get account assets</h2><h3 id='purpose-6'>Purpose</h3>
 <p>To know the state of an asset per account (balance), <code>GetAccountAssets</code> query can be formed.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>AccountAssetResponse</code>.</p>
-<h3 id='structure-5'>Structure</h3><h4 id='query-5'>Query</h4>
+<p>This Query returns <code>AccountAssetResponse</code>.</p>
+<h3 id='structure-6'>Structure</h3><h4 id='query-6'>Query</h4>
 <blockquote>
 <p>Query</p>
 </blockquote>
@@ -1729,15 +1945,15 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Account ID</td>
 <td>account id to request balance from</td>
-<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
+<td>username@domain</td>
 </tr>
 <tr>
 <td>Asset ID</td>
 <td>asset id to know its balance</td>
-<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
+<td>asset_name#domain</td>
 </tr>
 </tbody></table>
-<h4 id='response-5'>Response</h4>
+<h4 id='response-6'>Response</h4>
 <blockquote>
 <p>Response</p>
 </blockquote>
@@ -1760,13 +1976,13 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 </thead><tbody>
 <tr>
 <td>Asset ID</td>
-<td>asset id to knows its balance</td>
-<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
+<td>identifier of asset used for checking the balance</td>
+<td>asset_name#domain</td>
 </tr>
 <tr>
 <td>Account ID</td>
 <td>account which has this balance</td>
-<td><code>[a-z]{1,9}\@[a-z]{1,9}</code></td>
+<td>username@domain</td>
 </tr>
 <tr>
 <td>Balance</td>
@@ -1774,13 +1990,11 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>&gt; 0</td>
 </tr>
 </tbody></table>
-<h3 id='validation-3'>Validation</h3>
-<p>Stateless validation (check timestamp and signature)</p>
-<h2 id='get-asset-info'>Get asset info</h2><h3 id='purpose-6'>Purpose</h3>
-<p>In order to know precision for given asset, and other related info in future, such as description, etc. user can send <code>GetAssetInfo</code> query to Iroha network</p>
+<h2 id='get-asset-info'>Get asset info</h2><h3 id='purpose-7'>Purpose</h3>
+<p>In order to know precision for given asset, and other related info in the future, such as a description of the asset, etc. user can send <code>GetAssetInfo</code> query.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>AssetResponse</code> with an information about the asset.</p>
-<h3 id='structure-6'>Structure</h3><h4 id='query-6'>Query</h4>
+<p>This Query returns <code>AssetResponse</code> with an information about the asset.</p>
+<h3 id='structure-7'>Structure</h3><h4 id='query-7'>Query</h4>
 <blockquote>
 <p>Query</p>
 </blockquote>
@@ -1810,10 +2024,10 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Asset ID</td>
 <td>asset id to know related information</td>
-<td><code>[a-z]{1,9}\#[a-z]{1,9}</code></td>
+<td>asset_name#domain</td>
 </tr>
 </tbody></table>
-<h4 id='response-6'>Response</h4>
+<h4 id='response-7'>Response</h4>
 <blockquote>
 <p>Response</p>
 </blockquote>
@@ -1837,12 +2051,12 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <tr>
 <td>Asset ID</td>
 <td>asset id to get information about</td>
-<td><code>[a-z]{1,9}</code></td>
+<td><code>[A-Za-z0-9]{1,9}</code></td>
 </tr>
 <tr>
 <td>Domain ID</td>
 <td>domain related to this asset</td>
-<td><code>[a-z]{1,9}</code></td>
+<td><code>[A-Za-z0-9]{1,9}</code></td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -1850,13 +2064,11 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>uint8_t</td>
 </tr>
 </tbody></table>
-<h3 id='validation-4'>Validation</h3>
-<p>Stateless validation (check timestamp and signature)</p>
-<h2 id='get-roles'>Get roles</h2><h3 id='purpose-7'>Purpose</h3>
-<p>To get available roles in the system, user can send <code>GetRoles</code> query to Iroha network.</p>
+<h2 id='get-roles'>Get roles</h2><h3 id='purpose-8'>Purpose</h3>
+<p>To get existing roles in the system, a user can send <code>GetRoles</code> query to Iroha network.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>RolesResponse</code> containing array of existing roles.</p>
-<h3 id='structure-7'>Structure</h3><h4 id='query-7'>Query</h4>
+<p>This Query returns <code>RolesResponse</code> containing an array of existing roles.</p>
+<h3 id='structure-8'>Structure</h3><h4 id='query-8'>Query</h4>
 <blockquote>
 <p>Query</p>
 </blockquote>
@@ -1873,7 +2085,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
     </span><span class="s2">"query_counter"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
     </span><span class="s2">"query_type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"GetRoles"</span><span class="p">,</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h4 id='response-7'>Response</h4>
+</span></code></pre><h4 id='response-8'>Response</h4>
 <blockquote>
 <p>Response</p>
 </blockquote>
@@ -1894,13 +2106,11 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>vector of strings describing existing roles in the system</td>
 </tr>
 </tbody></table>
-<h3 id='validation-5'>Validation</h3>
-<p>Stateless validation (check timestamp and signature)</p>
-<h2 id='get-role-permissions'>Get role permissions</h2><h3 id='purpose-8'>Purpose</h3>
-<p>To get available permissions per role in the system, user can send <code>GetRolePermissions</code> query to Iroha network.</p>
+<h2 id='get-role-permissions'>Get role permissions</h2><h3 id='purpose-9'>Purpose</h3>
+<p>To get available permissions per role in the system, a user can send <code>GetRolePermissions</code> query to Iroha network.</p>
 
-<p>Given this Query, in successful case Iroha returns <code>RolePermissionsResponse</code> containing array of permissions related to the role.</p>
-<h3 id='structure-8'>Structure</h3><h4 id='query-8'>Query</h4>
+<p>This Query returns <code>RolePermissionsResponse</code> containing an array of permissions related to the role.</p>
+<h3 id='structure-9'>Structure</h3><h4 id='query-9'>Query</h4>
 <blockquote>
 <p>Query</p>
 </blockquote>
@@ -1933,7 +2143,7 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>string describing role existing in the system</td>
 </tr>
 </tbody></table>
-<h4 id='response-8'>Response</h4>
+<h4 id='response-9'>Response</h4>
 <blockquote>
 <p>Response</p>
 </blockquote>
@@ -1954,8 +2164,70 @@ Combining different permissions into roles, maintainers of Iroha peer network ca
 <td>string of permissions related to the role</td>
 </tr>
 </tbody></table>
-<h3 id='validation-6'>Validation</h3>
-<p>Stateless validation (check timestamp and signature)</p>
+<h1 id='entity-relationship-model'>Entity-relationship model</h1>
+<p>This section describes the contents of World State View, or in other words — the state of entities as per the latest block in the chain.</p>
+
+<p><img src="images/er-model.png" title="Entity-relationship model" alt="ER Model" /></p>
+<h2 id='peer'>Peer</h2>
+<ul>
+<li>address — network address and internal port, is used for synchronization, consensus, and communication with the ordering service</li>
+<li>public_key — key, which will be used for signing blocks during consensus process</li>
+</ul>
+<h2 id='asset'>Asset</h2>
+<ul>
+<li>asset_id — identifier of asset, formatted as asset_name#domain_id</li>
+<li>domain_id — identifier of domain, where the asset was created, references existing domain</li>
+<li>precision — size of fractional part</li>
+<li>data — JSON with arbitrary structure of asset description</li>
+</ul>
+<h2 id='signatory'>Signatory</h2>
+<ul>
+<li>public_key — a public key</li>
+</ul>
+<h2 id='domain'>Domain</h2>
+<ul>
+<li>domain_id — identifier of a domain</li>
+<li>default_role — a default role per user created in the domain, references existing role</li>
+</ul>
+<h2 id='role'>Role</h2>
+<ul>
+<li>role_id — identifier of role</li>
+</ul>
+<h3 id='rolehaspermissions'>RoleHasPermissions</h3>
+<ul>
+<li>role_id — identifier of role, references existing role</li>
+<li>permission_id — an id of predefined role</li>
+</ul>
+<h2 id='account'>Account</h2>
+<ul>
+<li>account_id — identifier of account, formatted as account_name@domain_id</li>
+<li>domain_id — identifier of domain where the account was created, references existing domain </li>
+<li>quorum — number of signatories required for creation of valid transaction from this account</li>
+<li>transaction_count – counter of transactions created by this account</li>
+<li>data — key-value storage for any information, related to the account</li>
+</ul>
+<h3 id='accounthassignatory'>AccountHasSignatory</h3>
+<ul>
+<li>account_id — identifier of account, references existing account </li>
+<li>public_key — a public key (which is also called signatory), references existing signatory</li>
+</ul>
+<h3 id='accounthasasset'>AccountHasAsset</h3>
+<ul>
+<li>account_id — identifier of account, references existing account </li>
+<li>asset_id — identifier of asset, references existing asset</li>
+<li>amount — an amount of the asset, belonging to the account</li>
+</ul>
+<h3 id='accounthasroles'>AccountHasRoles</h3>
+<ul>
+<li>account_id — identifier of account, references existing account </li>
+<li>role_id — identifier of role, references existing role</li>
+</ul>
+<h3 id='accounthasgrantablepermissions'>AccountHasGrantablePermissions</h3>
+<ul>
+<li>account_id — identifier of account, references existing account. This account gives grantable permission to perform operation over itself to permittee.</li>
+<li>permittee_account_id — identifier of account, references existing account. This account is given permission to perform operation over account_id.</li>
+<li>permission_id — identifier of grantable_permission</li>
+</ul>
 <h1 id='command-line-interface'>Command Line Interface</h1>
 <p>Iroha Command Line Interface (CLI) is a tool for creation of transaction containing commands from the command line, or sending queries to Iroha. It is intended to simplify interaction between the client side and Iroha peer. CLI could be also used for keypair generation.</p>
 
