@@ -6,7 +6,7 @@ A command changes the state, called World State View, by performing an action ov
 
 ### Purpose
 
-The purpose of _add asset quantity_ is to increase the quantity of an asset on account of transaction creator. Use case scenario is to increase the number of mutable asset in the system, which can act as a claim on a commodity (e.g. money, gold, etc.)
+The purpose of _add asset quantity_ command is to increase the quantity of an asset on account of transaction creator. Use case scenario is to increase the number of mutable asset in the system, which can act as a claim on a commodity (e.g. money, gold, etc.)
 
 ### Structure
 
@@ -63,7 +63,7 @@ Amount  | positive amount of the asset to add | > 0
 
 ### Purpose
 
-The purpose of _add peer_ is to write into ledger the fact of peer addition into the peer network. After the peer was added, consensus and synchronization components will start using it.
+The purpose of _add peer_ command is to write into ledger the fact of peer addition into the peer network. After the peer was added, consensus and synchronization components will start using it.
 
 ### Structure
 
@@ -101,7 +101,7 @@ Peer key | peer public key, which will be used in consensus algorithm to sign-of
 
 ### Purpose
 
-The purpose of _add signatory_ is to add an identifier to the account. Such identifier is a public key of another device or a public key of another user.
+The purpose of _add signatory_ command is to add an identifier to the account. Such identifier is a public key of another device or a public key of another user.
 
 ### Structure
 
@@ -131,8 +131,8 @@ Public key | Signatory to add to account | ed25519 public key
 ### Validation
 
 Two cases:
-Case 1. Transaction creator wants to add signatory to own account, having permission CanAddSignatory
-Case 2. Transaction creator was granted with CanAddSignatory permission to add signatory to this account
+Case 1. Transaction creator wants to add signatory to his or her account, having permission CanAddSignatory
+Case 2. CanAddSignatory was granted to transaction creator
 
 <aside class="notice">
 Granting specific rights in the system allows other account to perform actions over the account, which granted such rights. They can be revoked if needed, and for more information — please check <a href="#permission-model">permission model</a> section.
@@ -142,7 +142,7 @@ Granting specific rights in the system allows other account to perform actions o
 
 ### Purpose
 
-The purpose of _append role_ is to promote an account to some created role in the system, where role is a set of permissions account has to perform an action (command or query).
+The purpose of _append role_ command is to promote an account to some created role in the system, where role is a set of permissions account has to perform an action (command or query).
 
 ### Structure
 
@@ -179,7 +179,7 @@ Role name | name of already created role | already existent, `[A-Za-z0-9_]{1,7}`
 
 ### Purpose
 
-The purpose of _create account_ is to make entity in the system, capable of sending transactions or queries, storing signatories, personal data and identifiers.
+The purpose of _create account_ command is to make entity in the system, capable of sending transactions or queries, storing signatories, personal data and identifiers.
 
 ### Structure
 
@@ -219,7 +219,7 @@ Main pubkey| first public key to add to the account | ed25519 public key
 
 ### Purpose
 
-The purpose of _сreate asset_ is to create a new type of asset, unique in a domain. An asset is a countable representation of a commodity. 
+The purpose of _сreate asset_ command is to create a new type of asset, unique in a domain. An asset is a countable representation of a commodity. 
 
 ### Structure
 
@@ -258,7 +258,7 @@ Precision | number of digits after comma/dot | 0 <= precision <= uint32 max
 
 ### Purpose
 
-The purpose of _create domain_ is to make new domain in Iroha network, which is a group of accounts.
+The purpose of _create domain_ command is to make new domain in Iroha network, which is a group of accounts.
 
 ### Structure
 
@@ -295,7 +295,7 @@ Default role | role for any created user in the domain | one of the existing rol
 
 ### Purpose
 
-The purpose of _create role_ is to create new role in the system from the set of permissions.
+The purpose of _create role_ command is to create new role in the system from the set of permissions.
 Combining different permissions into roles, maintainers of Iroha peer network can create customized security model.
 
 ### Structure
@@ -334,7 +334,7 @@ Permissions | array of already existent permissions | set of passed permissions 
 
 ### Purpose
 
-The purpose of _detach role_ is to detach a role from the set of roles of an account.
+The purpose of _detach role_ command is to detach a role from the set of roles of an account.
 By executing this command it is possible to decrease the number of possible actions in the system for the user.
 
 ### Structure
@@ -371,7 +371,7 @@ Role name | detached role | existing role
 
 ### Purpose
 
-The purpose of _grant permission_ is to give another account rights to perform actions over account of transaction sender (give someone right to do something with my account).
+The purpose of _grant permission_ command is to give another account rights to perform actions over the account of transaction sender (give someone right to do something with my account).
 
 ### Structure
 
@@ -407,7 +407,7 @@ Permission name | name of granted permission | permission is defined
 
 ### Purpose
 
-Purpose of _remove signatory_ is to remove public key, associated with an identity, from an account
+Purpose of _remove signatory_ command is to remove public key, associated with an identity, from an account
 
 ### Structure
 
@@ -441,13 +441,13 @@ Signatory should have been previously added to the account
 
 Two cases:
 Case 1. When transaction creator wants to remove signatory from their account and he or she has permission CanRemoveSignatory
-Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account
+Case 2. CanRemoveSignatory was granted to transaction creator
 
 ## Revoke permission
 
 ### Purpose
 
-The purpose of _revoke permission_ is to revoke or dismiss given granted permission from another account in the network.
+The purpose of _revoke permission_ command is to revoke or dismiss given granted permission from another account in the network.
 
 ### Structure
 
@@ -482,7 +482,7 @@ Permission name | name of revoked permission | permission is defined
 
 ### Purpose
 
-Purpose of _set account detail_ is to set key-value information for a given account
+Purpose of _set account detail_ command is to set key-value information for a given account
 
 ### Structure
 
@@ -516,13 +516,13 @@ Value | value of corresponding key | -
 
 Two cases:
 Case 1. When transaction creator wants to set account detail to his/her account and he or she has permission CanSetAccountInfo
-Case 2. Transaction creator was granted with CanSetAccountInfo permission to set details about this account
+Case 2. CanSetAccountInfo was granted to transaction creator
 
 ## Set account quorum
 
 ### Purpose
 
-The purpose of _set account quorum_ is to set the number of signatories required to confirm the identity of user, who creates the transaction. Use case scenario is to set the number of different users, utilizing single account, to sign off the transaction.
+The purpose of _set account quorum_ command is to set the number of signatories required to confirm the identity of user, who creates the transaction. Use case scenario is to set the number of different users, utilizing single account, to sign off the transaction.
 
 ### Structure
 
@@ -555,13 +555,13 @@ When quorum is set, it is checked if invariant of **size(signatories) >= quorum*
 
 Two cases:
 Case 1. When transaction creator wants to set quorum for his/her account and he or she has permission CanRemoveSignatory
-Case 2. Transaction creator was granted with CanRemoveSignatory permission to remove signatory from this account
+Case 2. CanRemoveSignatory was granted to transaction creator
 
 ## Subtract asset quantity
 
 ### Purpose
 
-The purpose of _subtract asset quantity_ is the opposite of AddAssetQuantity commands — to decrease the number of assets on account of transaction creator. 
+The purpose of _subtract asset quantity_ command is the opposite of AddAssetQuantity commands — to decrease the number of assets on account of transaction creator. 
 
 ### Structure
 
@@ -618,7 +618,7 @@ Amount  | positive amount of the asset to add | > 0
 
 ### Purpose
 
-The purpose of _transfer asset_ is to share assets within the account in peer network: in the way that source account transfers assets to target account.
+The purpose of _transfer asset_ command is to share assets within the account in peer network: in the way that source account transfers assets to target account.
 
 ### Structure
 
