@@ -607,15 +607,15 @@ Write this to your shell configuration to make it persistent.
 <blockquote>
 <p>Launching Docker and Postgres in Docker</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>docker run --name some-redis 
-    -p 6379:6379<span class="se">\</span>
-    -d redis:3.2.8
+<pre class="highlight shell tab-shell"><code>docker run --name some-redis <span class="se">\</span>
+-p 6379:6379 <span class="se">\</span>
+-d redis:3.2.8
 
-docker run --name some-postgres 
-    -e <span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres <span class="se">\</span>
-    -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword <span class="se">\</span>
-    -p 5432:5432 <span class="se">\</span>
-    -d postgres:9.5
+docker run --name some-postgres <span class="se">\</span>
+-e <span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres <span class="se">\</span>
+-e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword <span class="se">\</span>
+-p 5432:5432 <span class="se">\</span>
+-d postgres:9.5
 </code></pre>
 <p>To launch Iroha daemon, running postgres and redis services are required. You may launch them on your local machine, or use docker containers, as provided on the right side.</p>
 <h3 id='linux-debian-based'>Linux (debian-based)</h3>
