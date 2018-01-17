@@ -496,9 +496,95 @@ cmake --build build -- -j<span class="k">$(</span>nproc<span class="k">)</span>
 On macOS $(nproc) variable does not work. Check number of logical cores with <code>sysctl -n hw.ncpu</code>
 </aside>
 
-<p>We use CMake to build platform-dependent build files. Run shell commands from &quot;Build&quot; section on the right. Built binaries (<code>irohad</code> and <code>iroha-cli</code>) will be in <code>./build/bin</code> directory.</p>
+<p>Run shell commands from &quot;Build&quot; section on the right. Built binaries (<code>irohad</code> and <code>iroha-cli</code>) will be in <code>./build/bin</code> directory.</p>
 
 <p>After you built the project — please run tests to check the operability of the daemon.</p>
+<h3 id='cmake-parameters'>Cmake parameters</h3>
+<p>We use CMake to build platform-dependent build files. It has numerous of the flags for configuring the final build. Note that beside the listed params <a href="https://cmake.org/Wiki/CMake_Useful_Variables">cmake&#39;s vars</a> can be useful as well. Also as long as this page can be deprecated (or just not complete) you can browse custom flags via <code>cmake -L</code>, <code>cmake-gui</code>, or <code>ccmake</code>.</p>
+
+<aside class="notice">
+You can specify parameters at the <code>cmake</code> configuring stage (e.g <code>cmake -DTESTING=ON</code>).
+</aside>
+<h4 id='main-params'>Main params</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Possible values</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>TESTING</td>
+<td>ON/OFF</td>
+<td>ON</td>
+<td>Enables or disables build of the tests</td>
+</tr>
+<tr>
+<td>BENCHMARKING</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables build of the benchmarks</td>
+</tr>
+<tr>
+<td>COVERAGE</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables coverage</td>
+</tr>
+<tr>
+<td>SWIG_PYTHON</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables libraries and native interface bindings for python</td>
+</tr>
+<tr>
+<td>SWIG_JAVA</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables libraries and native interface bindings for java</td>
+</tr>
+</tbody></table>
+<h4 id='packaging-specific-params'>Packaging specific params</h4>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Possible values</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ENABLE_LIBS_PACKAGING</td>
+<td>ON/OFF</td>
+<td>ON</td>
+<td>Enables or disables all types of packaging</td>
+</tr>
+<tr>
+<td>PACKAGE_ZIP</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables zip packaging</td>
+</tr>
+<tr>
+<td>PACKAGE_TGZ</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables tar.gz packaging</td>
+</tr>
+<tr>
+<td>PACKAGE_RPM</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables rpm packaging</td>
+</tr>
+<tr>
+<td>PACKAGE_DEB</td>
+<td>ON/OFF</td>
+<td>OFF</td>
+<td>Enables or disables deb packaging</td>
+</tr>
+</tbody></table>
 <h3 id='add-to-irohad-and-iroha-cli-to-path-optional'>Add to irohad and iroha-cli to path (optional)</h3>
 <p><code>export PATH=.../iroha/build/bin:$PATH</code></p>
 
