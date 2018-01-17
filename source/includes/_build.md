@@ -48,9 +48,37 @@ cmake --build build -- -j$(nproc)
 On macOS $(nproc) variable does not work. Check number of logical cores with <code>sysctl -n hw.ncpu</code>
 </aside>
 
-We use CMake to build platform-dependent build files. Run shell commands from "Build" section on the right. Built binaries (`irohad` and `iroha-cli`) will be in `./build/bin` directory.
+Run shell commands from "Build" section on the right. Built binaries (`irohad` and `iroha-cli`) will be in `./build/bin` directory.
 
 After you built the project — please run tests to check the operability of the daemon.
+
+### Cmake parameters
+
+We use CMake to build platform-dependent build files. It has numerous of the flags for configuring the final build. Note that beside the listed params [cmake's vars](https://cmake.org/Wiki/CMake_Useful_Variables) can be useful as well. Also as long as this page can be deprecated (or just not complete) you can browse custom flags via `cmake -L`, `cmake-gui`, or `ccmake`.
+
+<aside class="notice">
+You can specify parameters at the <code>cmake</code> configuring stage (e.g <code>cmake -DTESTING=ON</code>).
+</aside>
+
+#### Main params
+
+Parameter | Possible values | Default | Description
+----------|-----------------|------------|--------------------
+TESTING | ON/OFF | ON | Enables or disables build of the tests
+BENCHMARKING | ON/OFF | OFF |  Enables or disables build of the benchmarks
+COVERAGE | ON/OFF | OFF | Enables or disables coverage
+SWIG_PYTHON | ON/OFF | OFF | Enables or disables libraries and native interface bindings for python
+SWIG_JAVA | ON/OFF | OFF | Enables or disables libraries and native interface bindings for java
+
+#### Packaging specific params
+
+Parameter | Possible values | Default | Description
+----------|-----------------|------------|--------------------
+ENABLE_LIBS_PACKAGING | ON/OFF | ON | Enables or disables all types of packaging
+PACKAGE_ZIP | ON/OFF | OFF | Enables or disables zip packaging
+PACKAGE_TGZ | ON/OFF | OFF | Enables or disables tar.gz packaging
+PACKAGE_RPM | ON/OFF | OFF | Enables or disables rpm packaging
+PACKAGE_DEB | ON/OFF | OFF | Enables or disables deb packaging
 
 ### Add to irohad and iroha-cli to path (optional)
 
