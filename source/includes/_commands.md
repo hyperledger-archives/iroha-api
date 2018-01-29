@@ -69,6 +69,10 @@ The purpose of _add peer_ command is to write into ledger the fact of peer addit
 
 ```protobuf
 message AddPeer {
+    Peer peer = 1;
+}
+
+message Peer {
     string address = 1;
     bytes peer_key = 2;
 }
@@ -78,8 +82,10 @@ message AddPeer {
     "commands": [
         {
             "command_type": "AddPeer",
-            "address": "192.168.1.1:50001",
-            "peer_key": string(64)
+            "peer": {
+                "address": "192.168.1.1:50001",
+                "peer_key": string(64)
+            }
         },
     ], …
 }
@@ -663,3 +669,4 @@ Amount | amount of asset to transfer | 0 < amount < max_uint256
 2. An amount is a positive number and asset precision is consistent with the asset definition
 3. Source account has enough amount of asset to transfer and is not zero
 4. Source account can transfer money, and destination account can receive money (their roles have these permissions)
+
