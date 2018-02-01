@@ -11,18 +11,18 @@ To generate files containing private and public keys `--new_account` flag should
 
 Example:
 ```bash
-iroha-cli --new_account --name alice@ru --pass_phrase mysupersecretpassword
+iroha-cli --new_account --account_name alice@ru --pass_phrase mysupersecretpassword --key_path ./
 ```
 
-After that `alice@ru.priv` and `alice@ru.pub` files will be generated in the folder where iroha-cli has been launched.
+After that `alice@ru.priv` and `alice@ru.pub` files will be generated in the `key_path` folder. By default `key_path` if not specified is the folder where iroha-cli has been launched.
 
 ## Interactive mode 
 
 Run: 
-<code class="bash"> iroha-cli --interactive --name your_account_id </code>
+<code class="bash"> iroha-cli --interactive --account_name your_account_id --key_path /path/to/keys </code>
 
-Your account_id will be used as the creator of the queries and transactions, signing up messages with accounts keys, fill up counters. 
-At the start of interactive cli will try to find locally keypairs associated with the account_id, hence this keypairs must be generated and stored locally. 
+Your `account_id` is used as the creator of the queries and transactions for signing up messages with accounts keys and fill up counters. 
+You can specify the location of the keypairs associated with the `account_id` using `key_path` flag. By default, current folder is used.
 
 ## Starting menu 
 
@@ -30,32 +30,33 @@ At the start of cli user has two possible modes:
 
 * Start a transaction
 * Start a query
+* Get status of a transaction
 
 ![image](../images/cli/image.png)
 
 ## Transaction CLI
 
 Start up of transaction cli will trigger the creation of a new transaction.
-Each transaction consists of commands, being less or equal than **65000**. User is offered to add commands to new formed transaction.
-All meta data of transaction will be filled automatically (signature, tx_counter, creator account, timestamp).
-Currently following Iroha commands are supported in Interactive CLI:
+Each transaction consists of commands, being equal or less than **65000**. User is offered to add commands to the new transaction.
+All meta data of the transaction will be filled automatically (signature, tx_counter, creator account, timestamp).
+Currently, following Iroha commands are supported in Interactive CLI:
 
 ![image-2](../images/cli/image-2.png)
 
 Back option will switch back to main menu. 
-To add command to transaction there two options:
+To add command to the transaction there are two options:
 <ol> 
     <li> Type number of the command in the menu, or command name without parameters: 
     This will iterate through the parameters of the command and ask user to type the parameter value. 
-    For example typing "1" will create set account quorum, and ask to type account id and quorum:
-    ![image-3](../images/cli/image-4.png) </li> 
+    For example typing "9" will create `set account quorum` command, and ask to type `account id` and `quorum`:
+    ![image-3](../images/cli/image-3.png) </li> 
 
     <li> Type command name with all needed parameters . 
     This option can be used to quickly add command to transaction. For example typing: 
     `set_qrm test@test 2` - will create Set_Account_Quorum command for account: `test@test` and quorum: 2. </li> 
 </ol>
 
-After addition of the command, result menu will be printed:  
+After adding the command, result menu will be printed:  
 ![image-4](../images/cli/image-4.png)
 
 <ol>
@@ -70,7 +71,7 @@ After addition of the command, result menu will be printed:  
 
 Interactive query cli is build similarly as Transaction CLI.
 Query meta data will be assigned automatically (query_counter, time_stamp,  creator_account, signature)
-Currently interactive cli supports the following queries:
+Currently, interactive cli supports the following queries:
 
 ![image-5](../images/cli/image-5.png)
 
