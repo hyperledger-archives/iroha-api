@@ -37,7 +37,7 @@ At the start of cli user has two possible modes:
 ## Transaction CLI
 
 Start up of transaction cli will trigger the creation of a new transaction.
-Each transaction consists of commands, being less or equal than **65000**. User is offered to add commands to anew transaction.
+Each transaction consists of commands, being equal or less than **65000**. User is offered to add commands to the new transaction.
 All meta data of the transaction will be filled automatically (signature, tx_counter, creator account, timestamp).
 Currently, following Iroha commands are supported in Interactive CLI:
 
