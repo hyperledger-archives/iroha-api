@@ -81,7 +81,7 @@ message AddPeer {
             "address": "192.168.1.1:50001",
             "peer_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ] …
+    ]
 }
 ```
 
