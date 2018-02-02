@@ -958,6 +958,10 @@ In the current version, there is no way to get current transaction counter by an
 <h2 id='add-peer'>Add peer</h2><h3 id='purpose-2'>Purpose</h3>
 <p>The purpose of <em>add peer</em> command is to write into ledger the fact of peer addition into the peer network. After the peer was added, consensus and synchronization components will start using it.</p>
 <h3 id='structure-2'>Structure</h3><pre class="highlight protobuf tab-protobuf"><code><span class="kd">message</span> <span class="nc">AddPeer</span> <span class="p">{</span>
+    <span class="n">Peer</span> <span class="na">peer</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span> <span class="nc">Peer</span> <span class="p">{</span>
     <span class="kt">string</span> <span class="na">address</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">bytes</span> <span class="na">peer_key</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -965,8 +969,10 @@ In the current version, there is no way to get current transaction counter by an
     </span><span class="s2">"commands"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="s2">"command_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AddPeer"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.1.1:50001"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"peer_key"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
+            </span><span class="s2">"peer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.1.1:50001"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"peer_key"</span><span class="p">:</span><span class="w"> </span><span class="err">string(</span><span class="mi">64</span><span class="err">)</span><span class="w">
+            </span><span class="p">}</span><span class="w">
         </span><span class="p">},</span><span class="w">
     </span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -2324,47 +2330,48 @@ To choose one of the options can type short name of the command specified in par
 
 <p>Example:
 <code>bash
-iroha-cli --new_account --name alice@ru --pass_phrase mysupersecretpassword
+iroha-cli --new_account --account_name alice@ru --pass_phrase mysupersecretpassword --key_path ./
 </code></p>
 
-<p>After that <code>alice@ru.priv</code> and <code>alice@ru.pub</code> files will be generated in the folder where iroha-cli has been launched.</p>
+<p>After that <code>alice@ru.priv</code> and <code>alice@ru.pub</code> files will be generated in the <code>key_path</code> folder. By default <code>key_path</code> if not specified is the folder where iroha-cli has been launched.</p>
 <h2 id='interactive-mode'>Interactive mode </h2>
 <p>Run: 
-<code class="bash"> iroha-cli --interactive --name your_account_id </code></p>
+<code class="bash"> iroha-cli --interactive --account_name your_account_id --key_path /path/to/keys </code></p>
 
-<p>Your account_id will be used as the creator of the queries and transactions, signing up messages with accounts keys, fill up counters. 
-At the start of interactive cli will try to find locally keypairs associated with the account_id, hence this keypairs must be generated and stored locally. </p>
+<p>Your <code>account_id</code> is used as the creator of the queries and transactions for signing up messages with accounts keys and fill up counters. 
+You can specify the location of the keypairs associated with the <code>account_id</code> using <code>key_path</code> flag. By default, current folder is used.</p>
 <h2 id='starting-menu'>Starting menu </h2>
 <p>At the start of cli user has two possible modes:</p>
 
 <ul>
 <li>Start a transaction</li>
 <li>Start a query</li>
+<li>Get status of a transaction</li>
 </ul>
 
 <p><img src="images/cli/image.png" alt="image" /></p>
 <h2 id='transaction-cli'>Transaction CLI</h2>
 <p>Start up of transaction cli will trigger the creation of a new transaction.
-Each transaction consists of commands, being less or equal than <strong>65000</strong>. User is offered to add commands to new formed transaction.
-All meta data of transaction will be filled automatically (signature, tx_counter, creator account, timestamp).
-Currently following Iroha commands are supported in Interactive CLI:</p>
+Each transaction consists of commands, being equal or less than <strong>65000</strong>. User is offered to add commands to the new transaction.
+All meta data of the transaction will be filled automatically (signature, tx_counter, creator account, timestamp).
+Currently, following Iroha commands are supported in Interactive CLI:</p>
 
 <p><img src="images/cli/image-2.png" alt="image-2" /></p>
 
 <p>Back option will switch back to main menu. 
-To add command to transaction there two options:
+To add command to the transaction there are two options:
 <ol> 
     <li> Type number of the command in the menu, or command name without parameters: 
     This will iterate through the parameters of the command and ask user to type the parameter value. 
-    For example typing &quot;1&quot; will create set account quorum, and ask to type account id and quorum:
-    <img src="images/cli/image-4.png" alt="image-3" /> </li> </p>
+    For example typing &quot;9&quot; will create <code>set account quorum</code> command, and ask to type <code>account id</code> and <code>quorum</code>:
+    <img src="images/cli/image-3.png" alt="image-3" /> </li> </p>
 
 <p><li> Type command name with all needed parameters . 
     This option can be used to quickly add command to transaction. For example typing: 
     <code>set_qrm test@test 2</code> - will create Set_Account_Quorum command for account: <code>test@test</code> and quorum: 2. </li> 
 </ol></p>
 
-<p>After addition of the command, result menu will be printed:  
+<p>After adding the command, result menu will be printed:  
 <img src="images/cli/image-4.png" alt="image-4" /></p>
 
 <ol>
@@ -2377,7 +2384,7 @@ To add command to transaction there two options:
 <h2 id='query-cli'>Query CLI</h2>
 <p>Interactive query cli is build similarly as Transaction CLI.
 Query meta data will be assigned automatically (query_counter, time_stamp,  creator_account, signature)
-Currently interactive cli supports the following queries:</p>
+Currently, interactive cli supports the following queries:</p>
 
 <p><img src="images/cli/image-5.png" alt="image-5" /></p>
 
