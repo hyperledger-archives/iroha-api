@@ -38,8 +38,8 @@ message Amount {
             "account_id": "test@test",
             "asset_id": "coin#test",
             "amount": {
-                "value": string,
-                "precision": int
+                "value": "200",
+                "precision": 2
             }
         }
     ], …
@@ -79,8 +79,8 @@ message AddPeer {
         {
             "command_type": "AddPeer",
             "address": "192.168.1.1:50001",
-            "peer_key": string(64)
-        },
+            "peer_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
+        }
     ], …
 }
 ```
@@ -117,7 +117,7 @@ message AddSignatory {
         {
             "command_type": "AddSignatory",
             "account_id": "test@test",
-            "public_key": string(64)
+            "public_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
     ], …
 }
@@ -197,7 +197,7 @@ message CreateAccount {
             "command_type": "CreateAccount",
             "account_name": "makoto.takemiya",
             "domain_id": "test",
-            "main_pubkey": string
+            "main_pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
     ], …
 }
@@ -237,7 +237,7 @@ message CreateAsset {
             "command_type": "CreateAsset",
             "asset_name": "usd",
             "domain_id": "test",
-            "precision": "2"
+            "precision": 2
         }
     ], …
 }
@@ -313,8 +313,7 @@ message CreateRole {
             "command_type": "CreateRole",
             "role_name": "MoneyCreator",
             "permissions": [
-                "CanAddAssetQuantity",
-                …
+                "CanAddAssetQuantity"
             ]
         }
     ], …
@@ -351,7 +350,7 @@ message DetachRole {
         {
             "command_type": "DetachRole",
             "account_id": "test@test",
-            "role_name": "user"
+            "role_name": "User"
         }
     ], …
 }
@@ -423,7 +422,7 @@ message RemoveSignatory {
         {
             "command_type": "RemoveSignatory",
             "account_id": "takemiya@test",
-            "public_key": string(64)
+            "public_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
     ], …
 }
@@ -593,8 +592,8 @@ message Amount {
             "account_id": "test@test",
             "asset_id": "coin#test",
             "amount": {
-                "value": string,
-                "precision": int
+                "value": "200",
+                "precision": 2
             }
         }
     ], …
