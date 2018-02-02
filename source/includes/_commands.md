@@ -42,7 +42,7 @@ message Amount {
                 "precision": 2
             }
         }
-    ], …
+    ] 
 }
 ```
 
@@ -81,7 +81,7 @@ message AddPeer {
             "address": "192.168.1.1:50001",
             "peer_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ], …
+    ] …
 }
 ```
 
@@ -119,7 +119,7 @@ message AddSignatory {
             "account_id": "test@test",
             "public_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ], …
+    ]
 }
 ```
 
@@ -160,7 +160,7 @@ message AppendRole {
             "account_id": "takemiya@test",
             "role_name": "Administrator"
         }
-    ], …
+    ]
 }
 ```
 
@@ -199,7 +199,7 @@ message CreateAccount {
             "domain_id": "test",
             "main_pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ], …
+    ]
 }
 ```
 
@@ -239,7 +239,7 @@ message CreateAsset {
             "domain_id": "test",
             "precision": 2
         }
-    ], …
+    ]
 }
 ```
 
@@ -276,7 +276,7 @@ message CreateDomain {
             "domain_id": "test2",
             "default_role": "User"
         }
-    ], …
+    ]
 }
 ```
 
@@ -316,7 +316,7 @@ message CreateRole {
                 "CanAddAssetQuantity"
             ]
         }
-    ], …
+    ]
 }
 ```
 
@@ -352,7 +352,7 @@ message DetachRole {
             "account_id": "test@test",
             "role_name": "User"
         }
-    ], …
+    ]
 }
 ```
 
@@ -388,7 +388,7 @@ message GrantPermission {
             "account_id": "takemiya@soramitsu",
             "permission_name": "CanAddAssetQuantity"
         }
-    ], …
+    ]
 }
 ```
 
@@ -424,7 +424,7 @@ message RemoveSignatory {
             "account_id": "takemiya@test",
             "public_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ], …
+    ]
 }
 ```
 
@@ -464,7 +464,7 @@ message RevokePermission {
             "account_id": "takemiya@soramitsu",
             "permission_name": "CanAddAssetQuantity"
         }
-    ], …
+    ]
 }
 ```
 
@@ -501,7 +501,7 @@ message SetAccountDetail{
             "key": "position",
             "value": "Co-CEO"
         }
-    ], …
+    ]
 }
 ```
 
@@ -539,7 +539,7 @@ message SetAccountQuorum {
             "account_id": "takemiya@test",
             "quorum": 5
         }
-    ], …
+    ]
 }
 ```
 
@@ -596,7 +596,7 @@ message Amount {
                 "precision": 2
             }
         }
-    ], …
+    ]
 }
 ```
 
@@ -644,7 +644,7 @@ message TransferAsset {
                 "precision": 0
             }
         }
-    ], …
+    ]
 }
 ```
 

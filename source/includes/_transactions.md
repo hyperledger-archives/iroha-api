@@ -11,11 +11,16 @@ message Transaction {
 ```json
 {
     /* Transaction */
-    "signatures": array of objects,
-    "created_ts": int(13),
-    "creator_account_id": string(?),
-    "tx_counter": int,
-    "commands": array of objects
+    "signatures": [
+          {
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
+          }
+        ],
+    "created_ts": 1517560129182,
+    "creator_account_id": "admin@test",
+    "tx_counter": 1,
+    "commands": []
 }
 ```
 
@@ -53,13 +58,12 @@ message Payload {
 {
     "commands": [
         {
-            "command_type": string(?),
-            /* other command-specific fields */
+            /* command-specific fields */
         }
     ],
-    "creator_account_id": string(?),
-    "tx_counter": int,
-    "created_ts": int(13)
+    "creator_account_id": "admin@test",
+    "tx_counter": 1,
+    "created_ts": 1517560129182
 }
 ```
 
@@ -75,10 +79,10 @@ message Signature {
 {
     "signatures": [
         {
-            "pubkey": string(64),
-            "signature": string(128),
+             "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         }
-    ], …
+    ]
 }
 ```
 
