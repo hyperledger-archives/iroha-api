@@ -9,18 +9,24 @@ message Transaction {
  }
 ```
 ```json
-{
-    /* Transaction */
-    "signatures": [
-          {
-            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
-            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
-          }
-        ],
-    "created_ts": 1517560129182,
-    "creator_account_id": "admin@test",
-    "tx_counter": 1,
-    "commands": []
+{  
+   "signatures":[  
+      {  
+         "pubkey":"407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+         "signature":"81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
+      }
+   ],
+   "created_ts":1517560129182,
+   "creator_account_id":"admin@test",
+   "tx_counter":1,
+   "commands":[  
+      {  
+         "command_type":"CreateAccount",
+         "account_name":"makoto.takemiya",
+         "domain_id":"test",
+         "main_pubkey":"407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
+      }
+   ]
 }
 ```
 
@@ -55,15 +61,15 @@ message Payload {
 }
 ```
 ```json
-{
-    "commands": [
-        {
-            /* command-specific fields */
-        }
-    ],
-    "creator_account_id": "admin@test",
-    "tx_counter": 1,
-    "created_ts": 1517560129182
+{  
+   "commands":[  
+      {  
+         /* command-specific fields */
+      }
+   ],
+   "creator_account_id":"admin@test",
+   "tx_counter":1,
+   "created_ts":1517560129182
 }
 ```
 
@@ -76,13 +82,13 @@ message Signature {
 }
 ```
 ```json 
-{
-    "signatures": [
-        {
-             "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
-            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
-        }
-    ]
+{  
+   "signatures":[  
+      {  
+         "pubkey":"407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+         "signature":"81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
+      }
+   ]
 }
 ```
 

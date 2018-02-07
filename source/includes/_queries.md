@@ -18,10 +18,8 @@
        GetRolePermissions get_role_permissions = 10;
        GetAssetInfo get_asset_info = 11;
      }
-     // used to prevent replay attacks.
      uint64 query_counter = 12;
   }
-
   Payload payload = 1;
   Signature signature = 2;
 }
@@ -312,7 +310,7 @@ message GetTransactions {
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetTransactions",
-    "tx_hashes": [bf6edb882d53f5532cb416455834878db7af08fb814f8c95d6867a6d9eea4057]
+    "tx_hashes": ["bf6edb882d53f5532cb416455834878db7af08fb814f8c95d6867a6d9eea4057"]
 }
 ```
 
