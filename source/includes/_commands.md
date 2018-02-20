@@ -164,7 +164,7 @@ message AppendRole {
         {
             "command_type": "AppendRole",
             "account_id": "takemiya@test",
-            "role_name": "Administrator"
+            "role_name": "administrator"
         }
     ]
 }
@@ -280,7 +280,7 @@ message CreateDomain {
         {
             "command_type": "CreateDomain",
             "domain_id": "test2",
-            "default_role": "User"
+            "default_role": "user"
         }
     ]
 }
@@ -317,9 +317,9 @@ message CreateRole {
     "commands": [
         {
             "command_type": "CreateRole",
-            "role_name": "MoneyCreator",
+            "role_name": "moneycreator",
             "permissions": [
-                "CanAddAssetQuantity"
+                "can_add_asset_quantity"
             ]
         }
     ]
@@ -356,7 +356,7 @@ message DetachRole {
         {
             "command_type": "DetachRole",
             "account_id": "test@test",
-            "role_name": "User"
+            "role_name": "user"
         }
     ]
 }
@@ -392,7 +392,7 @@ message GrantPermission {
         {
             "command_type": "GrantPermission",
             "account_id": "takemiya@soramitsu",
-            "permission_name": "CanAddAssetQuantity"
+            "permission_name": "can_add_asset_quantity"
         }
     ]
 }
@@ -468,7 +468,7 @@ message RevokePermission {
         {
             "command_type": "RevokePermission",
             "account_id": "takemiya@soramitsu",
-            "permission_name": "CanAddAssetQuantity"
+            "permission_name": "can_add_asset_quantity"
         }
     ]
 }

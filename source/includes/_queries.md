@@ -532,7 +532,7 @@ message GetRolePermissions {
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetRolePermissions",
-    "role_id" : "MoneyCreator"
+    "role_id" : "moneycreator"
 }
 ```
 
