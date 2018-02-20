@@ -164,7 +164,7 @@ message AppendRole {
         {
             "command_type": "AppendRole",
             "account_id": "takemiya@test",
-            "role_name": "administrator"
+            "role_name": "admin"
         }
     ]
 }
@@ -201,7 +201,7 @@ message CreateAccount {
     "commands": [
         {
             "command_type": "CreateAccount",
-            "account_name": "makoto.takemiya",
+            "account_name": "makoto",
             "domain_id": "test",
             "main_pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
@@ -319,7 +319,7 @@ message CreateRole {
             "command_type": "CreateRole",
             "role_name": "moneycreator",
             "permissions": [
-                "can_add_asset_quantity"
+                "can_add_asset_qty"
             ]
         }
     ]
@@ -392,7 +392,7 @@ message GrantPermission {
         {
             "command_type": "GrantPermission",
             "account_id": "takemiya@soramitsu",
-            "permission_name": "can_add_asset_quantity"
+            "permission_name": "can_add_asset_qty"
         }
     ]
 }
@@ -468,7 +468,7 @@ message RevokePermission {
         {
             "command_type": "RevokePermission",
             "account_id": "takemiya@soramitsu",
-            "permission_name": "can_add_asset_quantity"
+            "permission_name": "can_add_asset_qty"
         }
     ]
 }
