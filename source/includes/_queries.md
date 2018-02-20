@@ -18,10 +18,8 @@
        GetRolePermissions get_role_permissions = 10;
        GetAssetInfo get_asset_info = 11;
      }
-     // used to prevent replay attacks.
      uint64 query_counter = 12;
   }
-
   Payload payload = 1;
   Signature signature = 2;
 }
@@ -81,10 +79,10 @@ message GetAccount {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetAccount",
@@ -145,10 +143,10 @@ message GetSignatories {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetSignatories",
@@ -197,10 +195,10 @@ message GetAccountTransactions {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetAccountTransactions",
@@ -251,10 +249,10 @@ message GetAccountAssetTransactions {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetAccountAssetTransactions",
@@ -305,14 +303,14 @@ message GetTransactions {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetTransactions",
-    "tx_hashes": [string(64),…]
+    "tx_hashes": ["bf6edb882d53f5532cb416455834878db7af08fb814f8c95d6867a6d9eea4057"]
 }
 ```
 
@@ -359,15 +357,15 @@ message GetAccountAssets {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetAccountAssets",
     "account_id": "test@test",
-    "asset_id": "coin#test",
+    "asset_id": "coin#test"
 }
 ```
 
@@ -421,14 +419,14 @@ message GetAssetInfo {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetAssetInfo",
-    "asset_id": "coin#test",
+    "asset_id": "coin#test"
 }
 ```
 
@@ -480,13 +478,13 @@ message GetRoles {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
-    "query_type" : "GetRoles",
+    "query_type" : "GetRoles"
 }
 ```
 
@@ -527,14 +525,14 @@ message GetRolePermissions {
 {
     "signature":
         {
-            "pubkey": "…",
-            "signature": "…"
+            "pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83",
+            "signature": "81744e004555970ad114a2b8f7a0d1bb087e26c6e009a6147781a5042dbbf8e00f1fd5a4d4ddb123c1c0813f00d633b7295e482a43001edbe7f51dd4d32aef05"
         },
-    "created_ts": …,
+    "created_ts": 1517560129182,
     "creator_account_id": "admin@test",
     "query_counter": 1,
     "query_type" : "GetRolePermissions",
-    "role_id" : "MoneyCreator",
+    "role_id" : "moneycreator"
 }
 ```
 

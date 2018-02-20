@@ -38,11 +38,11 @@ message Amount {
             "account_id": "test@test",
             "asset_id": "coin#test",
             "amount": {
-                "value": string,
-                "precision": int
+                "value": "200",
+                "precision": 2
             }
         }
-    ], …
+    ] 
 }
 ```
 
@@ -84,10 +84,10 @@ message Peer {
             "command_type": "AddPeer",
             "peer": {
                 "address": "192.168.1.1:50001",
-                "peer_key": string(64)
+                "peer_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
             }
-        },
-    ], …
+        }
+    ]
 }
 ```
 
@@ -123,9 +123,9 @@ message AddSignatory {
         {
             "command_type": "AddSignatory",
             "account_id": "test@test",
-            "public_key": string(64)
+            "public_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ], …
+    ]
 }
 ```
 
@@ -164,9 +164,9 @@ message AppendRole {
         {
             "command_type": "AppendRole",
             "account_id": "takemiya@test",
-            "role_name": "Administrator"
+            "role_name": "admin"
         }
-    ], …
+    ]
 }
 ```
 
@@ -201,11 +201,11 @@ message CreateAccount {
     "commands": [
         {
             "command_type": "CreateAccount",
-            "account_name": "makoto.takemiya",
+            "account_name": "makoto",
             "domain_id": "test",
-            "main_pubkey": string
+            "main_pubkey": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ], …
+    ]
 }
 ```
 
@@ -243,9 +243,9 @@ message CreateAsset {
             "command_type": "CreateAsset",
             "asset_name": "usd",
             "domain_id": "test",
-            "precision": "2"
+            "precision": 2
         }
-    ], …
+    ]
 }
 ```
 
@@ -280,9 +280,9 @@ message CreateDomain {
         {
             "command_type": "CreateDomain",
             "domain_id": "test2",
-            "default_role": "User"
+            "default_role": "user"
         }
-    ], …
+    ]
 }
 ```
 
@@ -317,13 +317,12 @@ message CreateRole {
     "commands": [
         {
             "command_type": "CreateRole",
-            "role_name": "MoneyCreator",
+            "role_name": "moneycreator",
             "permissions": [
-                "CanAddAssetQuantity",
-                …
+                "can_add_asset_qty"
             ]
         }
-    ], …
+    ]
 }
 ```
 
@@ -359,7 +358,7 @@ message DetachRole {
             "account_id": "test@test",
             "role_name": "user"
         }
-    ], …
+    ]
 }
 ```
 
@@ -393,9 +392,9 @@ message GrantPermission {
         {
             "command_type": "GrantPermission",
             "account_id": "takemiya@soramitsu",
-            "permission_name": "CanAddAssetQuantity"
+            "permission_name": "can_add_asset_qty"
         }
-    ], …
+    ]
 }
 ```
 
@@ -429,9 +428,9 @@ message RemoveSignatory {
         {
             "command_type": "RemoveSignatory",
             "account_id": "takemiya@test",
-            "public_key": string(64)
+            "public_key": "407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
         }
-    ], …
+    ]
 }
 ```
 
@@ -469,9 +468,9 @@ message RevokePermission {
         {
             "command_type": "RevokePermission",
             "account_id": "takemiya@soramitsu",
-            "permission_name": "CanAddAssetQuantity"
+            "permission_name": "can_add_asset_qty"
         }
-    ], …
+    ]
 }
 ```
 
@@ -508,7 +507,7 @@ message SetAccountDetail{
             "key": "position",
             "value": "Co-CEO"
         }
-    ], …
+    ]
 }
 ```
 
@@ -546,7 +545,7 @@ message SetAccountQuorum {
             "account_id": "takemiya@test",
             "quorum": 5
         }
-    ], …
+    ]
 }
 ```
 
@@ -599,11 +598,11 @@ message Amount {
             "account_id": "test@test",
             "asset_id": "coin#test",
             "amount": {
-                "value": string,
-                "precision": int
+                "value": "200",
+                "precision": 2
             }
         }
-    ], …
+    ]
 }
 ```
 
@@ -651,7 +650,7 @@ message TransferAsset {
                 "precision": 0
             }
         }
-    ], …
+    ]
 }
 ```
 
