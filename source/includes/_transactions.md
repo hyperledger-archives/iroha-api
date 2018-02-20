@@ -22,7 +22,7 @@ message Transaction {
    "commands":[  
       {  
          "command_type":"CreateAccount",
-         "account_name":"makoto.takemiya",
+         "account_name":"makoto",
          "domain_id":"test",
          "main_pubkey":"407e57f50ca48969b08ba948171bb2435e035d82cec417e18e4a38f5fb113f83"
       }
