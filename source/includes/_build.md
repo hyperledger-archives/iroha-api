@@ -26,7 +26,7 @@ Run the script `run-iroha-dev.sh`, contained in the folder `scripts`: `sh .../ir
 After you execute this script, following things happen:
 
  1. The script checks if you don't have containers with Iroha already running. It ends up with reattaching you to interactive shell upon succesful completion.
- 2. The script will download iroha-docker-develop, redis and postgres images. Iroha image contains all development dependencies, and is based on top of ubuntu:16.04.
+ 2. The script will download iroha-docker-develop and postgres images. Iroha image contains all development dependencies, and is based on top of ubuntu:16.04.
  3. Three containers are created and launched.
  4. The user is attached to the interactive environment for development and testing with `iroha` folder mounted from the host machine. Iroha folder is mounted to `/opt/iroha` in Docker container.
 
@@ -106,13 +106,9 @@ Execute `run-iroha-dev.sh` again to attach to existing container.
 
 ## Linux or macOS
 
-> Launching Docker and Postgres in Docker
+> Launching Postgres in Docker
 
 ``` shell
-docker run --name some-redis \
--p 6379:6379 \
--d redis:3.2.8
-
 docker run --name some-postgres \
 -e POSTGRES_USER=postgres \
 -e POSTGRES_PASSWORD=mysecretpassword \
@@ -120,7 +116,7 @@ docker run --name some-postgres \
 -d postgres:9.5
 ```
 
-To launch Iroha daemon, running postgres and redis services are required. You may launch them on your local machine, or use docker containers, as provided on the right side.
+To launch Iroha daemon, running postgres service is required. You may launch it on your local machine, or use docker container, as provided on the right side.
 
 ### Linux (debian-based)
 
