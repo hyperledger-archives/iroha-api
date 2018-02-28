@@ -54,18 +54,16 @@ Follow JSON structure of the block, as it is reflected in [JSON schema for the b
 
 Configuration file keeps information about storage credentials and irohad parameters:
 
-| Parameter         | Type    | Meaning                                                                                       |
-|-------------------|---------|-----------------------------------------------------------------------------------------------|
-| block_store_path  | string  | Path to store blocks of committed transactions (flat file storage)                            |
-| torii_port        | integer | Port to access iroha node gRPC (default 50051)                                                |
+| Parameter         | Type    | Meaning                                                                                                             |
+|-------------------|---------|---------------------------------------------------------------------------------------------------------------------|
+| block_store_path  | string  | Path to store blocks of committed transactions (flat file storage)                                                  |
+| torii_port        | integer | Port to access iroha node gRPC (default 50051)                                                                      |
 | internal_port     | integer | Port for communication between ordering service, YAC consensus and block loader for synchronization (default 10001) |
-| pg_opt            | string  | Postgres credentials                                                                          |
-| redis_host        | string  | Redis host IP address                                                                       |
-| redis_port        | integer | Port to access redis storage                                                                  |
-| max_proposal_size | integer | Maximum size of created proposals                                                             |
-| proposal_delay    | integer | The period of time (in ms) used to prepare proposal of transactions                           |
-| vote_delay        | integer | The period of time (in ms) of spreading vote across the network                               |
-| load_delay        | integer | The period of time (in ms) between synchronizations between peers                             |
+| pg_opt            | string  | Postgres credentials                                                                                                |
+| max_proposal_size | integer | Maximum size of created proposals                                                                                   |
+| proposal_delay    | integer | The period of time (in ms) used to prepare proposal of transactions                                                 |
+| vote_delay        | integer | The period of time (in ms) of spreading vote across the network                                                     |
+| load_delay        | integer | The period of time (in ms) between synchronizations between peers                                                   |
 
 Example:
 
@@ -77,9 +75,9 @@ To launch irohad daemon, following parameters must be passed:
 
 | Parameter     | Meaning                                                                                      |
 |---------------|----------------------------------------------------------------------------------------------|
-| config        | configuration file, containing postgres, and redis connection, and values to tune the system |
+| config        | configuration file, containing postgres connection and values to tune the system             |
 | genesis_block | initial block in the ledger                                                                  |
-| keypair_name  | private and public key file names without file extension. Used by peer to sign the blocks |
+| keypair_name  | private and public key file names without file extension. Used by peer to sign the blocks    |
 
 Use this command to launch iroha:
 
