@@ -219,7 +219,6 @@ Main pubkey| first public key to add to the account | ed25519 public key
 
 1. Transaction creator has permission to create account
 2. Domain, passed as domain_id, has already been created in the system
-3. Such public key has not been added before as first public key of account or added to multi-signature account 
 
 ## Create asset
 
